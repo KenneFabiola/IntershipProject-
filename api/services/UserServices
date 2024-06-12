@@ -1,0 +1,33 @@
+<?php
+require_once('../repositories/UserRepository.php');
+class UserService
+{
+
+
+    private $pdo;
+    private $userRepository;
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+        $this->userRepository = new UserRepository($pdo);;
+    }
+
+    public function getUserById($id)
+    {
+        return $this->userRepository->findById($id);
+    }
+    public function userExist($id)
+    {
+        return $this->userRepository->findById($id) != null;
+    }
+    public function updateUser($id, $username, $first_name, $last_name, $email, $pwd, $role_id)
+    {
+        if($id && $username  && $first_name  && $last_name  && $email  && $pwd  && $role_id){
+            if ($this->userExist($id)) {
+                $user = new User($id, $username, $first_name, $last_name, $email, $pwd, $role_id);
+                return $this->userRepository->updateUser($user);
+            }
+            return null;
+        }
+}
+}

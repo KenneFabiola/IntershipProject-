@@ -1,0 +1,12 @@
+.head{
+    letter-spacing: 2px;
+}
+.outliness{
+    border-left: 15px;
+    border-right: 25px;
+}
+.contact{
+    text-decoration: underline;
+    text-underline-offset: 7px;
+    
+}
