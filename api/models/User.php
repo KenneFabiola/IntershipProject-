@@ -55,30 +55,30 @@ class User
     }
     public function setId($id)
     {
-        return $this->id;
+        return $this->id = $id;
     }
     public function setUsername($username)
     {
-        return $this->username;
+        return $this->username = $username;
     }
-    public function setFirstName($last_name)
+    public function setFirstName($first_name)
     {
-        return $this->first_name;
+        return $this->first_name = $first_name;
     }
     public function setLastName($last_name)
     {
-        return $this->last_name;
+        return $this->last_name = $last_name ;
     }
     public function setEmail($email)
     {
-        return $this->email;
+        return $this->email = $email;
     }
     public function setPwd($pwd)
     {
-        return $this->pwd;
+        return $this->pwd = $pwd;
     }
     public function setRoleId($role_id)
     {
-        return $this->role_id;
+        return $this->role_id = $role_id;
     }
 }

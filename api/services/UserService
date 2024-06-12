@@ -1,12 +1,17 @@
 <?php
 require_once('../repositories/UserRepository.php');
+require_once('../../Database.php');
+
+
+$database = new Database;
+$pdo = $database->connect();
+
 class UserService
 {
 
-
     private $pdo;
     private $userRepository;
-    public function __construct($pdo)
+    public function __construct($pdo, $userRepository)
     {
         $this->pdo = $pdo;
         $this->userRepository = new UserRepository($pdo);;
@@ -20,14 +25,27 @@ class UserService
     {
         return $this->userRepository->findById($id) != null;
     }
+
     public function updateUser($id, $username, $first_name, $last_name, $email, $pwd, $role_id)
     {
-        if($id && $username  && $first_name  && $last_name  && $email  && $pwd  && $role_id){
+        if ($id && $username  && $first_name  && $last_name  && $email  && $pwd  && $role_id) {
             if ($this->userExist($id)) {
                 $user = new User($id, $username, $first_name, $last_name, $email, $pwd, $role_id);
                 return $this->userRepository->updateUser($user);
             }
             return null;
         }
-}
+    }
+
+    public function deleteUser($id)
+    {
+        if ($this->userExist($id)) {
+            return $this->userRepository->deleteUser($id);
+        }
+        return null;
+    }
+
+    public function getAllUser($id){
+        return $this->userRepository->readUser($id);
+    }
 }
