@@ -12,31 +12,39 @@ class UserRepository
     // insertion of user
     public function createUser(User $user)
     {
-        $hashed_pwd = password_hash($user->getPwd(), PASSWORD_BCRYPT);
-        $sql = "INSERT INTO users (username,first_name,last_name,email,pwd,role_id) VALUES (:username, :first_name, :last_name, :email,:pwd,:role_id)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':username', $user->getUsername());
-        $stmt->bindValue(':first_name', $user->getFirstName());
-        $stmt->bindValue(':last_name', $user->getLastName());
-        $stmt->bindValue(':email', $user->getEmail());
-        $stmt->bindValue(':pwd', $hashed_pwd);
-        $stmt->bindValue(':role_id', $user->getRoleId());
-
-
-
-        if ($stmt->execute()) {
-            $user->setId($this->pdo->lastInsertId());
-            return $user;
+        try{
+            $hashed_pwd = password_hash($user->getPwd(), PASSWORD_DEFAULT);
+            $sql = "INSERT INTO users (username,first_name,last_name,email,pwd,role_id,deleted) VALUES (:username, :first_name, :last_name, :email,:pwd,:role_id,:deleted)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':username', $user->getUsername());
+            $stmt->bindValue(':first_name', $user->getFirstName());
+            $stmt->bindValue(':last_name', $user->getLastName());
+            $stmt->bindValue(':email', $user->getEmail());
+            $stmt->bindValue(':pwd', $hashed_pwd);
+            $stmt->bindValue(':role_id', $user->getRoleId());
+            $stmt->bindValue(':deleted', $user->getDeleted());
+    
+    
+    
+            if ($stmt->execute()) {
+                $user->setId($this->pdo->lastInsertId());
+                return $user;
+            }
+            return null;
+        }catch(PDOException $e){
+            echo 'PDOExeception: ' .$e->getMessage();
+            return null;
         }
-        return null;
+       
     }
 
 //find user by their id
     public function findById($id)
     {
-        $sql = 'SELECT * FROM users WHERE id = :id';
+        try {
+        $sql = 'SELECT * FROM users WHERE id = :id AND deleted = 0';
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id);
+        $stmt->execute(['id'=> $id]);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -48,11 +56,16 @@ class UserRepository
                 $result['last_name'],
                 $result['email'],
                 $result['pwd'],
-                $result['role_id']
+                $result['role_id'],
+                $result['deleted']
             );
         }
         return null;
+    }catch(PDOException $e){
+        echo 'PDOExeception: ' .$e->getMessage();
+        return null;
     }
+}
  // update user 
     public function updateUser(User $user)
     {
@@ -78,6 +91,21 @@ class UserRepository
         }
     }
 
+    // find by username 
+    public function findByUsername($username){
+        try{
+            $sql = 'SELECT * FROM users WHERE  username = :usename';
+            $stmt=$this->pdo->prepare($sql);
+            $stmt->bindValue(':username', $username);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+        } catch (PDOException $e) {
+            echo 'PDOExecption:' . $e->getMessage();
+        }
+    }
+
 
 
 
@@ -86,7 +114,7 @@ class UserRepository
     public function deleteUser($id)
     {
         try {
-            $sql = 'DELETE FROM users WHERE id =:id';
+            $sql = 'UPDATE users SET deleted = 1 WHERE id =:id';
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(':id', $id,);
             return $stmt->execute();
@@ -99,26 +127,29 @@ class UserRepository
 
 
     // read user
-    public function readUser(){
+    public function findAll(){
         try{
             $sql = 'SELECT * FROM users';
             $stmt = $this->pdo->query($sql);
 
-            $user = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                $user[] = new User(
+                $user = new User(
                     $row['id'],
                     $row['username'],
                     $row['first_name'],
                     $row['last_name'],
                     $row['email'],
-                    $row['password'],
-                    $row['role_id']
+                    $row['pwd'],
+                    $row['role_id'],
+                    $row['deleted']
                 );
+              
+                echo ( $row['id'] . " " . $row['username'] . " ". $row['first_name']. " ". $row['last_name']." ".$row['email']." ". $row['pwd']." ". $row['role_id']." ". "<br>");
             }
-            return null;
+            return $user;
         }catch(PDOException $e){
             echo 'PDOExecption:' .$e->getMessage();
+            return[];
         }
     }
 

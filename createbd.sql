@@ -82,11 +82,13 @@ CREATE TABLE payments (
     id INT (255) AUTO_INCREMENT PRIMARY KEY,
     created_by INT(255) NOT NULL,
     last_modified_by INT(255) NOT NULL,
+    registration_id INT(255) NOT NULL,
     amount FLOAT (25) NOT NULL,
     created_at DATETIME NOT NULL DEFAULT current_timestamp(),
     deleted BOOLEAN  NOT NULL DEFAULT false,
     FOREIGN KEY (created_by) REFERENCES users(id),
-    FOREIGN KEY (last_modified_by) REFERENCES users(id)
+    FOREIGN KEY (last_modified_by) REFERENCES users(id);
+    FOREIGN KEY (registration_id) REFERENCES registrations(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

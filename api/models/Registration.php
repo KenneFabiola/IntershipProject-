@@ -1,41 +1,77 @@
 <?php
 class Registration {
     private $id;
-    private $createdAt;
-    private $studentId;
-    private $createdBy;
-    private $lastModifiedBy;
-    private $sectionId;
-    private $programId;
-
-    public function __construct($id, $createdAt, $studentId,$createdBy,$lastModifiedBy,$sectionId,$programId)
+    private $student_id;
+    private $section_id;
+    private $program_id;
+    private $created_by;
+    private $last_modified_by;
+    private $created_at;
+    private $deleted;
+    
+    public function __construct($id, $student_id,$section_id,$program_id,$created_by,$last_modified_by,$created_at,$deleted)
     {
         $this->id=$id;
-        $this->createdAt=$createdAt;
+        $this->student_id=$student_id;
+        $this->section_id=$section_id;
+        $this->program_id=$program_id;
+        $this->created_by=$created_by;
+        $this->last_modified_by=$last_modified_by;
+        $this->created_at=$created_at;
+        $this->deleted=$deleted;
     }
 
     public function getId(){
         return $this->id;
     }
-    public function getCreatedAt(){
-        return $this->createdAt;
-    }
     public function getStudentId(){
-        return $this->studentId;
-    }
-    public function getCreatedBy(){
-        return $this->createdBy;
-    }
-    public function getLastModifiedBy(){
-        return $this->lastModifiedBy;
+        return $this->student_id;
     }
     public function getSectionId(){
-        return $this->sectionId;
+        return $this->section_id;
     }
-
     public function getProgramId(){
-        return $this->programId;
+        return $this->program_id;
     }
+    public function getCreatedBy(){
+        return $this->created_by;
+    }
+    public function getLastModifiedBy(){
+        return $this->last_modified_by;
+    }
+    public function getCreatedAt() {
+        return $this->created_at;
+    }
+    public function getDeleted() {
+        return $this->deleted;
+    }
+    
+    public function setId($id){
+        return $this->id = $id;
+    }
+    public function setStudentId($student_id){
+        return $this->student_id = $student_id;
+    }
+    public function setSectionId($section_id){
+        return $this->section_id = $section_id;
+    }
+    public function setProgramId($program_id){
+        return $this->program_id = $program_id;
+    }
+    public function setCreatedBy($created_by){
+        return $this->created_by;
+    }
+    public function setLastModifiedBy($last_modified_by){
+        return $this->last_modified_by = $last_modified_by;
+    }
+    public function setCreatedAt($created_at) {
+        return $this->created_at = $created_at;
+    }
+    public function setDeleted($deleted) {
+        return $this->deleted = $deleted;
+    }
+    
+
 
 }
 ?>

@@ -1,54 +1,73 @@
 <?php
 class Payment {
     private $id;
-    private $date;
     private $amount;
-    private $createdBy;
-    private $lastModifiedBy;
-    private $deleteBy;
-    private $tuitionId;
-    private $registrationId;
+    private $created_at;
+    private $created_by;
+    private $last_modified_by;
+    private $deleted;
+    private $registration_id;
 
-    public function __construct($date, $amount,$id,$createdBy,$lastModifiedBy,$deleteBy,$tuitionId,$registrationId) {
+    public function __construct($id, $amount,$created_at,$created_by,$last_modified_by,$deleted,$registration_id) {
        
         $this->id = $id;
-        $this->date = $date;
+        $this->created_at = $created_at;
         $this->amount = $amount;
-        $this->createdBy = $createdBy;
-        $this->lastModifiedBy = $lastModifiedBy;
-        $this->deleteBy = $deleteBy;
-        $this->tuitionId = $tuitionId;
-        $this->registrationId = $registrationId;
+        $this->created_by = $created_by;
+        $this->last_modified_by = $last_modified_by;
+        $this->deleted = $deleted;
+        $this->registration_id = $registration_id;
 
         
     }
     public function getId() {
         return $this->id;
     }
-    public function getDate() {
-        return $this->date;
-    }
+    
     public function getAmount() {
         return $this->amount;
     }
-    public function getCreatedby() {
-        return $this->createdBy;
+    public function getCreatedAt()
+    {
+        return $this->created_at;
     }
-    public function getLastModifiedBy() {
-        return $this->lastModifiedBy;
+    public function getCreatedBy()
+    {
+        return $this->created_by;
     }
-    public function getDeleteby() {
-        return $this->deleteBy;
+   
+    public function getLastModifiedBy()
+    {
+        return $this->last_modified_by;
     }
-    public function getTuitionId(){
-        return $this->tuitionId;
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
-    public function getProgram_id(){
-        return $this->registrationId;
+    public function getRegistrationId(){
+        return $this->registration_id;
     }
-
+    public function setId($id)
+    {
+        return $this->id = $id;
+    }
     public function setamount($amount) {
         return $this->amount;
+    }
+    public function setCreatedAt($created_at)
+    {
+        return $this->created_at = $created_at;
+    }
+    public function setCreatedBy($created_by)
+    {
+        return $this->created_by = $created_by;
+    }
+    public function setLastModifiedBy($last_modified_by)
+    {
+        return $this->last_modified_by = $last_modified_by;
+    }
+    public function setRegistrationId($registration_id){
+        return $this->registration_id = $registration_id;
     }
    
   

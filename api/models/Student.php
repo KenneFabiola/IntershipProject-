@@ -1,5 +1,5 @@
 <?php
-class Student
+class Student 
 {
     private $id;
     private $username;
@@ -11,10 +11,11 @@ class Student
     private $created_by;
     private $last_modified_by;
     private $created_at;
-    private $delete;
+    private $deleted;
+    
 
 
-    public function __construct($id, $username, $first_name, $last_name, $email, $pwd, $program, $created_by, $last_modified_by, $created_at, $delete)
+    public function __construct($id, $username, $first_name, $last_name, $email, $pwd, $program, $created_by, $last_modified_by, $created_at, $deleted)
     {
         $this->id = $id;
         $this->username = $username;
@@ -26,7 +27,7 @@ class Student
         $this->created_by = $created_by;
         $this->last_modified_by = $last_modified_by;
         $this->created_at = $created_at;
-        $this->delete = $delete;
+        $this->deleted = $deleted;
     }
 
 
@@ -70,9 +71,9 @@ class Student
     {
         return $this->last_modified_by;
     }
-    public function getdelete()
+    public function getDeleted()
     {
-        return $this->delete;
+        return $this->deleted;
     }
     public function setId($id)
     {
@@ -114,8 +115,8 @@ class Student
     {
         return $this->created_at = $created_at;
     }
-    public function setdelete($delete)
+    public function setDeleted($deleted)
     {
-        return $this->delete = $delete;
+        return $this->deleted = $deleted;
     }
 }
