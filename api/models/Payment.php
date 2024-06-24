@@ -66,6 +66,10 @@ class Payment {
     {
         return $this->last_modified_by = $last_modified_by;
     }
+    public function setDeleted($deleted)
+    {
+        return $this->deleted = $deleted;
+    }
     public function setRegistrationId($registration_id){
         return $this->registration_id = $registration_id;
     }

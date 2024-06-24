@@ -62,6 +62,10 @@ class Tuition
     {
         return $this->id = $id;
     }
+    public function setSectionId($section_id)
+    {
+        return $this->section_id = $section_id;
+    }
     public function setProgram($program)
     {
         return $this->program = $program;
