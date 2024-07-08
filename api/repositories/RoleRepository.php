@@ -1,6 +1,8 @@
 <?php
-require_once('../../Database.php');
-require_once('../models/Role.php');
+// require_once('../../Database.php');
+// require_once('../models/Role.php');
+require_once dirname(dirname(__DIR__)) .DIRECTORY_SEPARATOR . 'Database.php';
+require_once dirname(__DIR__) .DIRECTORY_SEPARATOR .'models' . DIRECTORY_SEPARATOR . 'Role.php';
 
 class RoleRepository
 {

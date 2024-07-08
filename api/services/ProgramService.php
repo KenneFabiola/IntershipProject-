@@ -1,5 +1,6 @@
 <?php
-require_once("../repositories/ProgramRepository.php");
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'ProgramRepository.php';
+
 
 class ProgramService {
     private $program_repository;
@@ -24,8 +25,11 @@ class ProgramService {
         return $this->program_repository->deleteProgram($id);
     }
 
-    public function findAll() {
-        return $this->program_repository->findAll();
+    public function findAllProgram() {
+        return $this->program_repository->findAllProgram();
+    }
+    public function findProgramName() {
+        return $this->program_repository->findProgramName();
     }
 
   

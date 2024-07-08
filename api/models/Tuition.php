@@ -7,12 +7,15 @@ class Tuition
     private $program_id;
     private $section_id;
     private $program;
+    private $amount;
     private $created_at;
     private $deleted;
+    private $created_by_username;
+    private $last_modified_by_username;
 
 
 
-    public function __construct($id, $created_by, $last_modified_by, $program_id, $section_id, $program, $created_at, $deleted)
+    public function __construct($id, $created_by, $last_modified_by, $program_id, $section_id, $program,$amount,$created_at, $deleted)
     {
         $this->id = $id;
         $this->created_by = $created_by;
@@ -20,6 +23,7 @@ class Tuition
         $this->program_id = $program_id;
         $this->section_id = $section_id;
         $this->program = $program;
+        $this->amount = $amount;
         $this->created_at = $created_at;
         $this->deleted = $deleted;
     }
@@ -41,6 +45,10 @@ class Tuition
     public function getProgram()
     {
         return $this->program;
+    }
+    public function getAmount()
+    {
+        return $this->amount;
     }
     public function getCreatedBy()
     {
@@ -70,6 +78,10 @@ class Tuition
     {
         return $this->program = $program;
     }
+    public function setAmount($amount)
+    {
+        return $this->amount = $amount;
+    }
     public function setProgramId($program_id)
     {
         return $this->program_id = $program_id;
@@ -89,5 +101,17 @@ class Tuition
     public function setDeleted($deleted)
     {
         return $this->deleted = $deleted;
+    }
+    public function getCreatedByUsername(){
+        return $this->created_by_username;
+    }
+    public function setCreatedByUsername($created_by_username){
+        return $this->created_by_username = $created_by_username;
+    }
+    public function getLastModifiedByUsername() {
+        return $this->last_modified_by_username;
+    }
+    public function setLastModifiedByUsername($last_modified_by_username) {
+        return $this->last_modified_by_username = $last_modified_by_username;
     }
 }

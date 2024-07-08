@@ -1,6 +1,9 @@
 <?php
-require_once('../../Database.php');
-require_once("..\models\Student.php");
+// session_start();
+require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Database.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Student.php' ;
+
+
 class StudentRepository{
 
 
@@ -10,28 +13,42 @@ class StudentRepository{
         $database = new Database();
         $this->pdo = $database->connect();
     }
-    // create student
+    // insertion of user
     public function createStudent(Student $student)
     {
-        $hashed_pwd = password_hash($student->getPwd(), PASSWORD_BCRYPT);
-        $sql = "INSERT INTO students (username,first_name,last_name,email,pwd,program,created_by,last_modified_by,created_at,deleted) VALUES (:username, :first_name, :last_name, :email,:pwd,:program,:created_by,:last_modified_by,:created_at,:deleted)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':username', $student->getUsername());
-        $stmt->bindValue(':first_name', $student->getFirstName());
-        $stmt->bindValue(':last_name', $student->getLastName());
-        $stmt->bindValue(':email', $student->getEmail());
-        $stmt->bindValue(':pwd',$hashed_pwd);
-        $stmt->bindValue(':program',$student->getProgram());
-        $stmt->bindValue(':created_by',$student->getCreatedBy());
-        $stmt->bindValue(':last_modified_by',$student->getLastModifiedBy());
-        $stmt->bindValue(':created_at',$student->getCreatedAt());
-        $stmt->bindValue(':deleted',$student->getDeleted());
+        try{
+                $verify = "SELECT COUNT(*) FROM students WHERE email = :email AND username = :username ";
+                $stmtverify = $this->pdo->prepare($verify);
+                $stmtverify->bindValue(':username', $student->getUsername());
+                $stmtverify->bindValue(':email', $student->getEmail());
+                $stmtverify->execute();
+                if($stmtverify->fetchColumn() > 0) {
+                    return ['error' => 'Student already exist'];
+                }
+                $find_password = $student->getPwd();
+                $hashed_pwd = password_hash($find_password, PASSWORD_DEFAULT);
+                $sql = "INSERT INTO students (username,first_name,last_name,email,pwd,program,created_by,last_modified_by,created_at,deleted) VALUES (:username, :first_name, :last_name, :email,:pwd,:program,:created_by,:last_modified_by,:created_at,:deleted)";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindValue(':username', $student->getUsername());
+                $stmt->bindValue(':first_name', $student->getFirstName());
+                $stmt->bindValue(':last_name', $student->getLastName());
+                $stmt->bindValue(':email', $student->getEmail());
+                $stmt->bindValue(':pwd',$hashed_pwd);
+                $stmt->bindValue(':program',$student->getProgram());
+                $stmt->bindValue(':created_by',$student->getCreatedBy());
+                $stmt->bindValue(':last_modified_by',$student->getLastModifiedBy());
+                $stmt->bindValue(':created_at',$student->getCreatedAt());
+                $stmt->bindValue(':deleted',$student->getDeleted());
 
-        if ($stmt->execute()) {
-            $student->setId($this->pdo->lastInsertId());
-            return $student;
-        }
-        return null;
+                if ($stmt->execute()) {
+                    $student->setId($this->pdo->lastInsertId());
+                    return ['success' =>  $student];
+                }
+                return ['error' => 'failed'];
+    }catch(PDOException $e){
+        error_log('PDOExeception: ' .$e->getMessage());
+          return null;
+      }
         
 
 }
@@ -41,12 +58,12 @@ class StudentRepository{
  * @param int $id
  * @return Student|null
  */
-public function findById($id)
+public function findById($student_id)
 {
     try {
     $sql = 'SELECT * FROM students WHERE id = :id AND deleted = 0';
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute(['id'=> $id]);
+    $stmt->execute(['id'=> $student_id]);
     $stmt->execute();
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -65,8 +82,7 @@ public function findById($id)
             $result['deleted']
         );
 
-        echo ( $result['id'] . " " . $result['username'] . " ". $result['first_name']. " ". $result['last_name']." ".$result['email']." ". $result['pwd']." ". $result['program']." ". "<br>");
-       
+        
     }
     return null;
 }catch(PDOException $e){
@@ -81,28 +97,17 @@ public function findById($id)
  */
 public function findAll(){
     try {
-        $stmt = $this->pdo->prepare('SELECT * FROM students WHERE deleted=false');
+        $stmt = $this->pdo->prepare('SELECT * FROM students WHERE deleted = false');
         $stmt->execute();
-        $student =[];
+        $students =[];
 
         while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
-            $student = new Student(
-                $row['id'],
-                $row['created_by'],
-                $row['last_modified_by'],
-                $row['username'],
-                $row['first_name'],
-                $row['last_name'],
-                $row['email'],
-                $row['program'],
-                $row['pwd'],
-                $row['created_at'],
-                $row['deleted']
-            );
-            echo ( $row['id'] . " " . $row['username'] . " ". $row['first_name']. " ". $row['last_name']." ".$row['email']." ". $row['pwd']." ". $row['program']." ". "<br>");
-         
+          
+           $row['created_by_username'] = $this-> findUsernameUserById($row['created_by']);
+           $row['last_modified_by_username'] = $this->findUsernameUserById($row['last_modified_by']);
+           $students[] = $row;
         }
-        return $student;
+        return $students;
 
 
     }catch(PDOException $e){
@@ -110,6 +115,8 @@ public function findAll(){
         return null;
     }
 }
+
+
 
 
 /**
@@ -173,25 +180,92 @@ public function findAll(){
      }
   }
 
-  /**
+ 
+
+public function findByUsername($username) {
+    try {
+        $sql = 'SELECT * FROM students WHERE username = :username';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt ->bindValue(':username',$username);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+       
+
+        if($result){
+            return new Student(
+                $result['id'],
+                $result['username'],
+                $result['first_name'],
+                $result['last_name'],
+                $result['email'],
+                $result['pwd'],
+                $result['program'],
+                $result['created_by'],
+                $result['last_modified_by'],
+                $result['created_at'],
+                $result['deleted']
+               
+            );
+
+        }
+        return null;
+
+    }catch (PDOException $e) {
+         echo 'PDOExecption:' . $e->getMessage();
+         return null;
+     }
+}
+
+
+
+/**
+ * find Program
+ 
+ */
+public function  findProgram($id) {
+
+    try {
+        $sql = 'SELECT program_name FROM programs where id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt -> bindParam(':id',$id);
+        $stmt->execute();
+        $result= $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($result) {
+            return $result['program_name'];
+        }
+        return null;
+    } catch(PDOException $e) {
+        echo 'PDOExecption:' .$e->getMessage();
+        return null;
+    }
+}
+
+
+ /**
    * find username by id
    */
-//  public function findUsernameUserById($id){
-//     try{
-//         $sql = 'SELECT username FROM users WHERE id = :id';
-//         $stmt = $this->pdo->prepare($sql);
-//         $stmt->execute(['id' => $id]);
-//         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  public function findUsernameUserById($id){
+    try{
+        $sql = 'SELECT username FROM users WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt ->bindParam(':id',$id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+       
 
-//         if($result){
-//             return $result['username'];
+        if($result){
+            return $result['username'];
 
-//         }
-//         return null;
+        }
+        return null;
 
-//     }catch (PDOException $e) {
-//          echo 'PDOExecption:' . $e->getMessage();
-//      }
+    }catch (PDOException $e) {
+         echo 'PDOExecption:' . $e->getMessage();
+         return null;
+     }
 
-// }
 }
+
+}
+

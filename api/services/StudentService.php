@@ -1,5 +1,6 @@
 <?php
-require_once("../repositories/StudentRepository.php");
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'StudentRepository.php';
+
 
 class studentService {
     private $student_repository;
@@ -9,7 +10,12 @@ class studentService {
     }
 
     public function createStudent($student) {
-        return $this->student_repository->createStudent($student);
+       $result = $this->student_repository->createStudent($student);
+       if(isset($result['success'])) {
+        return $result['success'];
+       }elseif (isset($result['error'])) {
+        return $result['error'];
+       }
     }
 
     public function findById($id) {

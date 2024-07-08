@@ -1,5 +1,6 @@
 <?php
-require_once("../repositories/RgistrationRepository.php");
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'RegistrationRepository.php';
+
 
 class RegistrationService {
     private $registration_repository;

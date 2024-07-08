@@ -12,6 +12,8 @@ class Student
     private $last_modified_by;
     private $created_at;
     private $deleted;
+    private $created_by_username;
+    private $last_modified_by_username;
     
 
 
@@ -75,6 +77,7 @@ class Student
     {
         return $this->deleted;
     }
+    
     public function setId($id)
     {
         return $this->id = $id;
@@ -111,7 +114,7 @@ class Student
     {
         return $this->last_modified_by = $last_modified_by;
     }
-    public function setCreatedAy($created_at)
+    public function setCreatedAt($created_at)
     {
         return $this->created_at = $created_at;
     }
@@ -119,4 +122,18 @@ class Student
     {
         return $this->deleted = $deleted;
     }
+
+    public function getCreatedByUsername(){
+        return $this->created_by_username;
+    }
+    public function setCreatedByUsername($created_by_username){
+        return $this->created_by_username = $created_by_username;
+    }
+    public function getLastModifiedByUsername() {
+        return $this->last_modified_by_username;
+    }
+    public function setLastModifiedByUsername($last_modified_by_username) {
+        return $this->last_modified_by_username = $last_modified_by_username;
+    }
+    
 }

@@ -1,33 +1,41 @@
 <?php
-require_once('../../Database.php');
-require_once("..\models\Tuition.php");
+require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Database.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'UserRepository.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Tuition.php' ;
+
 class TuitionRepository{
 
 
     private $pdo;
-    public function __construct()
+    private $user_repository;
+    public function __construct(PDO $pdo)
     {
-        $database = new Database();
-        $this->pdo = $database->connect();
+        $this->pdo = $pdo;
+        $this->user_repository = new UserRepository($pdo);
     }
-    // insertion of user
+    // insertion of tuition
     public function createTuition(Tuition $tuition)
     {
-        $sql = "INSERT INTO tuitions (created_by,last_modified_by,program_id,section_id,program,created_at,deleted) VALUES (:created_by,:last_modified_by:,:program_id,:section_id,:program,:created_at,:deleted)";
+        $sql = "INSERT INTO tuitions (created_by,last_modified_by,program_id,section_id,program,amount,created_at,deleted) VALUES 
+        (:created_by,:last_modified_by,:program_id,:section_id,:program,:amount,:created_at,:deleted)";
         $stmt = $this->pdo->prepare($sql);
+        // echo $tuition->getCreatedBy(); die();    
         $stmt->bindValue(':created_by',$tuition->getCreatedBy());
         $stmt->bindValue(':last_modified_by',$tuition->getLastModifiedBy());
         $stmt->bindValue(':program_id', $tuition->getProgramId());
         $stmt->bindValue(':section_id', $tuition->getSectionId());
         $stmt->bindValue(':program',$tuition->getProgram());
-         $stmt->bindValue(':created_at',$tuition->getCreatedAt());
+        $stmt->bindValue(':amount',$tuition->getAmount());
+        $stmt->bindValue(':created_at',$tuition->getCreatedAt());
         $stmt->bindValue(':deleted',$tuition->getDeleted());
 
         if ($stmt->execute()) {
             $tuition->setId($this->pdo->lastInsertId());
-            return $tuition;
+            return ['success' =>  $tuition];
+            
         }
-        return null;
+        return ['error' => 'failed'];
+        
         
 
 }
@@ -54,6 +62,7 @@ public function findById($id)
             $result['program_id'],
             $result['section_id'],
             $result['program'],
+            $result['amount'],
             $result['created_at'],
             $result['deleted'],
            
@@ -74,24 +83,17 @@ public function findById($id)
  *
  * @return array
  */
-public function findAll(){
+public function findAllTuition(){
     try {
         $stmt = $this->pdo->prepare('SELECT * FROM tuitions WHERE deleted=false');
         $stmt->execute();
         $tuition =[];
 
         while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
-            $tuition = new tuition(
-                $row['id'],
-                $row['created_by'],
-                $row['last_modified_by'],
-                $row['program_id'],
-                $row['section_id'],
-                $row['program'],
-                $row['created_at'],
-                $row['deleted'],
-            );
-            echo ( $row['id'] . " " . $row['program']." ". "<br>");
+            $row['created_by_username'] = $this->user_repository->findUsernameUserById($row['created_by']);
+            $row['last_modified_by_username'] = $this->user_repository-> findUsernameUserById($row['last_modified_by']);
+        
+            $tuition = [];
     
         }
         return $tuition;
@@ -119,6 +121,7 @@ public function findAll(){
             program_id = :program_id,
             section_id = :section_id,
             program = :program, 
+            amount = :amount, 
             created_at = :created_at,
             deleted = :deleted WHERE id =:id';
 
@@ -129,6 +132,7 @@ public function findAll(){
          $stmt->bindValue(':created_by', $tuition->getCreatedBy());
          $stmt->bindValue(':last_modified_by', $tuition->getLastModifiedBy());
          $stmt->bindValue(':program', $tuition->getProgram());
+         $stmt->bindValue(':amount', $tuition->getAmount());
          $stmt->bindValue(':created_at', $tuition->getCreatedAt());
          $stmt->bindValue(':deleted', $tuition->getDeleted());
 
@@ -159,5 +163,10 @@ public function findAll(){
      }
   }
 
- 
+/**
+ *  start with other method  */ 
+
+
+
+
 }

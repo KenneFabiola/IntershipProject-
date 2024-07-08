@@ -8,6 +8,8 @@ class Section
     private $last_modified_by;
     private $deleted;
     private $statut;
+    private $created_by_username;
+    private $last_modified_by_username;
 
     public function __construct($id, $created_at, $school_year, $created_by, $last_modified_by, $deleted, $statut)
     {
@@ -75,5 +77,18 @@ class Section
     public function setStatut($statut)
     {
         return $this->statut;
+    }
+
+    public function getCreatedByUsername(){
+        return $this->created_by_username;
+    }
+    public function setCreatedByUsername($created_by_username){
+        return $this->created_by_username = $created_by_username;
+    }
+    public function getLastModifiedByUsername() {
+        return $this->last_modified_by_username;
+    }
+    public function setLastModifiedByUsername($last_modified_by_username) {
+        return $this->last_modified_by_username = $last_modified_by_username;
     }
 }

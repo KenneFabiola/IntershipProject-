@@ -1,5 +1,6 @@
 <?php
-require_once("../repositories/UserRepository.php");
+// require_once("../repositories/UserRepository.php");
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'UserRepository.php';
 
 class UserService {
     private $user_repository;
@@ -9,7 +10,12 @@ class UserService {
     }
 
     public function createUser($user) {
-        return $this->user_repository->createUser($user);
+        $result = $this->user_repository->createUser($user);
+        if (isset($result['success'])) {
+            return $result['success'];
+        } elseif (isset($result['error'])) {
+            return ['error' => $result['error']];
+        }
     }
 
     public function findById($id) {
@@ -28,12 +34,16 @@ class UserService {
         return $this->user_repository->findAll();
     }
 
-    public function authentificate($username, $pwd) {
-        $user = $this->user_repository->findByUsername($username);
+    public function findByUsername($username) {
+        return  $this->user_repository->findByUsername($username);
 
-        if($user && password_verify($pwd,$user['pwd'])) {
-            return $user;
-        }
-        return null;
+    
     }
+    public function findUsernameUser($id) {
+        return $this->user_repository->findUsernameUserById($id);
+    }
+
+
+
+    
 }

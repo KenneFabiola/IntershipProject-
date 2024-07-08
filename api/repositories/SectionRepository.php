@@ -1,18 +1,30 @@
 <?php
-require_once('../../Database.php');
-require_once("..\models\Section.php");
+require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Database.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Section.php' ;
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'UserRepository.php';
+
 class SectionRepository{
 
 
     private $pdo;
-    public function __construct()
+    private $user_repository;
+    
+    public function __construct(PDO $pdo)
     {
-        $database = new Database();
-        $this->pdo = $database->connect();
+        $this->pdo = $pdo;
+        $this->user_repository = new UserRepository($pdo);
     }
     // create section
     public function createSection(Section $section)
-    {
+    {   
+        $verify = "SELECT COUNT(*) FROM sections WHERE school_year = :school_year AND deleted = false ";
+            $stmtverify = $this->pdo->prepare($verify);
+            $stmtverify->bindValue(':school_year', $section->getSchoolYear());
+            $stmtverify->execute();
+            if($stmtverify->fetchColumn() > 0) {
+                return ['error' => 'this section already exist'];
+            }
+
        $sql = "INSERT INTO sections (school_year,created_by,last_modified_by,created_at,statut,deleted) VALUES (:school_year,:created_by,:last_modified_by,:created_at,:statut,:deleted)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':school_year', $section->getSchoolYear());
@@ -24,9 +36,9 @@ class SectionRepository{
 
         if ($stmt->execute()) {
             $section->setId($this->pdo->lastInsertId());
-            return $section;
+            return ['success' =>  $section];
         }
-        return null;
+        return ['error' => 'failed'];
         
 
 }
@@ -48,7 +60,7 @@ public function findById($id)
     if ($result) {
         return new Section(
             $result['id'],
-            $result['School_year'],
+            $result['school_year'],
             $result['statut'],
             $result['created_by'],
             $result['last_modified_by'],
@@ -70,26 +82,22 @@ public function findById($id)
  *
  * @return array
  */
-public function findAll(){
+public function findAllSection(){
     try {
-        $stmt = $this->pdo->prepare('SELECT * FROM sections WHERE deleted=false');
+        $sql = 'SELECT * FROM sections WHERE deleted=false AND statut= "active" ';
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
-        $section =[];
+        $sections =[];
 
         while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
-            $section = new Section(
-                $row['id'],
-                $row['school_year'],
-                $row['statut'],
-                $row['created_by'],
-                $row['last_modified_by'],
-                $row['created_at'],
-                $row['deleted']
-            );
-            echo ( $row['id'] . " " . $row['school_year'] . " ". $row['statut']." ". "<br>");
-     
+            $row['created_by_username'] = $this->user_repository-> findUsernameUserById($row['created_by']);
+            $row['last_modified_by_username'] = $this->user_repository-> findUsernameUserById($row['last_modified_by']);
+        
+          
+             $sections[] = $row;
+            
         }
-        return $section;
+        return $sections;
 
 
     }catch(PDOException $e){
@@ -151,6 +159,67 @@ public function findAll(){
          echo 'PDOExecption:' . $e->getMessage();
      }
   }
+/**
+ * Undocumented function
+ *
+ * @param [type] $id
+ * @return bool
+ */
+  public function checkActiveSection ($id) {
+    try {
+        $sql = 'SELECT statut FROM sections WHERE statut= "active" AND deleted = false';
+        // prepare the request with pdo
+        $stmt = $this->pdo->prepare($sql);
+        // exectution of the request by id of section
+        $stmt->execute();
+        // recupération du résultat de la requête sous forme de tableau associatifs
+        $section = $stmt->fetch(PDO::FETCH_ASSOC);
+        // retourne true si cette ligne est vrai et false dans le cas contraire
+        return $section && $section['statut'] === 'active';
 
+    }catch (PDOException $e) {
+         echo 'PDOExecption:' . $e->getMessage();
+     }
+  }
+
+  public function finishSection($id) {
+    try {
+      
+            $sql = 'UPDATE sections SET statut = "inactive" WHERE id =:id';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':id', $id,);
+            return $stmt->execute();
+    }catch(PDOException $e){
+        echo 'PDOExeception: ' .$e->getMessage();
+        return null;
+    }
+  }
+
+  public function getInactiveSection() {
+    try {
+        $sql = 'SELECT * FROM sections WHERE statut = "inactive" ';
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $sections =[];
+
+        while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
+            $row['created_by_username'] = $this->user_repository-> findUsernameUserById($row['created_by']);
+            $row['last_modified_by_username'] = $this->user_repository-> findUsernameUserById($row['last_modified_by']);
+        
+          
+             $sections[] = $row;
+            
+        }
+        return $sections;
+
+
+    }catch(PDOException $e){
+        echo 'PDOExeception: ' .$e->getMessage();
+        return null;
+    }
+
+  }
   
 }
+

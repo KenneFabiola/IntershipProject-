@@ -11,7 +11,7 @@ class RegistrationRepository{
         $this->pdo = $database->connect();
     }
     // insertion of user
-    public function createregistration(Registration $registration)
+    public function createRegistration(Registration $registration)
     {
         $sql = "INSERT INTO registrations (student_id,section_id,program_id,created_by,last_modified_by,created_at,deleted) VALUES (:student_id,:section_id,:program_id,:created_by,:last_modified_by:,:created_at,:deleted)";
         $stmt = $this->pdo->prepare($sql);
