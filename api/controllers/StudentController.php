@@ -8,10 +8,10 @@ class StudentController
     private $student_service;
     private $user_repository;
 
-    public function __construct($pdo)
+    public function __construct()
     {
-        $this->student_service = new StudentService($pdo);
-        $this->user_repository = new UserRepository($pdo); // Pour les futures utilisations, si nécessaire
+        $this->student_service = new StudentService();
+        $this->user_repository = new UserRepository(); // Pour les futures utilisations, si nécessaire
     }
 
     // verified the authentification of user
@@ -169,9 +169,9 @@ class StudentController
 }
 
 // Connexion à la base de données et création de l'instance du contrôleur
-$database = new Database();
-$pdo = $database->connect();
-$controller = new StudentController($pdo);
+// $database = new Database();
+// $pdo = $database->connect();
+$controller = new StudentController();
 
 $json_student = $controller->getAllStudents();
 $students = json_decode($json_student,true);

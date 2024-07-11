@@ -34,9 +34,7 @@ class AuthentificateController
                 $_SESSION['id'] = $connexion->getId();
                 $_SESSION['username'] = $connexion->getUsername();
                 $_SESSION['password'] = $connexion->getPwd();
-                // $_SESSION['id'] = $connexion->getId();
-                // $_SESSION['username'] = $username;
-                // $_SESSION['password'] =  $password;
+              
 
 
 
@@ -70,8 +68,11 @@ class AuthentificateController
 
   
     public function logout() {
-        $this->authentificate_service->logout();
-        header('location:../../views/index.php');
+        if(isset($_POST['logout'])) {
+            $this->authentificate_service->logout();
+            header('location:../../views/index.php');
+            exit();
+        }
     }
 
 }
@@ -84,9 +85,7 @@ $controller = new AuthentificateController($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller->login();
-} elseif($_SERVER['REQUEST_METHOD'] === 'GET') {
+} 
+if(isset($_POST['logout'])) {
     $controller->logout();
-}
-else {
-    echo json_encode(['error' => 'Invalid request method']);
 }

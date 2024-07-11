@@ -5,8 +5,8 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY
 class studentService {
     private $student_repository;
 
-    public function __construct($pdo) {
-        $this->student_repository = new StudentRepository($pdo);
+    public function __construct() {
+        $this->student_repository = new StudentRepository();
     }
 
     public function createStudent($student) {
@@ -31,7 +31,7 @@ class studentService {
     }
 
     public function findAll() {
-        return $this->student_repository->findAll();
+        return $this->student_repository->findAllStudent();
     }
 
   

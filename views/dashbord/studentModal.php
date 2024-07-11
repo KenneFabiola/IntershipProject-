@@ -1,4 +1,4 @@
-
+<!-- add new student -->
 <div id="addStudentModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
 
 
@@ -98,7 +98,7 @@
 
 
 
-<!-- update modal -->
+<!-- update student -->
  
 <div id="editStudentModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
 <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full justify-between">

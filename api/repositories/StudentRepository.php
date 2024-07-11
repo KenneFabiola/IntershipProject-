@@ -95,24 +95,28 @@ public function findById($student_id)
  *
  * @return array
  */
-public function findAll(){
+public function findAllStudent()
+{
     try {
-        $stmt = $this->pdo->prepare('SELECT * FROM students WHERE deleted = false');
-        $stmt->execute();
-        $students =[];
+        $sql = "SELECT  s.*,
+                u1.username AS created_by_username,
+                u2.username AS last_modified_by_username
+                FROM students s
+                LEFT JOIN users u1 ON s.created_by = u1.id
+                LEFT JOIN users u2 ON s.last_modified_by = u2.id
+                WHERE s.deleted = false
+                ORDER BY s.id";
+        $stmt = $this->pdo->query($sql);
+        $students = [];
 
-        while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
-          
-           $row['created_by_username'] = $this-> findUsernameUserById($row['created_by']);
-           $row['last_modified_by_username'] = $this->findUsernameUserById($row['last_modified_by']);
-           $students[] = $row;
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $students[] = $row;
         }
+
         return $students;
-
-
-    }catch(PDOException $e){
-        echo 'PDOExeception: ' .$e->getMessage();
-        return null;
+    } catch (PDOException $e) {
+        echo 'PDOExecption:' . $e->getMessage();
+        return [];
     }
 }
 
@@ -242,30 +246,6 @@ public function  findProgram($id) {
 }
 
 
- /**
-   * find username by id
-   */
-  public function findUsernameUserById($id){
-    try{
-        $sql = 'SELECT username FROM users WHERE id = :id';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt ->bindParam(':id',$id);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-       
-
-        if($result){
-            return $result['username'];
-
-        }
-        return null;
-
-    }catch (PDOException $e) {
-         echo 'PDOExecption:' . $e->getMessage();
-         return null;
-     }
-
-}
-
+ 
 }
 

@@ -41,7 +41,7 @@
                                 <tr>
 
                                     <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($program_data['id']); ?>
-                                        <input type="text" value="<?= ($program_data['id']); ?>" >
+                                        <input type="text" value="<?= ($program_data['id']); ?>">
                                     </td>
                                     <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($program_data['program_name']); ?>
                                         <input type="text" name="programs[<?= $program_data['id'] ?>]['program_name'] " id="program" value="<?= htmlspecialchars($programdata['program_name']); ?>">
@@ -94,7 +94,7 @@
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
             <h3 class="text-xl font-semibold text-gray-700 "> Gestion des filières </h3>
 
-            <button type="button" id="closeeModal" class="end-2.5 text-gray-700 bg-transparent  rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-blue-gray-900:text-white" onclick="closeSection()">
+            <button type="button" id="closeeModal" class="end-2.5 text-gray-700 bg-transparent  rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-blue-gray-900:text-white" onclick="cover() ">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -118,4 +118,57 @@
 
         </div>
     </div>
+</div>
+
+
+
+<div id="addTuitionModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+
+
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full justify-between">
+
+        <!-- modal header -->
+        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <h3 class="text-xl font-semibold text-gray-700 "> Ajouter le mountant des filières </h3>
+            <button type="button" id="closeAddModalProgram" class="end-2.5 text-gray-700 bg-transparent  rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-blue-gray-900:text-white" onclick="closeTuition()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <!-- body -->
+        <div class="p-4 md:p-5">
+            <form method="POST" action="../../api/controllers/TuitionController.php" id="registerFormByAdmin" class="space-y-4">
+
+                <div class="space-y-8">
+                    <div>
+                        <input type="text" class="text-gray-900" id="programId" name="program_id">
+                        <input type="text" id="programName" name="program_name" placeholder="program_name" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
+                    </div>
+                    <div>
+                        <input type="text" id="amount" name="amount" placeholder="mountant" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
+                    </div>
+                    <div>
+                        <select name="section" id="section" onchange="getSelectedSectionId()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option selected>Choisir une Section</option>
+                            <?php foreach ($sections as $sectiondata) : ?>
+
+                                <option value="<?= htmlspecialchars($sectiondata['school_year']); ?>" data-section-id="<?= $sectiondata['id']; ?>"><?= htmlspecialchars($sectiondata['school_year']); ?></option>
+                            <?php endforeach; ?>
+
+                        </select>
+                        <input type="text" class="text-gray-900" name="section_id" id="sectionId">
+
+                    </div>
+
+                </div>
+        </div>
+
+        <div class="justify-between flex text-sm font-meduim">
+
+            <button type="button" id="closeAddModal" class="px-4 py-2 text-white bg-gradient-to-r from-gray-700 via-gray-700 to-gray-700 rounded-md hover:bg-gray-600 focus:outline focus-ring cursor-pointer" onclick="cover">Annuler</button>
+            <input value="Enregister" type="submit" name="addTuition" class="px-4 py-2 bg-gradient-to-r from-blue-600 via-blue-600 to-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus-ring cursor-pointer ">
+        </div>
+        </form>
+    </div>
+</div>
+</div>
 </div>

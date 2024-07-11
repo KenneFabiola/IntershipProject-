@@ -5,8 +5,13 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY
 class ProgramService {
     private $program_repository;
 
-    public function __construct($pdo) {
-        $this->program_repository = new ProgramRepository($pdo);
+    public function __construct() {
+        $this->program_repository = new ProgramRepository();
+        if(isset($result['success'])) {
+            return $result['success'];
+           }elseif (isset($result['error'])) {
+            return $result['error'];
+           }
     }
 
     public function createProgram($student) {
@@ -17,8 +22,8 @@ class ProgramService {
         return $this->program_repository->findById($id);
     }
 
-    public function updateProgram($student) {
-        return $this->program_repository->updateProgram($student);
+    public function updateProgram($program) {
+        return $this->program_repository->updateProgram($program);
     }
 
     public function deleteProgram($id) {

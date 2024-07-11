@@ -26,3 +26,22 @@ function closeTuition() {
     document.getElementById('tuitionModal').classList.add('hidden');
 
 }
+
+// menu deroulant de la section
+
+function openMultiDropdown(button) {
+    
+    document.getElementById('optionForSection').classList.remove('hidden');
+    
+}
+
+/*  fermer le menu deroulant de la section */
+const optionForSection = document.getElementById('optionForSection');
+
+window.addEventListener('click', (event) => {
+    if(event.target === optionForSection){
+      optionForSection.classList.add('hidden');
+    }
+ });
+
+

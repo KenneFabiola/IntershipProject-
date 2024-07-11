@@ -97,17 +97,15 @@
   <!-- custom js -->
   <script src="../../assets/js/custom.js"></script>
   <script src="../../assets/js/tailwind.js"></script>
-  <script src="../../assets/js/script1.js"></script>
-  <script src="../../assets/js/script2.js"></script>
-  <script src="../../assets/js/script3.js"></script>
-  <script src="../../assets/js/script4.js"></script>
+  <script src="../../assets/js/conn.js"></script>
+  <script src="../../assets/js/user.js"></script>
+  <script src="../../assets/js/student.js"></script>
   <script src="../../assets/js/script5.js"></script>
-  <script src="../../assets/js/script6.js"></script>
   <script src="../../assets/js/script7.js"></script>
   <script src="../../assets/js/script8.js"></script>
   <script src="../../assets/js/tuition.js"></script>
   <script src="../../assets/js/section.js"></script>
-  <script src="../../assets/js/education.js"></script>
+  <script src="../../assets/js/program.js"></script>
  
   
   

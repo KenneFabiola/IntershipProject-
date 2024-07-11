@@ -7,6 +7,7 @@ include 'authorisation.php';
 <!DOCTYPE html>
 <html>
 <?php include'head.php'; ?>
+<?php include 'message.php' ; ?>
 <body>
   <div class="hero_area">
     <!-- header section strats -->
@@ -36,7 +37,7 @@ include 'authorisation.php';
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ">
                 <li class="nav-item ">
-                  <a class="nav-link" href="index.php">Accueil </a>
+                  <a class="nav-link" href="dashbord.php">Accueil </a>
                 </li>
                 <li class="nav-item ">
                   <a class="nav-link" href="program.php">Filière </a>
@@ -45,8 +46,14 @@ include 'authorisation.php';
                   <a class="nav-link cursor-pointer" href="student.php">Etudiant <span class="sr-only">(current)</span> </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link cursor-pointer">Deconnexion</a>
+                  <a class="nav-link cursor-pointer" href="education.php" >Scolarité</a>
                 </li>
+                <form action="../../api/controllers/AuthentificateController.php" method="POST">
+                  <input type="hidden" name="logout" value="true">
+                  <li class="nav-item">
+                    <button type="submit" class="nav-link cursor-pointer">Déconnexion</button>
+                  </li>
+                </form>
                 <li class="nav-item">
                   <a class="nav-link" href="profil.php">Profil</a>
                 </li>
@@ -143,7 +150,6 @@ include 'authorisation.php';
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['first_name']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['last_name']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['email']); ?></td>
-                       
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['program']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['created_by_username']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['last_modified_by_username']); ?></td>

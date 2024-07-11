@@ -1,19 +1,14 @@
 <?php
-// header('Content-Type: application/json');
-
-require_once dirname(dirname(__DIR__)) .DIRECTORY_SEPARATOR .'Database.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'RoleRepository.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR .'services' . DIRECTORY_SEPARATOR . 'UserService.php';
-
-
 
 class UserController {
     private $user_service;
     private $role_repository;
 
-    public function __construct($pdo) {
-        $this->role_repository = new RoleRepository($pdo);
-        $this->user_service = new UserService($pdo);
+    public function __construct() {
+        $this->role_repository = new RoleRepository();
+        $this->user_service = new UserService();
     }
 /**
  * created user
@@ -146,7 +141,9 @@ public function createUser() {
     public function getAllUsers() {
         $user = $this->user_service->findAll();
         if ($user) {
-           
+        //    echo '<pre>';
+        //    print_r($user);
+        //    echo '</pre>';
            return json_encode($user);
           
         } else {
@@ -180,9 +177,9 @@ public function createUser() {
 }
 
 
-$database = new Database();
-$pdo = $database->connect();
-$controller = new UserController($pdo);
+// $database = new Database();
+// $pdo = $database->connect();
+$controller = new UserController();
 
 $json_user = $controller->getAllUsers();
 

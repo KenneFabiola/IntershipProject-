@@ -160,6 +160,6 @@
 <!-- modal sign_up -->
 <?php include 'signUp.php'; ?>
 <!-- footer -->
-<?php include'footer.php'; ?>
+<?php include 'footer.php'; ?>
 </body>
 </html>

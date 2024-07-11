@@ -1,6 +1,5 @@
 <?php
-// require_once('../../Database.php');
-// require_once('../models/Role.php');
+
 require_once dirname(dirname(__DIR__)) .DIRECTORY_SEPARATOR . 'Database.php';
 require_once dirname(__DIR__) .DIRECTORY_SEPARATOR .'models' . DIRECTORY_SEPARATOR . 'Role.php';
 
@@ -31,6 +30,24 @@ class RoleRepository
             );
         } else {
             return null;
+        }
+    }
+
+    public function findAllRole(){
+        try{
+            $sql = 'SELECT * FROM roles WHERE id';
+            $stmt = $this->pdo->query($sql);
+            $roles = [];
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+                $roles[] = $row;
+              
+            }
+            return $roles;
+        }catch(PDOException $e){
+            echo 'PDOExecption:' .$e->getMessage();
+            return[];
         }
     }
 }

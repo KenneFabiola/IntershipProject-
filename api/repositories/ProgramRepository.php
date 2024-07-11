@@ -35,9 +35,9 @@ class ProgramRepository
     $stmt->bindValue(':deleted', $program->getDeleted());
     if ($stmt->execute()) {
         $program->setId($this->pdo->lastInsertId());
-        return $program;
+        return ['success' =>  $program];
     }
-    return null;
+    return ['error' => 'failed'];
 
         } catch (PDOException $e) {
             echo 'PDOExeception: ' . $e->getMessage();
@@ -61,7 +61,7 @@ class ProgramRepository
                 return new Program(
                     $result['id'],
                     $result['program_name'],
-                    $result['describe'],
+                    $result['descriptive'],
                     $result['duration'],
                     $result['created_by'],
                     $result['last_modified_by'],
@@ -83,14 +83,18 @@ class ProgramRepository
     // read program
     public function findAllProgram(){
         try{
-            $sql = 'SELECT * FROM programs WHERE deleted = false';
+            $sql = 'SELECT p.*,
+            u1.username AS created_by_username,
+            u2.username AS last_modified_by_username
+            FROM programs p
+            LEFT JOIN users u1 ON p.created_by = u1.id
+            LEFT JOIN users u2 ON p.last_modified_by = u2.id
+            WHERE p.deleted = false
+            ORDER BY p.id';
             $stmt = $this->pdo->query($sql);
             $programs = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 
-           $row['created_by_username'] = $this-> findUsernameUserById($row['created_by']);
-           $row['last_modified_by_username'] = $this->findUsernameUserById($row['last_modified_by']);
-       
                $programs[] = $row;
               
             }
@@ -101,31 +105,7 @@ class ProgramRepository
         }
     }
 
-     /**
-   * find username by id
-   */
-  public function findUsernameUserById($id){
-    try{
-        $sql = 'SELECT username FROM users WHERE id = :id';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt ->bindParam(':id',$id);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-       
-
-        if($result){
-            return $result['username'];
-
-        }
-        return null;
-
-    }catch (PDOException $e) {
-         echo 'PDOExecption:' . $e->getMessage();
-         return null;
-     }
-
-}
-
+   
 
 
 /**
@@ -139,9 +119,9 @@ class ProgramRepository
          
          $sql = 'UPDATE programs SET 
             program_name = :program_name,
-            describe = :describe,
+            descriptive = :descriptive,
             duration = :duration,
-            created_by  =:created_by,
+            created_by  = :created_by,
             last_modified_by = :last_modified_by,
             created_at = :created_at ,
             deleted = :deleted WHERE id =:id';

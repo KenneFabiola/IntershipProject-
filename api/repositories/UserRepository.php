@@ -1,14 +1,14 @@
 <?php
 session_start();
 // gestion des interactions avec la base de données;
-
+require_once dirname(dirname(__DIR__)) .DIRECTORY_SEPARATOR .'Database.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'User.php' ;
 class UserRepository
 {
     private $pdo;
     public function __construct()
     {
-        $database = new Database();!
+        $database = new Database();
         $this->pdo = $database->connect();
     }
     // insertion of user
@@ -137,9 +137,13 @@ class UserRepository
 
 
     // read user
-    public function findAll(){
+    public function findAllUser(){
         try{
-            $sql = 'SELECT * FROM users WHERE deleted = false';
+            
+            $sql = 'SELECT u.*,  role_name
+                FROM users u
+                JOIN roles r ON u.role_id = r.id
+                WHERE u.deleted = false ORDER BY u.id';
             $stmt = $this->pdo->query($sql);
             $users = [];
 

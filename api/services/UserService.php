@@ -1,12 +1,11 @@
 <?php
-// require_once("../repositories/UserRepository.php");
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'UserRepository.php';
 
 class UserService {
     private $user_repository;
 
-    public function __construct($pdo) {
-        $this->user_repository = new UserRepository($pdo);
+    public function __construct() {
+        $this->user_repository = new UserRepository();
     }
 
     public function createUser($user) {
@@ -31,7 +30,7 @@ class UserService {
     }
 
     public function findAll() {
-        return $this->user_repository->findAll();
+        return $this->user_repository->findAllUser();
     }
 
     public function findByUsername($username) {

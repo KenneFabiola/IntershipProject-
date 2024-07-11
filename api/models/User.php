@@ -9,6 +9,7 @@ class User
     private $pwd;
     private $deleted;
     private $role_id;
+    private $role_name;
 
 
     public function __construct($id, $username, $first_name, $last_name, $email, $pwd,$deleted = 0,$role_id)
@@ -23,6 +24,7 @@ class User
         $this->pwd = $pwd;
         $this->deleted = $deleted;
         $this->role_id = $role_id;
+     
     }
 
 
@@ -88,5 +90,11 @@ class User
     public function setRoleId($role_id)
     {
         return $this->role_id = $role_id;
+    }
+    public function getRoleName() {
+        return $this->role_name;
+    }
+    public function setRoleName($role_name) {
+        return $this->role_name = $role_name;
     }
 }

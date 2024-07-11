@@ -97,7 +97,7 @@
   <!-- custom js -->
   <script src="../assets/js/custom.js"></script>
   <script src="../assets/js/tailwind.js"></script>
-  <script src="../assets/js/script1.js"></script>
+  <script src="../assets/js/conn.js"></script>
   <script src="../assets/js/script2.js"></script>
   <script src="../assets/js/script3.js"></script>
   

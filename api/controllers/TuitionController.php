@@ -39,63 +39,40 @@ class TuitionController
            $created_by =$_SESSION['id']; echo $created_by;
 
             $last_modified_by = $_SESSION['id'] ?? null;
-            $section_id = $_POST['sectionIdForTuition'] ?? null;  echo $section_id;
-           
-            if(!isset($_POST['programs']) || !is_array($_POST['programs'])) {
-                echo json_encode(['error' => 'invalid programs data']);
-                exit();
-
-            }
-            foreach( $_POST['programs'] as  $program_data) {
-                echo 'ok';
-                // echo is_array($_POST['programs']);
-                $program_id = $program_data['program_id'] ?? null;
-                $program = $program_data['program_name'] ?? null; echo $program;
-                $amount = $program_data['amount'] ?? null; 
-
-
-                if ($program_id && $program && $amount) {
-                    echo ' success'; 
-                    die();
-                }
-               
-
-            }
-           
-           
-           
-            
-            // echo $program;
-            // $amount = $_POST['amount'];
-            // echo $amount;
-            
-
-            // // get data post
-
-            // // Création de l'objet tuition
-            // $tuition = new Tuition(
-            //     null,
-            //     $created_by,
-            //     $last_modified_by,
-            //     $program_id,
-            //     $section_id,
-            //     $program,
-            //     $amount,
-            //     null,
-            //     false
-            // );
+            $section_id = $_POST['section_id'] ?? null;  echo $section_id;
+            $program = $_POST['program_name'];  echo $program;
+            $program_id = $_POST['program_id'];  echo $program_id;   
+            $amount = $_POST['amount'];  echo $amount;
            
           
-            // get service for authentification
-            // $createdTuition = $this->tuition_service->createTuition($tuition);
-            // if (is_array($createdTuition) && isset($createdTuition['error'])) {
-            //     echo json_encode(['error' => $createdTuition['error']]);
-            // }
-            // elseif ($createdTuition) {
-            //     echo json_encode(['success' => 'tuition created successfully']);
-            // } else {
-            //     echo json_encode(['error' => 'Failed to create Tuition']);
-            // }
+              
+
+            // get data post
+
+            // Création de l'objet tuition
+            $tuition = new Tuition(
+                null,
+                $created_by,
+                $last_modified_by,
+                $program_id,
+                $section_id,
+                $program,
+                $amount,
+                null,
+                false
+            );
+           
+          
+             // get service for authentification
+            $createdTuition = $this->tuition_service->createTuition($tuition);
+            if (is_array($createdTuition) && isset($createdTuition['error'])) {
+                echo json_encode(['error' => $createdTuition['error']]);
+            }
+            elseif ($createdTuition) {
+                echo json_encode(['success' => 'tuition created successfully']);
+            } else {
+                echo json_encode(['error' => 'Failed to create Tuition']);
+            }
          }
     }
 
@@ -170,6 +147,9 @@ class TuitionController
     {
         $tuitions = $this->tuition_service->findAllTuition();
         if ($tuitions) {
+                 echo '<pre>';
+            print_r($tuitions);
+           echo ' </pre>';
             return json_encode($tuitions);
         } else {
             echo json_encode(['error' => 'No tuitions found']);
@@ -210,3 +190,40 @@ $json_program = $controller->findProgramName();
 
 $tuitions = json_decode($json_tuition, true);
 $programs = json_decode($json_program, true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // if(!isset($_POST['programs']) || !is_array($_POST['programs'])) {
+            //     echo json_encode(['error' => 'invalid programs data']);
+            //     exit();
+
+            // }
+            // foreach( $_POST['programs'] as  $program_data) {
+            //     echo 'ok';
+            //     // echo is_array($_POST['programs']);
+            //     $program_id = $program_data['program_id'] ?? null;
+            //     $program = $program_data['program_name'] ?? null; echo $program;
+            //     $amount = $program_data['amount'] ?? null; 
+
+
+            //     if ($program_id && $program && $amount) {
+            //         echo ' success'; 
+            //         die();
+            //     }
+               
+
+            // }
+           
+           

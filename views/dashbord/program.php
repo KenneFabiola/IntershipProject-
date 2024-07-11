@@ -1,7 +1,9 @@
 <?php 
  require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'ProgramController.php';
+ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'SectionController.php';
 
 include 'authorisation.php';
+include 'message.php';
  ?>
 
 
@@ -37,17 +39,23 @@ include 'authorisation.php';
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ">
                 <li class="nav-item ">
-                  <a class="nav-link" href="index.php">Accueil </a>
+                  <a class="nav-link" href="dashbord.php">Accueil </a>
                 </li>
                 <li class="nav-item active">
                   <a class="nav-link" href="program.php">Filière <span class="sr-only">(current)</span> </a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link cursor-pointer" >Scolarité</a>
+                <li class="nav-item ">
+                  <a class="nav-link" href="student.php">Etudiant <span class="sr-only">(current)</span> </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link cursor-pointer">Deconnexion</a>
+                  <a class="nav-link cursor-pointer" href="education.php" >Scolarité</a>
                 </li>
+                <form action="../../api/controllers/AuthentificateController.php" method="POST">
+                  <input type="hidden" name="logout" value="true">
+                  <li class="nav-item">
+                    <button type="submit" class="nav-link cursor-pointer">Déconnexion</button>
+                  </li>
+                </form>
                 <li class="nav-item">
                   <a class="nav-link" href="profil.php">Profil</a>
                 </li>
@@ -95,7 +103,7 @@ include 'authorisation.php';
                      Nom de la filière
                   </th>
                   <th scope="col" class="px-6 py-3">
-                      Frais de scolarité
+                      Description
                   </th>
                   <th scope="col" class="px-6 py-3">
                       Durée 
@@ -109,10 +117,7 @@ include 'authorisation.php';
                   <th scope="col" class="px-6 py-3">
                   Date de création
                   </th>
-                  <th scope="col" class="px-6 py-3">
-                  Deleted
-                  </th>
-                  
+                                 
                   <th scope="col" class="px-6 py-3">
                       Action
                   </th>
@@ -125,7 +130,7 @@ include 'authorisation.php';
           <tbody>
           <?php if (isset($programs['error'])): ?>
                 <tr>
-                    <td colspan="5" class="py-2 px-4"><?= htmlspecialchars($users['error']); ?></td>
+                    <td colspan="5" class="py-2 px-4"><?= htmlspecialchars($programs['error']); ?></td>
                 </tr>
             <?php elseif (!empty($programs)): ?>
                 <?php foreach ($programs as $programdata): ?>
@@ -137,19 +142,22 @@ include 'authorisation.php';
                         <td class="py-2 px-4"><?= htmlspecialchars($programdata['created_by_username']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($programdata['last_modified_by_username']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($programdata['created_at']); ?></td>
-                        <td class="py-2 px-4"><?= htmlspecialchars($programdata['deleted']); ?></td>
+                        
                         <td class="py-2 px-4">
                             <div class="justify between">
-                                        <a href="#" id="" data-student_id= "<?= $studentdata['id'] ?>" 
-                                        data-student_username= "<?= $studentdata['username'] ?>"
-                                        data-firstname= "<?= $studentdata['last_name'] ?>"
-                                        data-lastname= "<?= $studentdata['pwd'] ?>"
-                                        data-email= "<?= $studentdata['program']?>"
-                                        data-pwd= "<?= $userdata['pwd'] ?>"
-                                        class="font-meduim text-blue-600 hover:underline" onclick="openEditModal(this)"><i class="fas fa-edit"></i></a> 
+                                        <a href="#" id="" data-program_id= "<?= $programdata['id'] ?>" 
+                                        data-program_name= "<?= $programdata['program_name'] ?>"
+                                        data-program_description= "<?= $programdata['descriptive'] ?>"
+                                        data-duration= "<?= $programdata['duration'] ?>"
+                                        
+                                        class="font-meduim text-blue-600 hover:underline" onclick="openEditProgramModal(this) "><i class="fas fa-edit"></i></a> 
                                       
 
-                                        <button  data_program_id= "<?= $programdata['id'] ?>" class="font-meduim text-red-600 hover:underline" onclick="openProgram(this)"><i class="fas fa-trash"></i></button> 
+                                        <button  data-program_id= "<?= $programdata['id'] ?>" class="font-meduim text-red-600 hover:underline" onclick="openProgram(this)"><i class="fas fa-trash"></i></button> 
+                                        <button 
+                                        data-program_id = "<?= $programdata['id'] ?>"
+                                        data-program_name = "<?= htmlspecialchars($programdata['program_name']); ?>"
+                                        onclick="openEditModalTuition(this)" ><i class="fas fa-credit-card"></i></button>
                               </div>
                         </td>
                         
@@ -157,7 +165,7 @@ include 'authorisation.php';
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="5" class="py-2 px-4">Aucun utilisateur trouvé.</td>
+                    <td colspan="5" class="py-2 px-4">Aucun Programme trouvé.</td>
                 </tr>
             <?php endif; ?>
           </tbody>     
@@ -166,9 +174,10 @@ include 'authorisation.php';
                   
   </div>                
 
-<?php include'programModal.php';?>
+<?php include 'programModal.php';?>
+<?php include 'tuitionModal.php'; ?>
 
-<?php include'footer.php'; ?>
+<?php include 'footer.php'; ?>
 
 </body>
 </html>

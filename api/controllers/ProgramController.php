@@ -11,10 +11,10 @@ class ProgramController
     private $program_service;
     private $user_repository;
 
-    public function __construct($pdo)
+    public function __construct()
     {
-        $this->program_service = new ProgramService($pdo);
-        $this->user_repository = new UserRepository($pdo); // Pour les futures utilisations, si nécessaire
+        $this->program_service = new ProgramService();
+        $this->user_repository = new UserRepository(); // Pour les futures utilisations, si nécessaire
     }
 
 
@@ -22,7 +22,7 @@ class ProgramController
 
 
     //create program
-    public function createprogram()
+    public function createProgram()
     {
 
         if (!isset($_SESSION['password']) || !isset($_SESSION['username'])) {
@@ -60,16 +60,19 @@ class ProgramController
             // get service for authentification
             $created_program = $this->program_service->createProgram($program);
 
-            if ($created_program) {
-                echo json_encode(['success' => 'program created successfully']);
+            if (is_array($created_program) && isset($created_program['error'])) {
+                $_SESSION['error'] = $created_program['error'];
+                header('location:../../views/dashbord/program.php');
             } else {
-                echo json_encode(['error' => 'Failed to create program']);
+                $_SESSION['success'] = 'program created successfully';
+                header('location:../../views/dashbord/program.php');
+
             }
         }
     }
 
     // Méthode pour mettre à jour un étudiant
-    public function updateprogram()
+    public function updateProgram()
     {
         // check if authentification is ok
         if (!isset($_SESSION['password']) || !isset($_SESSION['username'])) {
@@ -83,27 +86,22 @@ class ProgramController
                 exit();
             }
         }
-
-
-
-        $created_by = $_SESSION['id'];
+    if(isset($_POST['updateProgram'])) {
         $last_modified_by = $_SESSION['id'];
-        $input_data = json_decode(file_get_contents("php://input"), true);
-
-        $id = $input_data['id'] ?? null;
-        $user = $this->program_service->findById($id);
-
-        $id = $input_data['id'] ?? null;
+        $id = intval($_POST['updateProgramById']); 
+        $program_name = htmlspecialchars($_POST['program_name'] ?? null);
+        $descriptive = htmlspecialchars($_POST['descriptive'] ?? null);
+        $duration = htmlspecialchars($_POST['duration'] ?? null);  
+  
         $program = $this->program_service->findById($id);
         if ($program) {
-            $program->setProgramName($input_data['program_name'] ?? $program->getProgramName());
-            $program->setDescriptive($input_data['amount'] ?? $program->getDescriptive());
-            $program->setDuration($input_data['duration'] ?? $program->getDuration());
+            $program->setProgramName($program_name ?? $program->getProgramName());
+            $program->setDescriptive($descriptive ?? $program->getDescriptive());
+            $program->setDuration($duration ?? $program->getDuration());
             $program->setLastModifiedBy($last_modified_by);
-            $program->setCreatedBy($program->getCreatedBy()); // Ne devrait pas être modifié lors de la mise à jour
-
-            $updatedprogram = $this->program_service->updateprogram($program, $last_modified_by);
-            if ($updatedprogram) {
+           
+            $updated_program = $this->program_service->updateprogram($program);
+            if ($updated_program) {
                 echo json_encode(['success' => 'program updated successfully']);
             } else {
                 echo json_encode(['error' => 'Failed to update program']);
@@ -113,8 +111,13 @@ class ProgramController
         }
     }
 
+
+       
+       
+    }
+
     // delete program
-    public function deleteprogram()
+    public function deleteProgram()
     {
 
         if (!isset($_SESSION['password']) || !isset($_SESSION['username'])) {
@@ -145,7 +148,7 @@ class ProgramController
     }
 
     // get program by id
-    public function getprogramById($id)
+    public function getProgramById($id)
     {
         $program = $this->program_service->findById($id);
         if ($program) {
@@ -156,7 +159,7 @@ class ProgramController
     }
 
     // get all program
-    public function getAllprograms()
+    public function getAllPrograms()
     {
         $programs = $this->program_service->findAllProgram();
         if ($programs) {
@@ -167,18 +170,21 @@ class ProgramController
     }
 }
 
-$database = new Database();
-$pdo = $database->connect();
-$controller = new ProgramController($pdo);
+// $database = new Database();
+// $pdo = $database->connect();
+$controller = new ProgramController();
 
-$json_program = $controller->getAllprograms();
+$json_program = $controller->getAllPrograms();
 $programs = json_decode($json_program, true);
 
 if (isset($_POST['deleteProgram'])) {
-    $controller->deleteprogram();
+    $controller->deleteProgram();
 }
 if (isset($_POST['addProgram'])) {
-    $controller->createprogram();
+    $controller->createProgram();
+}
+if (isset($_POST['updateProgram'])) {
+    $controller->updateProgram();
 }
 
 

@@ -1,17 +1,16 @@
 <?php
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Database.php';
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'UserRepository.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Tuition.php' ;
 
 class TuitionRepository{
 
 
     private $pdo;
-    private $user_repository;
+  
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
-        $this->user_repository = new UserRepository($pdo);
+       
     }
     // insertion of tuition
     public function createTuition(Tuition $tuition)
@@ -83,20 +82,24 @@ public function findById($id)
  *
  * @return array
  */
-public function findAllTuition(){
+public function findAllTuitions(){
     try {
-        $stmt = $this->pdo->prepare('SELECT * FROM tuitions WHERE deleted=false');
-        $stmt->execute();
-        $tuition =[];
+        $sql = 'SELECT t.*, u1.username AS created_by,
+        u2.username AS last_modified_by
+        FROM tuitions t
+        LEFT JOIN users u1 ON t.created_by = u1.id
+        LEFT JOIN users u2 ON t.last_modified_by = u2.id
+        WHERE t.deleted = false
+        ORDER BY  t.id '; 
+        $stmt = $this->pdo->query($sql);
+        $tuitions =[];
 
         while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
-            $row['created_by_username'] = $this->user_repository->findUsernameUserById($row['created_by']);
-            $row['last_modified_by_username'] = $this->user_repository-> findUsernameUserById($row['last_modified_by']);
-        
-            $tuition = [];
+           
+            $tuitions = [];
     
         }
-        return $tuition;
+        return $tuitions;
 
 
     }catch(PDOException $e){
