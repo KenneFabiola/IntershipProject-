@@ -25,9 +25,9 @@ class RoleController
     public function getAllRole() {
         $roles = $this->role_service->findAllRole();
         if ($roles) {
-            echo '<pre>';
-            print_r($roles);
-           echo ' </pre>';
+        //     echo '<pre>';
+        //     print_r($roles);
+        //    echo ' </pre>';
            return json_encode($roles);
           
         } else {

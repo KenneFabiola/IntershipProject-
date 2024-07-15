@@ -6,8 +6,8 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEP
 class SectionController {
     private $section_service;
     
-    public function __construct($pdo) {
-        $this->section_service = new SectionService($pdo);
+    public function __construct() {
+        $this->section_service = new SectionService();
          
     }
     //create section
@@ -172,9 +172,9 @@ class SectionController {
 }
 
 // Connexion à la base de données et création de l'instance du contrôleur
-$database = new Database();
-$pdo = $database->connect();
-$controller = new SectionController($pdo);
+// $database = new Database();
+//  $pdo= $database->connect();
+$controller = new SectionController();
 
 $json_section = $controller->getAllSections();
 $sections = json_decode($json_section,true);

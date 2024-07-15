@@ -15,7 +15,7 @@ closeStudentProgram.addEventListener('click', () => {
  });
 
  window.addEventListener('click', (event) => {
-    if(event.target === addProgramModal){
+    if(event.target === addStudentModal){
       addStudentModal.classList.add('hidden');
     }
  });
@@ -48,7 +48,6 @@ function openEditStudentModal(button) {
    const studentFirstname = button.getAttribute('data_student_firstname');
    const studentLastname = button.getAttribute('data_student_last_name');
    const studentEmail = button.getAttribute('data_student_email');
-   const studentProgram = button.getAttribute('data_student_program');
    const studentLastModified = button.getAttribute('data_student_last_modified_by_username');
 
    document.getElementById('updateStudentById').value = studentId;
@@ -56,7 +55,6 @@ function openEditStudentModal(button) {
    document.getElementById('updateStudentFirstname').value = studentFirstname;
    document.getElementById('updateStudentLastname').value = studentLastname;
    document.getElementById('updateStudentEmail').value = studentEmail;
-   document.getElementById('updateStudentProgram').value = studentProgram;
    document.getElementById('usernameUser').value = studentLastModified;
 
    document.getElementById('editStudentModal').classList.remove('hidden');
@@ -67,6 +65,28 @@ function closeEditStudentModal() {
    
 }
 
+
+/* add user account */
+
  
+function openAccount(button) {
+
+   const accountUsername = button.getAttribute('data-student_username');
+   const accountFirstname = button.getAttribute('data-student_firstname');
+   const accountLastName = button.getAttribute('data-student_last_name');
+   const accountEmail = button.getAttribute('data-student_email');
+
+   document.getElementById('usernameAccount').value = accountUsername;
+   document.getElementById('firstNameAccount').value = accountFirstname;
+   document.getElementById('lastNameAccount').value = accountLastName ;
+   document.getElementById('emailAccount').value = accountEmail ;
+
+document.getElementById('studentAccount').classList.remove('hidden');
+
+}
+
+function closeButton() {
+   document.getElementById('studentAccount').classList.add('hidden');
+}
  
 

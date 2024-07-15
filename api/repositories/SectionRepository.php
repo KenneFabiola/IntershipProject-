@@ -9,10 +9,10 @@ class SectionRepository{
     private $pdo;
     private $user_repository;
     
-    public function __construct(PDO $pdo)
+    public function __construct()
     {
-        $this->pdo = $pdo;
-        $this->user_repository = new UserRepository($pdo);
+        $database = new Database();
+        $this->pdo = $database->connect();
     }
     // create section
     public function createSection(Section $section)
@@ -84,15 +84,19 @@ public function findById($id)
  */
 public function findAllSection(){
     try {
-        $sql = 'SELECT * FROM sections WHERE deleted=false AND statut= "active" ';
+        $sql = 'SELECT s.*, u1.username AS created_by_username,
+        u2.username AS last_modified_by
+        FROM sections s
+        LEFT JOIN users u1 ON s.created_by = u1.id
+        LEFT JOIN users u2 ON s.last_modified_by = u2.id
+         WHERE s.deleted=false AND statut= "active" 
+         ORDER BY s.id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $sections =[];
 
         while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
-            $row['created_by_username'] = $this->user_repository-> findUsernameUserById($row['created_by']);
-            $row['last_modified_by_username'] = $this->user_repository-> findUsernameUserById($row['last_modified_by']);
-        
+           
           
              $sections[] = $row;
             
@@ -197,16 +201,19 @@ public function findAllSection(){
 
   public function getInactiveSection() {
     try {
-        $sql = 'SELECT * FROM sections WHERE statut = "inactive" ';
-        
+        $sql = 'SELECT s.*, u1.username AS created_by_username,
+        u2.username AS last_modified_by
+        FROM sections s
+        LEFT JOIN users u1 ON s.created_by = u1.id
+        LEFT JOIN users u2 ON s.last_modified_by = u2.id
+         WHERE s.deleted = false AND statut = "inactive" 
+         ORDER BY s.id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $sections =[];
 
         while ($row =$stmt->fetch(PDO::FETCH_ASSOC)){
-            $row['created_by_username'] = $this->user_repository-> findUsernameUserById($row['created_by']);
-            $row['last_modified_by_username'] = $this->user_repository-> findUsernameUserById($row['last_modified_by']);
-        
+           
           
              $sections[] = $row;
             

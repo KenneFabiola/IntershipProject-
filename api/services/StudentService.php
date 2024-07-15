@@ -9,21 +9,29 @@ class studentService {
         $this->student_repository = new StudentRepository();
     }
 
-    public function createStudent($student) {
-       $result = $this->student_repository->createStudent($student);
-       if(isset($result['success'])) {
-        return $result['success'];
-       }elseif (isset($result['error'])) {
-        return $result['error'];
-       }
+    public function createStudent($student)
+    {
+        $result = $this->student_repository->createStudent($student);
+    
+        if (isset($result['error'])) {
+            return $result['error'];
+        } elseif (isset($result['success'])) {
+            return $result['success'];
+        }
     }
+    
 
     public function findById($id) {
         return $this->student_repository->findById($id);
     }
 
     public function updateStudent($student) {
-        return $this->student_repository->updateStudent($student);
+        $result = $this->student_repository->updateStudent($student);
+        if (isset($result['error'])) {
+            return $result['error'];
+        } elseif (isset($result['success'])) {
+            return $result['success'];
+        }
     }
 
     public function deleteStudent($id) {

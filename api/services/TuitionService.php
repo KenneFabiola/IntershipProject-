@@ -9,15 +9,15 @@ class TuitionService {
     private $section_repository;
  
 
-    public function __construct($pdo) {
-        $this->tuition_repository = new TuitionRepository($pdo);
-        $this->section_repository = new SectionRepository($pdo);
+    public function __construct() {
+        $this->tuition_repository = new TuitionRepository();
+        $this->section_repository = new SectionRepository();
         
     }
 
     public function createTuition(Tuition $tuition) {
         if($this->section_repository->checkActiveSection($tuition->getSectionId())) {
-            return $this->tuition_repository->createTuition($tuition);
+            $result =  $this->tuition_repository->createTuition($tuition);
             if (isset($result['success'])) {
                 return $result['success'];
             } elseif (isset($result['error'])) {
@@ -32,7 +32,15 @@ class TuitionService {
     }
 
     public function updateTuition($tuition) {
-        return $this->tuition_repository->updateTuition($tuition);
+        if($this->section_repository->checkActiveSection($tuition->getSectionId())) {
+            $result =  $this->tuition_repository->updateTuition($tuition);
+            if (isset($result['success'])) {
+                return $result['success'];
+            } elseif (isset($result['error'])) {
+                return ['error' => $result['error']];
+            }
+        }
+        
     }
 
     public function deleteTuition($id) {

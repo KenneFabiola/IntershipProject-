@@ -34,6 +34,7 @@ class AuthentificateController
                 $_SESSION['id'] = $connexion->getId();
                 $_SESSION['username'] = $connexion->getUsername();
                 $_SESSION['password'] = $connexion->getPwd();
+                $_SESSION['role'] = $connexion->getRoleId();
               
 
 

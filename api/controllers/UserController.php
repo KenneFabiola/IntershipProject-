@@ -17,54 +17,48 @@ class UserController {
  * @return void
  */
 public function createUser() {
-    if((isset($_POST['submit'])) || (isset($_POST['signUp']))){
-        $role_name = $_POST['role'] ?? 'student';
-        $role = $this->role_repository->getRoleByName($role_name);
+    if ((isset($_POST['submit'])) || (isset($_POST['signUp']))) {
+        $role_id = $_POST['role_id'] ?? 3;
+        $username = htmlspecialchars($_POST['username']); 
+        $first_name = htmlspecialchars($_POST['first_name']);
+        $last_name = htmlspecialchars($_POST['last_name']);
+        $email = htmlspecialchars($_POST['email']);
+        $pwd = htmlspecialchars($_POST['pwd'] ?? 'azerty');
 
-        if ($role) {
-            $role_id = $role->getId();
+        // create user object
+        $user = new User(
+            null,
+            $username,
+            $first_name,
+            $last_name,
+            $email,
+            $pwd,
+            false,
+            $role_id
+        );
+       
 
-            // get data post
-            $username = htmlspecialchars( $_POST['username']);
-            $first_name = htmlspecialchars($_POST['first_name']);
-            $last_name = htmlspecialchars( $_POST['last_name']);
-            $email = htmlspecialchars($_POST['email']) ;
-            $pwd = htmlspecialchars($_POST['pwd'] ?? 'azerty');
-
-            // create user objet
-            $user = new User(
-                null,
-                $username,
-                $first_name,
-                $last_name,
-                $email,
-                $pwd,
-                false,
-                $role_id
-            );
-
-            //call services to verify
+        //call services to verify
+      
+        try {
             $createdUser = $this->user_service->createUser($user);
+           
+        } catch (Exception $e) {
+            echo json_encode(['error' => 'Error creating user: ' . $e->getMessage()]);
+            return;
+        }
 
-            // check an error while user is create
-            if (is_array($createdUser) && isset($createdUser['error'])) {
-                echo json_encode(['error' => $createdUser['error']]);
-            } else {
-                echo json_encode(['success' => 'User created successfully']);
-                if ($role_name == 'admin') {
-                    header('Location: ../../views/dashbord/dashbord.php');
-                } elseif ($role_name == 'secretary') {
-                    echo '<script>alert("Je suis une secrétaire")</script>';
-                } elseif ($role_name == 'student') {
-                    echo '<script>alert("Je suis un étudiant")</script>';
-                }
-                exit();
-            }
+        // check an error while user is create
+        if (is_array($createdUser) && isset($createdUser['error'])) {
+            echo json_encode(['error' => $createdUser['error']]);
         } else {
-            echo json_encode(['error' => 'Role not found']);
+            echo json_encode(['success' => 'User created successfully']);
+            
+
         }
     }
 }
+
 
     /**
      * update user
@@ -83,7 +77,7 @@ public function createUser() {
                 $first_name = htmlspecialchars($_POST['first_name']);
                 $last_name = htmlspecialchars($_POST['last_name']);
                 $email = htmlspecialchars($_POST['email']);
-                $pwd = htmlspecialchars($_POST['pwd']);
+                // $pwd = htmlspecialchars($_POST['pwd']);
                 $deleted = false;
                 $user = $this->user_service->findById($id);
 
@@ -92,8 +86,6 @@ public function createUser() {
                 $user->setFirstName($first_name ?? $user->getFirstName());
                 $user->setLastName($last_name ?? $user->getLastName());
                 $user->setEmail($email ?? $user->getEmail());
-                $user->setPwd($pwd  ?? $user->getPwd());
-                $user->setDeleted($pwd  ?? $user->getDeleted());
                 $user->setRoleId($role_id);
 
                 $updatedUser = $this->user_service->updateUser($user);

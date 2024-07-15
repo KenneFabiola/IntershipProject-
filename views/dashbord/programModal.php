@@ -17,10 +17,15 @@
       
           <div class="space-y-8">
                 <div>
+                    <input type="hidden" value="<?= $_SESSION['id'] ?>" name="created_by">
+                    <input type="hidden" value="<?= $_SESSION['id'] ?>" name="last_modified_by">
                     <input type="text" id="program_name" name="program_name" placeholder="program_name" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
                 </div>
                 <div>
-                  <input type="text" id="describe" name="describe" placeholder="describe" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
+                    <input type="text" id="level_name" name="level_name" placeholder="niveau" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
+                </div>
+                <div>
+                  <input type="text" id="describe" name="descriptive" placeholder="description" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
                 </div>
                 <div>
                   <input type="text" id="duration" name="duration" placeholder="duration" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
@@ -60,9 +65,12 @@
       
           <div class="space-y-8">
                 <div>
-                    <input type="hidden" name="<?= $_SESSION['id'] ?>" id="" value="<?= $_SESSION['id'] ?>">
+                    <input type="hidden" name="last_modified_by" id="" value="<?= $_SESSION['id'] ?>">
                     <input type="text" name="updateProgramById" id="updateProgramById">
                     <input type="text" id="updateProgramName" name="program_name" placeholder="program_name" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
+                </div>
+                <div>
+                  <input type="text" id="updateLevelName" name="level_name" placeholder="level_name" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
                 </div>
                 <div>
                   <input type="text" id="updateProgramDescription" name="descriptive" placeholder="describe" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>

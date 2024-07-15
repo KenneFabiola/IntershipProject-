@@ -65,7 +65,7 @@
 
     <?php
 if(isset($_SESSION['username']) && isset ($_SESSION['id'])) {
-    echo "je suis " .$_SESSION['username'] .",". "mon Id est: " . $_SESSION['id'];
+    echo "je suis " .$_SESSION['username'] .",". "mon Id est: " . $_SESSION['id'].",". "mon role est: " . $_SESSION['role'] ;
 }
 
 ?>

@@ -42,9 +42,11 @@ class UserRepository
             if ($stmt->execute()) {
                 // get id of new user 
                 $user->setId($this->pdo->lastInsertId());
+               
                 return ['success' =>  $user];
             }
             return ['error' => 'failed'];
+         
         }catch(PDOException $e){
           error_log('PDOExeception: ' .$e->getMessage());
             return null;
@@ -84,16 +86,13 @@ class UserRepository
     public function updateUser(User $user)
     {
         try {
-            $find_password = $user->getPwd();
-            $hashed_pwd = password_hash($find_password, PASSWORD_BCRYPT);
+          
             $sql = 'UPDATE users SET 
-            first_name =:first_name,
-            last_name=:last_name, 
-            email=:email,
-            pwd=:pwd,
-            username=:username,
-            role_id=:role_id,
-            deleted=:deleted
+            username = :username,
+            first_name = :first_name,
+            last_name = :last_name, 
+            email = :email,         
+            role_id=:role_id
             WHERE id =:id';
 
             $stmt = $this->pdo->prepare($sql);
@@ -102,8 +101,6 @@ class UserRepository
             $stmt->bindValue(':first_name', $user->getFirstName());
             $stmt->bindValue(':last_name', $user->getLastName());
             $stmt->bindValue(':email', $user->getEmail());
-            $stmt->bindValue(':pwd', $hashed_pwd);
-            $stmt->bindValue(':deleted', $user->getDeleted());
             $stmt->bindValue(':role_id', $user->getRoleId());
 
 

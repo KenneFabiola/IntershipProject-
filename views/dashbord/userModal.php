@@ -32,13 +32,17 @@
                   <input type="password" id="password" name="pwd" placeholder="••••••••" class=" bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300">
                 </div>
                 <div>
-                  <?php  if(isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
-                  <select name="role" id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                  <?php  if(isset($_SESSION['role']) && $_SESSION['role'] == 1 ): ?>
+                  <select name="role" id="role" onchange="getSelectedRoleId()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     <option selected>Choisir une fonction</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Secretary">Secretary</option>
-                    <option value="Student">Student</option>
+                    <?php foreach ($roles as $roledata) : ?>
+                   <option value="<?= htmlspecialchars($roledata['role_name']); ?>" data-role_id ="<?= $roledata['id']; ?>">
+                   <?= htmlspecialchars($roledata['role_name']); ?>
+                   </option>
+                    <?php endforeach; ?>
                   </select> 
+                  <input type="text" class="text-gray-900" name="role_id" id="roleId">
+
                   <?php endif; ?>
                 </div>
           </div>
@@ -120,9 +124,7 @@
                     <div>
                       <input type="email" id="updateEmail" name="email" placeholder="Email" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
                     </div>
-                    <div>
-                      <input type="password" id="updatePassword" name="pwd" placeholder="••••••••" class=" bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300">
-                    </div>
+                    
                     <div>
                           <?php  if(isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
                           <select name="role" id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">

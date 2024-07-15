@@ -93,10 +93,11 @@ include 'authorisation.php';
           <div id="optionForSection" class=" block hidden z-10 inline-flex justify-center items-center divide-y divide-gray-900 bg-white w-44 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
 
             <ul class="py-1 text-sm text-gray-700 ">
+              <button onclick="closeMultiDropdown()"><i class="fas fa-times"></i></button>
               <li>
+                <button class="block px-4 py-2" id="sectionButton">New section</button>
                 <a href="#activeSection" class="block px-4 py-2">Voir les sessions active</a>
                 <a href="#finishSection" class="block px-4 py-2">Voir les sessions session terminée</a>
-                <a href="" class="block px-4 py-2 ">Ajouter une nouvelle section</a>
               </li>
 
             </ul>
@@ -124,6 +125,12 @@ include 'authorisation.php';
      
       <?php include 'footer.php'; ?>
 
+  <script>
+    function newSection(this) {
+    alert();
+    document.getElementById('sectionModal').classList.remove('hidden');
+}
+    </script>
 </body>
 
 </html>

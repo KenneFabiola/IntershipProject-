@@ -7,15 +7,16 @@ class ProgramService {
 
     public function __construct() {
         $this->program_repository = new ProgramRepository();
-        if(isset($result['success'])) {
+       
+    }
+
+    public function createProgram($student) {
+       $result= $this->program_repository->createProgram($student);
+         if(isset($result['success'])) {
             return $result['success'];
            }elseif (isset($result['error'])) {
             return $result['error'];
            }
-    }
-
-    public function createProgram($student) {
-        return $this->program_repository->createProgram($student);
     }
 
     public function findById($id) {
@@ -24,6 +25,11 @@ class ProgramService {
 
     public function updateProgram($program) {
         return $this->program_repository->updateProgram($program);
+        if(isset($result['success'])) {
+            return $result['success'];
+           }elseif (isset($result['error'])) {
+            return $result['error'];
+           }
     }
 
     public function deleteProgram($id) {

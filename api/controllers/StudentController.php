@@ -42,7 +42,6 @@ class StudentController
             $last_name = htmlspecialchars($_POST['last_name'] ?? null);
             $email = htmlspecialchars($_POST['email'] ?? null);
             $pwd = htmlspecialchars($_POST['pwd'] ?? 'azerty');
-            $program = htmlspecialchars($_POST['program'] ?? null);
 
 
             // Création de l'objet User
@@ -53,19 +52,32 @@ class StudentController
                 $last_name,
                 $email,
                 $pwd,
-                $program,
                 $created_by,
                 $last_modified_by,
                 null,
                 false
             );
-            // get service for authentification
-            $created_student = $this->student_service->createStudent($student);
-            if (is_array($created_student) && isset($created_student['error'])) {
-                echo json_encode(['error' => $created_student['error']]);
-            } else {
-                echo json_encode(['success' => 'student created successfully']);
+            try {
+                $created_student = $this->student_service->createStudent($student);
+               
+            } catch (Exception $e) {
+                echo json_encode(['error' => 'Error creating user: ' . $e->getMessage()]);
+                return;
             }
+    
+            // check an error while user is create
+            if (is_array($created_student) && isset($created_student['error'])) {
+            $_SESSION['error'] =  $created_student['error'];
+            header('location:../../views/dashbord/student.php');
+
+            } else {
+               $_SESSION['success'] = 'student created successfully';
+            header('location:../../views/dashbord/student.php');
+
+                
+    
+            }
+    
         }
     }
 
@@ -83,34 +95,32 @@ class StudentController
             }
         }
 
-        if(isset($_POST['updateStudent'])) {
-            
-            $last_modified_by = $_SESSION['id'];
-           
+        if(isset($_POST['updateStudent'])) {     
                            // get data post                
                 $id = intval($_POST['updateStudentById']);
+                $last_modified_by = $_POST['last_modified_by'];
                 $username = htmlspecialchars($_POST['username'] ?? null);
                 $first_name = htmlspecialchars($_POST['first_name'] ?? null);
-                $last_name = htmlspecialchars($_POST['last_name'] ?? null);
+                $last_name = htmlspecialchars($_POST['last_name'] ?? null); 
                 $email = htmlspecialchars($_POST['email'] ?? null);
-                $program = htmlspecialchars($_POST['program'] ?? null);
-                $deleted = false;
-                $student = $this->student_service->findById($id);
 
+                $student = $this->student_service->findById($id);
+                
                 if($student) {
-                    $student->setUsername($username?? $student->getUsername());
+                    $student->setUsername($username ?? $student->getUsername());
                     $student->setFirstName($first_name ?? $student->getFirstName());
                     $student->setLastName($last_name ?? $student->getLastName());
                     $student->setEmail($email ?? $student->getEmail());
-                    $student->setProgram($program ?? $student->getProgram());
                     $student->setLastModifiedBy($last_modified_by ?? $student->getLastModifiedBy());
-
+                    
                     $update_student= $this->student_service->updateStudent($student);
 
-                    if($update_student) {
-                        echo json_encode(['success' => 'Student update successfully']);
-                    }else {
-                        echo json_encode(['error' => 'failed to update student']);
+                    if (is_array($update_student) && isset($update_student['error'])) {
+                        $_SESSION['error'] =  $update_student['error'];
+                        header('location:../../views/dashbord/student.php');
+                    } else {
+                        $_SESSION['success'] = 'student created successfully';
+                        header('location:../../views/dashbord/student.php');
                     }
 
                 } else {

@@ -6,7 +6,8 @@ class Tuition
     private $last_modified_by;
     private $program_id;
     private $section_id;
-    private $program;
+    // private $program;
+    // private $level_name;
     private $amount;
     private $created_at;
     private $deleted;
@@ -15,14 +16,13 @@ class Tuition
 
 
 
-    public function __construct($id, $created_by, $last_modified_by, $program_id, $section_id, $program,$amount,$created_at, $deleted)
+    public function __construct($id, $created_by, $last_modified_by, $program_id, $section_id,$amount,$created_at, $deleted)
     {
         $this->id = $id;
         $this->created_by = $created_by;
         $this->last_modified_by = $last_modified_by;
         $this->program_id = $program_id;
         $this->section_id = $section_id;
-        $this->program = $program;
         $this->amount = $amount;
         $this->created_at = $created_at;
         $this->deleted = $deleted;
@@ -42,10 +42,13 @@ class Tuition
     {
         return $this->program_id;
     }
-    public function getProgram()
-    {
-        return $this->program;
-    }
+    // public function getProgram()
+    // {
+    //     return $this->program;
+    // }
+    // public function getLevelName() {
+    //     return $this->level_name;
+    // }
     public function getAmount()
     {
         return $this->amount;
@@ -74,10 +77,13 @@ class Tuition
     {
         return $this->section_id = $section_id;
     }
-    public function setProgram($program)
-    {
-        return $this->program = $program;
-    }
+    // public function setProgram($program)
+    // {
+    //     return $this->program = $program;
+    // }
+    // public function setLevelName($level_name) {
+    //     return $this->level_name = $level_name;
+    // }
     public function setAmount($amount)
     {
         return $this->amount = $amount;

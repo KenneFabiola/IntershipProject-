@@ -1,7 +1,6 @@
 <?php 
  require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'StudentController.php';
 
-include 'authorisation.php';
  ?>
 
 <!DOCTYPE html>
@@ -116,10 +115,7 @@ include 'authorisation.php';
                   <th scope="col" class="px-6 py-3">
                       Adresse Email
                   </th>
-                  
-                  <th scope="col" class="px-6 py-3">
-                     Filière
-                  </th>
+                
                   <th scope="col" class="px-6 py-3">
                       Crée par
                   </th>
@@ -130,6 +126,9 @@ include 'authorisation.php';
                   
                   <th scope="col" class="px-6 py-3">
                       Action
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                      Définir son compte utilisateur
                   </th>
               </tr>
           </thead>
@@ -150,17 +149,15 @@ include 'authorisation.php';
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['first_name']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['last_name']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['email']); ?></td>
-                        <td class="py-2 px-4"><?= htmlspecialchars($studentdata['program']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['created_by_username']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($studentdata['last_modified_by_username']); ?></td>
                         <td class="py-2 px-4">
                             <div class="justify between">
-                                        <a href="#" id="" data_student_id= "<?= $studentdata['id'] ?>" 
+                                        <a href="#"  data_student_id= "<?= $studentdata['id'] ?>" 
                                         data_student_username= "<?= $studentdata['username'] ?>"
                                         data_student_firstname= "<?= $studentdata['first_name'] ?>"
                                         data_student_last_name= "<?= $studentdata['last_name'] ?>"
                                         data_student_email= "<?= $studentdata['email']?>"
-                                        data_student_program= "<?= $studentdata['program']?>"
                                         data_student_last_modified_by_username= "<?= $studentdata['last_modified_by_username']?>"
                                         class="font-meduim text-blue-600 hover:underline" onclick="openEditStudentModal(this)"><i class="fas fa-edit"></i></a> 
                                       
@@ -169,6 +166,13 @@ include 'authorisation.php';
                                       
                             </div>
                         </td>
+                        <td class="py-2 px-4"><button type="button" class="text-blue-500"
+                                        data-student_username = "<?= $studentdata['username'] ?>"
+                                        data-student_firstname = "<?= $studentdata['first_name'] ?>"
+                                        data-student_last_name = "<?= $studentdata['last_name'] ?>"
+                                        data-student_email = "<?= $studentdata['email']?>"
+                                        onclick="openAccount(this)"><i class="fas fa-user"></button></i></td>
+                       
                         
                     </tr>
                 <?php endforeach; ?>
@@ -182,8 +186,9 @@ include 'authorisation.php';
       </table>
                   
   </div>   
+<script>
 
-
+  </script>
 <?php include'studentModal.php';?>
 <?php include'footer.php'; ?>
 

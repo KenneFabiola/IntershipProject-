@@ -7,9 +7,9 @@ class SectionService {
     private $section_repository;
     private $user_repository;
 
-    public function __construct($pdo) {
-        $this->section_repository = new SectionRepository($pdo);
-        $this->user_repository = new UserRepository($pdo);
+    public function __construct() {
+        $this->section_repository = new SectionRepository();
+        $this->user_repository = new UserRepository();
     }
 
     public function createsection( Section $section) {

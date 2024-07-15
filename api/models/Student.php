@@ -7,7 +7,6 @@ class Student
     private $last_name;
     private $email;
     private $pwd;
-    private $program;
     private $created_by;
     private $last_modified_by;
     private $created_at;
@@ -17,7 +16,7 @@ class Student
     
 
 
-    public function __construct($id, $username, $first_name, $last_name, $email, $pwd, $program, $created_by, $last_modified_by, $created_at, $deleted)
+    public function __construct($id, $username, $first_name, $last_name, $email, $pwd, $created_by, $last_modified_by, $created_at, $deleted)
     {
         $this->id = $id;
         $this->username = $username;
@@ -25,7 +24,6 @@ class Student
         $this->last_name = $last_name;
         $this->email = $email;
         $this->pwd = $pwd;
-        $this->program = $program;
         $this->created_by = $created_by;
         $this->last_modified_by = $last_modified_by;
         $this->created_at = $created_at;
@@ -57,10 +55,6 @@ class Student
     {
         return $this->pwd;
     }
-    public function getProgram()
-    {
-        return $this->program;
-    }
     public function getCreatedBy()
     {
         return $this->created_by;
@@ -88,23 +82,19 @@ class Student
     }
     public function setLastName($last_name)
     {
-        return $this->last_name = $last_name;
+        return $this-> last_name = $last_name;
     }
     public function setFirstName($first_name)
     {
-        return $this->first_name = $first_name;
+        return $this-> first_name = $first_name;
     }
     public function setEmail($email)
     {
-        return $this->email = $email;
+        return $this-> email = $email;
     }
     public function setPwd($pwd)
     {
         return $this->pwd = $pwd;
-    }
-    public function setProgram($program)
-    {
-        return $this->program = $program;
     }
     public function setCreatedBy($created_by)
     {

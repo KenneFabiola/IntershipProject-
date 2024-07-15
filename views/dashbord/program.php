@@ -1,6 +1,8 @@
 <?php 
  require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'ProgramController.php';
  require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'SectionController.php';
+ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'TuitionController.php';
+
 
 include 'authorisation.php';
 include 'message.php';
@@ -103,6 +105,9 @@ include 'message.php';
                      Nom de la filière
                   </th>
                   <th scope="col" class="px-6 py-3">
+                     Niveau
+                  </th>
+                  <th scope="col" class="px-6 py-3">
                       Description
                   </th>
                   <th scope="col" class="px-6 py-3">
@@ -137,6 +142,7 @@ include 'message.php';
                     <tr>
                         <td class="py-2 px-4"><?= htmlspecialchars($programdata['id']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($programdata['program_name']); ?></td>
+                        <td class="py-2 px-4"><?= htmlspecialchars($programdata['level_name']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($programdata['descriptive']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($programdata['duration']); ?></td>
                         <td class="py-2 px-4"><?= htmlspecialchars($programdata['created_by_username']); ?></td>
@@ -147,6 +153,7 @@ include 'message.php';
                             <div class="justify between">
                                         <a href="#" id="" data-program_id= "<?= $programdata['id'] ?>" 
                                         data-program_name= "<?= $programdata['program_name'] ?>"
+                                        data-level_name= "<?= $programdata['level_name'] ?>"
                                         data-program_description= "<?= $programdata['descriptive'] ?>"
                                         data-duration= "<?= $programdata['duration'] ?>"
                                         
@@ -157,7 +164,8 @@ include 'message.php';
                                         <button 
                                         data-program_id = "<?= $programdata['id'] ?>"
                                         data-program_name = "<?= htmlspecialchars($programdata['program_name']); ?>"
-                                        onclick="openEditModalTuition(this)" ><i class="fas fa-credit-card"></i></button>
+                                        data-program_level = "<?= htmlspecialchars($programdata['level_name']); ?>"
+                                        onclick="openAddModalTuition(this)" ><i class="fas fa-credit-card"></i></button>
                               </div>
                         </td>
                         
@@ -173,7 +181,7 @@ include 'message.php';
       </table>
                   
   </div>                
-
+  <?php include 'tuitionTable.php'; ?>
 <?php include 'programModal.php';?>
 <?php include 'tuitionModal.php'; ?>
 

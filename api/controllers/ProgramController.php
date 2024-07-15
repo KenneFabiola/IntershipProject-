@@ -37,12 +37,13 @@ class ProgramController
         }
 
         if (isset($_POST['addProgram'])) {
-            $created_by = $_SESSION['id'];
-            $last_modified_by = $_SESSION['id'];
-
+            
             // get data post
+            $created_by = $_POST['created_by']; 
+            $last_modified_by = $_POST['last_modified_by'];
             $program_name = $_POST['program_name'] ?? null;
-            $amount = $_POST['describe'] ?? null;
+            $level_name = $_POST['level_name'] ?? null; 
+            $descriptive = $_POST['descriptive'] ?? null;
             $duration = $_POST['duration'] ?? null;
 
 
@@ -50,7 +51,8 @@ class ProgramController
             $program = new program(
                 null,
                 $program_name,
-                $amount,
+                $level_name,
+                $descriptive,
                 $duration,
                 $created_by,
                 $last_modified_by,
@@ -87,24 +89,30 @@ class ProgramController
             }
         }
     if(isset($_POST['updateProgram'])) {
-        $last_modified_by = $_SESSION['id'];
+        $last_modified_by = $_POST['last_modified_by'];
         $id = intval($_POST['updateProgramById']); 
         $program_name = htmlspecialchars($_POST['program_name'] ?? null);
+        $level_name = htmlspecialchars($_POST['level_name'] ?? null);
         $descriptive = htmlspecialchars($_POST['descriptive'] ?? null);
         $duration = htmlspecialchars($_POST['duration'] ?? null);  
   
         $program = $this->program_service->findById($id);
         if ($program) {
             $program->setProgramName($program_name ?? $program->getProgramName());
+            $program->setLevelName($level_name ?? $program->getLevelName());
             $program->setDescriptive($descriptive ?? $program->getDescriptive());
             $program->setDuration($duration ?? $program->getDuration());
             $program->setLastModifiedBy($last_modified_by);
+  
            
             $updated_program = $this->program_service->updateprogram($program);
-            if ($updated_program) {
-                echo json_encode(['success' => 'program updated successfully']);
+            if (is_array($updated_program) && isset($updated_program['error'])) {
+                $_SESSION['error'] = $updated_program['error'];
+                header('location:../../views/dashbord/program.php');
             } else {
-                echo json_encode(['error' => 'Failed to update program']);
+                $_SESSION['success'] = 'program created successfully';
+                header('location:../../views/dashbord/program.php');
+
             }
         } else {
             echo json_encode(['error' => 'program not found']);

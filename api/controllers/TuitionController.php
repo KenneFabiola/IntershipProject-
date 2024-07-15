@@ -13,11 +13,11 @@ class TuitionController
     private $user_repository;
     private $program_service;
 
-    public function __construct($pdo)
+    public function __construct()
     {
-        $this->tuition_service = new TuitionService($pdo);
-        $this->user_repository = new UserRepository($pdo);
-        $this->program_service = new ProgramService($pdo);
+        $this->tuition_service = new TuitionService();
+        $this->user_repository = new UserRepository();
+        $this->program_service = new ProgramService();
     }
 
     // Méthode pour créer un étudiant
@@ -40,7 +40,6 @@ class TuitionController
 
             $last_modified_by = $_SESSION['id'] ?? null;
             $section_id = $_POST['section_id'] ?? null;  echo $section_id;
-            $program = $_POST['program_name'];  echo $program;
             $program_id = $_POST['program_id'];  echo $program_id;   
             $amount = $_POST['amount'];  echo $amount;
            
@@ -56,7 +55,6 @@ class TuitionController
                 $last_modified_by,
                 $program_id,
                 $section_id,
-                $program,
                 $amount,
                 null,
                 false
@@ -77,41 +75,48 @@ class TuitionController
     }
 
     // update tuition
-    // public function updatetuition()
-    // {
+    public function updatetuition()
+    {
 
-    //     $id = 5;
-    //     $user = $this->user_repository->findById($id);
-    //     if ($user) {
-    //         $created_by = $user->getId();
-    //         $last_modified_by = $user->getId();
-    //         $input_data = json_decode(file_get_contents("php://input"), true);
+             if (!isset($_SESSION['password']) || !isset($_SESSION['username'])) {
+            echo json_encode(['error' => 'unauthorized']);
+            exit();
+        }
 
-    //         $id = $input_data['id'] ?? null;
-    //         $user = $this->tuition_service->findById($id);
+        if ($_SESSION['role'] !== 1 && $_SESSION['role'] !== 2) { {
+                echo json_encode(['error' => 'unauthorized']);
+                exit();
+            }
+        }
+        // get data post 
+        if(isset($_POST['updateTuition'])) {
+            $id = intval($_POST['updateById']);
+            $last_modified_by = ($_POST['last_modified_by']);
+            $amount = htmlspecialchars($_POST['amount']);
+            $program_id = $_POST['program_id']; echo $program_id;
+            $section_id = $_POST['section_id']; echo $section_id; 
 
-    //         $id = $input_data['id'] ?? null;
-    //         $tuition = $this->tuition_service->findById($id);
-    //         if ($tuition) {
-    //             $tuition->setProgramId($input_data['program_id'] ?? $tuition->getProgramId());
-    //             $tuition->setSectionId($input_data['section_id'] ?? $tuition->getSectionId());
-    //             $tuition->setLastModifiedBy($last_modified_by);
-    //             $tuition->setCreatedBy($tuition->getCreatedBy());
-    //             $tuition->setProgram($input_data['program'] ?? $tuition->getProgram());
-    //             $tuition->setCreatedAt($input_data['created_at'] ?? $tuition->getCreatedAt());
-    //             $tuition->setDeleted($input_data['deleted'] ?? $tuition->getDeleted());
+            $tuition = $this->tuition_service->findById($id);
 
-    //             $updatetuition = $this->tuition_service->updatetuition($tuition, $last_modified_by);
-    //             if ($updatetuition) {
-    //                 echo json_encode(['success' => 'tuition updated successfully']);
-    //             } else {
-    //                 echo json_encode(['error' => 'Failed to update tuition']);
-    //             }
-    //         } else {
-    //             echo json_encode(['error' => 'tuition not found']);
-    //         }
-    //     }
-    // }
+            if ($tuition) {
+                $tuition->setLastModifiedBy($last_modified_by);
+                $tuition->setAmount($amount ?? $tuition->getAmount());
+                $tuition->setProgramId($program_id ?? $tuition->getProgramId());
+                $tuition->setSectionId($section_id ?? $tuition->getSectionId());
+                // print_r($tuition); die();
+               
+                $update_tuition = $this->tuition_service->updatetuition($tuition);
+                if (is_array($update_tuition) && isset($update_tuition['error'])) {
+                    $_SESSION['error'] =  $update_tuition['error'];
+                    // header('location:../../views/dashbord/program.php');
+                } else {
+                    $_SESSION['success'] = 'tuition updated successfully';
+                    // header('location:../../views/dashbord/program.php');
+                }
+            } 
+        }
+        
+    }
 
     // delete tuition
     public function deleteTuition()
@@ -147,9 +152,9 @@ class TuitionController
     {
         $tuitions = $this->tuition_service->findAllTuition();
         if ($tuitions) {
-                 echo '<pre>';
-            print_r($tuitions);
-           echo ' </pre>';
+            // echo '<pre>';
+            // print_r($tuitions);
+            // echo ' </pre>';
             return json_encode($tuitions);
         } else {
             echo json_encode(['error' => 'No tuitions found']);
@@ -172,15 +177,15 @@ class TuitionController
 }
 
 // Connexion à la base de données et création de l'instance du contrôleur
-$database = new Database();
-$pdo = $database->connect();
-$controller = new TuitionController($pdo);
+// $database = new Database();
+//  = $database->connect();
+$controller = new TuitionController();
 
 if (isset($_POST['addTuition'])) {
     $controller->createTuition();
 }
 if (isset($_POST['updateTuition'])) {
-    // $controller->updateTuition();
+    $controller->updateTuition();
 }
 if (isset($_POST['deleteTuition'])) {
     $controller->deleteTuition();

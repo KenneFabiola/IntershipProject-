@@ -1,3 +1,33 @@
+/* add section */
+
+const sectionButton = document.getElementById('sectionButton');
+const modalSectionClose = document.getElementById('modalSectionClose');
+const sectionModal = document.getElementById('sectionModal');
+const cover = document.getElementById('cover');
+
+ 
+
+sectionButton.addEventListener('click', () => {
+  
+   sectionModal.classList.remove('hidden');
+})
+
+modalSectionClose.addEventListener('click', () => {
+   sectionModal.classList.add('hidden');
+ });
+cover.addEventListener('click', () => {
+   sectionModal.classList.add('hidden');
+ });
+
+ window.addEventListener('click', (event) => {
+    if(event.target === sectionModal){
+      sectionModal.classList.add('hidden');
+    }
+ });
+
+
+
+
 /* finish section */
 function openFinishModal(button) {
     
@@ -12,20 +42,7 @@ function closeSection() {
     document.getElementById('finishSection').classList.add('hidden');
 }
 
-// onglet scholarité
-
-function openAddTuition(button) {
-    const sectionForTuition = button.getAttribute('data_section_id_tuition');
-    
-    document.getElementById('tuitionModal').classList.remove('hidden');
-    document.getElementById('sectionIdForTuition').value= sectionForTuition;
-    document.getElementById('refSectionId').innerHTML = sectionForTuition;
-}
-function closeTuition() {
-    
-    document.getElementById('tuitionModal').classList.add('hidden');
-
-}
+/* menu deroulant section */
 
 // menu deroulant de la section
 
@@ -43,5 +60,10 @@ window.addEventListener('click', (event) => {
       optionForSection.classList.add('hidden');
     }
  });
+
+ function closeMultiDropdown() {
+    document.getElementById('optionForSection').classList.add('hidden');
+
+ }
 
 

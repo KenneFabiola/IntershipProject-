@@ -27,8 +27,8 @@
 
                 <div class="justify-between flex text-sm font-meduim">
 
-                    <button type="button" id="cover" class="px-4 py-2 text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline focus-ring cursor-pointer">Annuler</button>
-                    <input value="Enregister" type="submit" name="addSection" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus-ring cursor-pointer ">
+                    <button type="button" id="cover" class="px-4 py-2 text-white bg-gradient-to-r from-gray-700 via-gray-700 to-gray-700 rounded-md hover:bg-gray-600 focus:outline focus-ring cursor-pointer">Annuler</button>
+                    <input value="Enregister" type="submit" name="addSection" class="px-4 py-2 bg-gradient-to-r from-blue-600 via-blue-600 to-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus-ring cursor-pointer ">
                 </div>
             </form>
         </div>

@@ -22,6 +22,15 @@
      }
   });
 
+  function getSelectedRoleId() {
+ 
+   const selectRole = document.getElementById('role');
+   const selectedOption = selectRole.options[selectRole.selectedIndex];
+   const roleId = selectedOption.getAttribute('data-role_id');
+   document.getElementById('roleId').value = roleId;
+}
+
+
 // update user;
 
   function openEditModal(button) {
@@ -43,6 +52,11 @@
    
 document.getElementById('editModal').classList.remove('hidden');
 
+
+}
+
+function closeEditModal() {
+   document.getElementById('editModal').classList.add('hidden');
 
 }
 

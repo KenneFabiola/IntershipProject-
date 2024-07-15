@@ -16,21 +16,23 @@ class ProgramRepository
     public function createProgram(Program $program)
     {
         try {
-            $verify = "SELECT COUNT(*) FROM programs WHERE program_name = :program_name";
+            $verify = "SELECT COUNT(*) FROM programs WHERE program_name = :program_name AND level_name = :level_name AND deleted = false";
             $stmtverify = $this->pdo->prepare($verify);
             $stmtverify->bindValue(':program_name', $program->getProgramName());
+            $stmtverify->bindValue(':level_name', $program->getLevelName());
             $stmtverify->execute();
             if($stmtverify->fetchColumn() > 0) {
-                return ['error' => 'Program already exist'];
+                return ['error' => 'This program already exist for this level'];
             }
 
-    $sql = "INSERT INTO programs (created_by,last_modified_by,program_name,descriptive,duration,deleted,created_at) VALUES (:created_by,:last_modified_by,:program_name,:descriptive,:duration,:deleted,:created_at)";
+    $sql = "INSERT INTO programs (created_by,last_modified_by,program_name,level_name,descriptive,duration,deleted,created_at) VALUES (:created_by,:last_modified_by,:program_name,:level_name,:descriptive,:duration,:deleted,:created_at)";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->bindValue('program_name', $program->getProgramName());
-    $stmt->bindValue(':descriptive', $program->getDescriptive());
-    $stmt->bindValue(':duration', $program->getDuration());
     $stmt->bindValue(':created_by', $program->getCreatedBy());
     $stmt->bindValue(':last_modified_by', $program->getLastModifiedBy());
+    $stmt->bindValue(':program_name', $program->getProgramName());
+    $stmt->bindValue(':level_name', $program->getLevelName());
+    $stmt->bindValue(':descriptive', $program->getDescriptive());
+    $stmt->bindValue(':duration', $program->getDuration());
     $stmt->bindValue(':created_at', $program->getCreatedAt());
     $stmt->bindValue(':deleted', $program->getDeleted());
     if ($stmt->execute()) {
@@ -116,31 +118,42 @@ class ProgramRepository
  public function updateProgram(Program $program)
  {
      try {
+        $verify = "SELECT COUNT(*) FROM programs WHERE program_name = :program_name AND level_name = :level_name AND deleted = false";
+        $stmtverify = $this->pdo->prepare($verify);
+        $stmtverify->bindValue(':program_name', $program->getProgramName());
+        $stmtverify->bindValue(':level_name', $program->getLevelName());
+        $stmtverify->execute();
+        if($stmtverify->fetchColumn() > 0) {
+            return ['error' => 'This program already exist for this level'];
+        }
          
          $sql = 'UPDATE programs SET 
             program_name = :program_name,
+            level_name = :level_name,
             descriptive = :descriptive,
             duration = :duration,
             created_by  = :created_by,
             last_modified_by = :last_modified_by,
-            created_at = :created_at ,
-            deleted = :deleted WHERE id =:id';
+          
+             WHERE id =:id';
 
          $stmt = $this->pdo->prepare($sql);
          $stmt->bindValue(':id', $program->getId());
          $stmt->bindValue(':program_name', $program->getProgramName());
+         $stmt->bindValue(':level_name', $program->getLevelName());
          $stmt->bindValue(':descriptive', $program->getDescriptive());
          $stmt->bindValue(':duration', $program->getDuration());
          $stmt->bindValue(':created_by', $program->getCreatedBy());
          $stmt->bindValue(':last_modified_by', $program->getLastModifiedBy());
-         $stmt->bindValue(':created_at', $program->getCreatedAt());
-         $stmt->bindValue(':deleted', $program->getDeleted());
+       
 
 
          if ($stmt->execute()) {
-             return $program;
+            return ['success' =>  $program];
+
          }
-         return null;
+         return ['error' => 'failed'];
+
      } catch (PDOException $e) {
          echo 'PDOExecption:' . $e->getMessage();
      }

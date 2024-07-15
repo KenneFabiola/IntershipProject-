@@ -2,27 +2,29 @@
 class Program{
     private $id;
     private $program_name;
+    private $level_name;
     private $descriptive;
     private $duration;
     private $created_by;
     private $last_modified_by;
     private $created_at;
+    // private $last_modified_at;
     private $deleted;
 
     private $created_by_username;
     private $last_modified_by_username;
 
-    public function __construct( $id,$program_name,$descriptive,$duration,$created_by, $last_modified_by,$created_at,$deleted) {
+    public function __construct( $id,$program_name,$level_name,$descriptive,$duration,$created_by, $last_modified_by,$created_at,$deleted) {
         $this->id = $id;
         $this->program_name = $program_name; 
+        $this->level_name = $level_name;
         $this->descriptive = $descriptive;
         $this->duration = $duration;
         $this->created_by = $created_by;
         $this->last_modified_by =  $last_modified_by;
         $this->created_at = $created_at;
+        // $this->last_modified_at = $last_modified_at;
         $this->deleted = $deleted;
-        // $this->created_by_name= null;
-        // $this->last_modified_by_name = null;
         
     }
 
@@ -36,8 +38,15 @@ class Program{
         return $this->program_name;
     }
       
+    public function getLevelName() {
+        return $this->level_name;
+    }
+      
     public function setProgramName($program_name) {
         return $this->program_name= $program_name;
+    }
+    public function setLevelName($level_name) {
+        return $this->level_name = $level_name;
     }
     public function getDescriptive() {
         return $this->descriptive;
@@ -68,6 +77,12 @@ class Program{
     public function getCreatedAt() {
         return $this->created_at;
     }
+    // public function getLastModifiedAt() {
+    //     return $this->last_modified_at;
+    // }
+    // public function setLastModifiedAt($last_modified_at) {
+    //     return $this->last_modified_at = $last_modified_at;
+    // }
     public function setCreayedAt($created_at) {
         return $this->created_at =$created_at;
     }

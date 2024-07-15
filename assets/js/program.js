@@ -48,11 +48,13 @@ function openProgram(button) {
 
   const programUpdateId= button.getAttribute('data-program_id');
   const programUpdateName = button.getAttribute('data-program_name');
+  const programUpdateLevel = button.getAttribute('data-level_name');
   const programUpdateDescription = button.getAttribute('data-program_description');
   const programUpdateDuration = button.getAttribute('data-duration');
 
   document.getElementById('updateProgramById').value = programUpdateId;
   document.getElementById('updateProgramName').value = programUpdateName;
+  document.getElementById('updateLevelName').value = programUpdateLevel;
   document.getElementById('updateProgramDescription').value = programUpdateDescription;
   document.getElementById('updateProgramDuration').value = programUpdateDuration;
 

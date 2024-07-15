@@ -88,9 +88,9 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY
       </div>
           
   <div class="flex justify-between">
-      <button type="button" id="openAddModal"  class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2">
+      <!-- <button type="button" id="openAddModal"  class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2" onclick="openAddModalTuition(this)">
         <i class="fas fa-user-plus"></i>  New Tuition
-      </button>
+      </button> -->
   </div>
 
       <!-- table -->
@@ -106,6 +106,22 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY
                           filières
                         </th>
                         <th scope="col" class="px-6 py-3 border border-slate-600">
+                         Niveau
+                        </th>
+                        <th scope="col" class="px-6 py-3 border border-slate-600">
+                          Sections
+                        </th>
+                        <th scope="col" class="px-6 py-3 border border-slate-600">
+                          Amount
+                        </th>
+                        <th scope="col" class="px-6 py-3 border border-slate-600">
+                         Crée par
+                        </th>
+                        <th scope="col" class="px-6 py-3 border border-slate-600">
+                         Modifier Par
+                        </th>
+                       
+                        <th scope="col" class="px-6 py-3 border border-slate-600">
                             Action
                         </th>
                     </tr>
@@ -117,7 +133,7 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY
                 <tbody>
                 <?php if (isset($tuitions['error'])): ?>
                       <tr>
-                          <td colspan="5" class="py-2 px-4"><?= htmlspecialchars($users['error']); ?></td>
+                          <td colspan="5" class="py-2 px-4"><?= htmlspecialchars($tuitions['error']); ?></td>
                       </tr>
                   <?php elseif (!empty($tuitions)): ?>
                       <?php foreach ($tuitions as $tuition_data): ?>
@@ -125,14 +141,18 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY
                          
                               <td class="py-2 px-4 border border-slate-700 "><?= $tuition_data['id']; ?></td>
                               <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($tuition_data['program']); ?></td>
+                              <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($tuition_data['level_name']); ?></td>
+                              <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($tuition_data['section']); ?></td>
                               <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($tuition_data['amount']); ?></td>
+                              <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($tuition_data['created_by']); ?></td>
+                              <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($tuition_data['last_modified_by']); ?></td>
                              
       
                                <td class="py-2 px-4 border border-slate-700 ">
                                 <div class="justify between">
-                                    <a href="#"  tuition_data_name= "<?= $tuition_data['program_name'] ?>" 
+                                    <a href="#"  tuition_data_name= "<?= $tuition_data['program'] ?>" 
                                     tuition_data_id= "<?= $tuition_data['id'] ?>" 
-                                    tuition_data_amount= "<?= $userdata['amount'] ?>"
+                                    tuition_data_amount= "<?= $tuition_data['amount'] ?>"
                                     
                                     class="font-meduim text-blue-600 hover:underline" onclick="openEditModalTuition(this)"><i class="fas fa-edit"></i></a> 
                                   

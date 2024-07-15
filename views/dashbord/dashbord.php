@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'UserController.php';
+require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'RoleController.php';
 include 'authorisation.php';
 
 ?>
@@ -101,12 +102,7 @@ include 'authorisation.php';
         <table class="w-full text-sm text-left rtl-text-right text-gray-900 border-collapse border border-slate-500 ">
           <thead class="text-xs text-gray-700 uppercase bg-blue-300 ">
             <tr>
-              <!-- <th scope="col" class="p-4">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="chechkbox-all-search" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <label for="checkbox-all-search" class="sr-only">check</label>
-                            </div>
-                        </th> -->
+             
               <th scope="col" class="px-6 py-3 border border-slate-600 ">
                 id
               </th>
