@@ -38,10 +38,10 @@ class TuitionController
 
            $created_by =$_SESSION['id']; echo $created_by;
 
-            $last_modified_by = $_SESSION['id'] ?? null;
+            $last_modified_by = $_SESSION['id'] ?? null; 
             $section_id = $_POST['section_id'] ?? null;  echo $section_id;
             $program_id = $_POST['program_id'];  echo $program_id;   
-            $amount = $_POST['amount'];  echo $amount;
+            $amount = $_POST['amount'];  echo $amount; 
            
           
               
@@ -92,9 +92,9 @@ class TuitionController
         if(isset($_POST['updateTuition'])) {
             $id = intval($_POST['updateById']);
             $last_modified_by = ($_POST['last_modified_by']);
-            $amount = htmlspecialchars($_POST['amount']);
+            $amount = htmlspecialchars($_POST['amount']); echo $amount;
             $program_id = $_POST['program_id']; echo $program_id;
-            $section_id = $_POST['section_id']; echo $section_id; 
+            $section_id = $_POST['section_id']; echo $section_id;
 
             $tuition = $this->tuition_service->findById($id);
 
@@ -103,15 +103,15 @@ class TuitionController
                 $tuition->setAmount($amount ?? $tuition->getAmount());
                 $tuition->setProgramId($program_id ?? $tuition->getProgramId());
                 $tuition->setSectionId($section_id ?? $tuition->getSectionId());
-                // print_r($tuition); die();
+                // print_r($tuition);
                
                 $update_tuition = $this->tuition_service->updatetuition($tuition);
                 if (is_array($update_tuition) && isset($update_tuition['error'])) {
                     $_SESSION['error'] =  $update_tuition['error'];
-                    // header('location:../../views/dashbord/program.php');
+                    header('location:../../views/dashbord/program.php');
                 } else {
                     $_SESSION['success'] = 'tuition updated successfully';
-                    // header('location:../../views/dashbord/program.php');
+                    header('location:../../views/dashbord/program.php');
                 }
             } 
         }
@@ -122,18 +122,20 @@ class TuitionController
     public function deleteTuition()
     {
 
-        $input_data = json_decode(file_get_contents("php://input"), true);
-        $id = $input_data['id'] ?? null;
-        if ($id) {
-            $deleted = $this->tuition_service->deleteTuition($id);
-            if ($deleted) {
-                echo json_encode(['success' => 'tuition deleted']);
-            } else {
-                echo json_encode(['error' => 'Failed to delete tuition']);
-            }
-        } else {
-            echo json_encode(['error' => 'Tuition ID not provided']);
+      if(isset($_POST['deleteTuition'])) {
+        $id = intval($_POST['deleteTuitionById']);
+        var_dump($id);
+
+        $deleted = $this->tuition_service->deleteTuition($id);
+        if($deleted) {
+            echo json_encode(['success' => 'Tuition deleted']);
+                header('location:../../views/dashbord/program.php');
+        }else {
+            echo json_encode(['error' => 'Failed to delete tuition']);
         }
+      }else {
+        echo json_encode(['error' => 'Tuition ID not provided']);
+    }
     }
 
     // Méthode pour récupérer un étudiant par ID

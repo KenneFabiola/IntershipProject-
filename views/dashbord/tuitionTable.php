@@ -89,11 +89,13 @@
                                   data-tuition_level = "<?= $tuitiondata['level_name'] ?>" 
                                   data-tuition_amount = "<?= $tuitiondata['amount'] ?>"
                                   data-tuition_section = "<?= $tuitiondata['section'] ?>"
+                                  data-sectionid_tuition = "<?= $tuitiondata['section_id'] ?>"
                                   
                                   class="font-meduim text-blue-600 hover:underline" onclick="openEditModalTuition(this)"><i class="fas fa-edit"></i></a> 
                                 
 
-                                  <button  data-user= "<?= $userdata['id'] ?>" class="font-meduim text-red-600 hover:underline" onclick="openDeleteModal(this)"><i class="fas fa-trash"></i></button> 
+                                  <button  data-tuition_id = "<?= $tuitiondata['id'] ?>"
+                                   class="font-meduim text-red-600 hover:underline" onclick="openDeleteTuitionModal(this)"><i class="fas fa-trash"></i></button> 
                                 
                               </div>
                             </td>

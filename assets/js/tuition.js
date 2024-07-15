@@ -45,6 +45,8 @@
       const updateTuitionByLevel = button.getAttribute('data-tuition_level');
       const updatetuitionAmount = button.getAttribute('data-tuition_amount');
       const updateTuitionSection = button.getAttribute('data-tuition_section');
+      const updateTuitionSectionId = button.getAttribute('data-sectionid_tuition');
+      alert(updateTuitionSectionId);
       // const updateTuitionSectionId = button.getAttribute('data-section_id');
 
       document.getElementById('updateById').value = updateTuititionById;
@@ -53,6 +55,7 @@
       document.getElementById('updateTByLevel').value = updateTuitionByLevel;
       document.getElementById('updateTAmount').value = updatetuitionAmount;
       document.getElementById('updateTSection').value = updateTuitionSection;
+      document.getElementById('updateSectionId').value = updateTuitionSectionId;
       // document.getElementById('updateSectionId').value = updateTuitionSectionId;
 
       document.getElementById('updateTuitionModal').classList.remove('hidden');
@@ -71,4 +74,21 @@ function closeUpdate() {
    document.getElementById('updateTuitionModal').classList.add('hidden');
 
 }
+
+/* script to deleted tuition */
+
+function openDeleteTuitionModal(button) {
+   // alert();
+   const tuitionId = button.getAttribute('data-tuition_id'); 
+   document.getElementById('deleteTuitionById').value = tuitionId;
+   // alert(tuitionId);
+
+
+   document.getElementById('deleteTuitionModal').classList.remove('hidden');
+}
+function closeDeleteTuitionModal() {
+   document.getElementById('deleteTuitionModal').classList.add('hidden');
+
+}
+
  

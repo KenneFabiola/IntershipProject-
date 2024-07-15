@@ -154,6 +154,7 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY
                                     tuition_data_id= "<?= $tuition_data['id'] ?>" 
                                     tuition_data_amount= "<?= $tuition_data['amount'] ?>"
                                     
+                                    
                                     class="font-meduim text-blue-600 hover:underline" onclick="openEditModalTuition(this)"><i class="fas fa-edit"></i></a> 
                                   
 

@@ -149,7 +149,13 @@ include 'authorisation.php';
                   <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($userdata['role_name']); ?></td>
                   <td class="py-2 px-4 border border-slate-700 ">
                     <div class="justify between">
-                      <a href="#" id="" data-user="<?= $userdata['id'] ?>" data-username="<?= $userdata['username'] ?>" data-firstname="<?= $userdata['first_name'] ?>" data-lastname="<?= $userdata['last_name'] ?>" data-email="<?= $userdata['email'] ?>"  class="font-meduim text-blue-600 hover:underline" onclick="openEditModal(this)"><i class="fas fa-edit"></i></a>
+                      <a href="#" id="" data-user="<?= $userdata['id'] ?>"
+                       data-username="<?= $userdata['username'] ?>"
+                        data-firstname="<?= $userdata['first_name'] ?>"
+                         data-lastname="<?= $userdata['last_name'] ?>"
+                          data-email="<?= $userdata['email'] ?>"
+                          data-roleId="<?= $userdata['role_id'] ?>"
+                            class="font-meduim text-blue-600 hover:underline" onclick="openEditUserModal(this)"><i class="fas fa-edit"></i></a>
 
 
                       <button data-user="<?= $userdata['id'] ?>" class="font-meduim text-red-600 hover:underline" onclick="openDeleteModal(this)"><i class="fas fa-trash"></i></button>
@@ -170,10 +176,38 @@ include 'authorisation.php';
       </div>
     </div>
 
+<!-- <script>
+// update user;
+
+function openEditUserModal(button) {
+
+   const userId = button.getAttribute('data-user');
+   const username = button.getAttribute('data-username');
+   const firstname = button.getAttribute('data-firstname');
+   const lastname = button.getAttribute('data-lastname');
+   const email = button.getAttribute('data-email');
+   const roleId = button.getAttribute('data-roleId'); 
+
+   
+   // alert ();
+   // document.getElementById('refId').innerHTML = userId ;
+   document.getElementById('updateById').value = userId ;
+   document.getElementById('updateUsername').value =username ;
+   document.getElementById('updateFirstname').value =firstname ;
+   document.getElementById('updateLastname').value =lastname ;
+   document.getElementById('updateEmail').value =email ;
+   document.getElementById('updateRoleId').value =roleId ;
+ 
+
+   
+document.getElementById('editModal').classList.remove('hidden');
+
+
+}
+</script> -->
 
 
 
-    <!-- modal delete -->
     <?php include 'UserModal.php' ?>
     <?php include 'educationTab.php' ?>
     <?php include 'footer.php' ?>

@@ -88,8 +88,8 @@ include 'message.php';
       </div>
           
   <div class="flex justify-between">
-      <button type="button" id="openAddModalProgram"  class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2">
-        <i class="fas fa-user-plus"></i>  New pogram
+      <button type="button" id="openAddModalProgram" onclick="openAddNewProgram()" class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2">
+        <i class="fas fa-user-plus"></i>  New program
       </button>
   </div>
 
@@ -160,7 +160,7 @@ include 'message.php';
                                         class="font-meduim text-blue-600 hover:underline" onclick="openEditProgramModal(this) "><i class="fas fa-edit"></i></a> 
                                       
 
-                                        <button  data-program_id= "<?= $programdata['id'] ?>" class="font-meduim text-red-600 hover:underline" onclick="openProgram(this)"><i class="fas fa-trash"></i></button> 
+                                        <button  data-programdelete_id = "<?= $programdata['id'] ?>" class="font-meduim text-red-600 hover:underline" onclick="openDeleteProgram(this)"><i class="fas fa-trash"></i></button> 
                                         <button 
                                         data-program_id = "<?= $programdata['id'] ?>"
                                         data-program_name = "<?= htmlspecialchars($programdata['program_name']); ?>"
@@ -180,8 +180,9 @@ include 'message.php';
                 
       </table>
                   
-  </div>                
-  <?php include 'tuitionTable.php'; ?>
+  </div>  
+
+<?php include 'tuitionTable.php'; ?>
 <?php include 'programModal.php';?>
 <?php include 'tuitionModal.php'; ?>
 

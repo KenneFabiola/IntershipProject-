@@ -36,7 +36,7 @@ class ProgramController
             }
         }
 
-        if (isset($_POST['addProgram'])) {
+        if (isset($_POST['addProgam'])) {
             
             // get data post
             $created_by = $_POST['created_by']; 

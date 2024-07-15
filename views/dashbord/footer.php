@@ -100,12 +100,14 @@
   <script src="../../assets/js/conn.js"></script>
   <script src="../../assets/js/user.js"></script>
   <script src="../../assets/js/student.js"></script>
-  <script src="../../assets/js/script4.js"></script>
   <script src="../../assets/js/script7.js"></script>
+  <!-- <script src="../../assets/js/script5.js"></script> -->
   <script src="../../assets/js/script8.js"></script>
   <script src="../../assets/js/tuition.js"></script>
   <script src="../../assets/js/section.js"></script>
-  <script src="../../assets/js/program.js"></script>
+  <!-- <script src="../../assets/js/program.js" defer></script> -->
+  <script src="../../assets/js/registration.js"></script>
+  <script src="../../assets/js/form.js"></script>
  
   
   
@@ -113,4 +115,3 @@
 
 
   
-

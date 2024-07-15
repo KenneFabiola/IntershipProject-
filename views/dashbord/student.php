@@ -186,11 +186,10 @@
       </table>
                   
   </div>   
-<script>
 
-  </script>
-<?php include'studentModal.php';?>
-<?php include'footer.php'; ?>
+  
+<?php include 'studentModal.php';?>
+<?php include 'footer.php'; ?>
 
 </body>
 </html>

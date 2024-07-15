@@ -66,18 +66,19 @@ public function createUser() {
 
     public function updateUser() {
         if(isset($_POST['update'])) {
-            $role_name = $_POST['role'] ?? 'student';
+            $role_name = $_POST['role'] ?? null;
             $role = $this->role_repository->getRoleByName($role_name);
+            
     
              if ($role) {
                 $role_id = $role->getId();
+               
                 $id = intval($_POST['updateById']);
 
                 $username = htmlspecialchars($_POST['username']);
                 $first_name = htmlspecialchars($_POST['first_name']);
                 $last_name = htmlspecialchars($_POST['last_name']);
                 $email = htmlspecialchars($_POST['email']);
-                // $pwd = htmlspecialchars($_POST['pwd']);
                 $deleted = false;
                 $user = $this->user_service->findById($id);
 
@@ -86,7 +87,7 @@ public function createUser() {
                 $user->setFirstName($first_name ?? $user->getFirstName());
                 $user->setLastName($last_name ?? $user->getLastName());
                 $user->setEmail($email ?? $user->getEmail());
-                $user->setRoleId($role_id);
+                $user->setRoleId($role_id ?? $user->getRoleId());
 
                 $updatedUser = $this->user_service->updateUser($user);
                 if ($updatedUser) {

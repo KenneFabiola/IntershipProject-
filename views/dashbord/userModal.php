@@ -120,6 +120,7 @@
                     </div>
                     <div>
                       <input type="text" id="updateLastname" name="last_name" placeholder="Lastname" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
+                      <input type="text" id="updateRoleId" class= "gray-900">
                     </div>
                     <div>
                       <input type="email" id="updateEmail" name="email" placeholder="Email" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
@@ -135,6 +136,7 @@
                           </select> 
                           <?php endif; ?>
                     </div>
+                    
               </div>
 
               <div class="justify-between flex text-sm font-meduim">
