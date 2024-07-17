@@ -32,6 +32,15 @@ class UserService {
     public function findAll() {
         return $this->user_repository->findAllUser();
     }
+    public function findAllAdmin() {
+        return $this->user_repository->findAllUserAdmin();
+    }
+    public function findAllSecretary() {
+        return $this->user_repository->findAllUserSecretary();
+    }
+    public function findAllStudent() {
+        return $this->user_repository->findAllUserStudent();
+    }
 
     public function findByUsername($username) {
         return  $this->user_repository->findByUsername($username);

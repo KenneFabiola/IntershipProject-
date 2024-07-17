@@ -10,10 +10,10 @@ class AuthentificateService
     private $student_repository;
  
 
-    public function __construct($pdo)
+    public function __construct()
     {
-        $this->user_repository = new UserRepository($pdo);
-        $this->student_repository = new StudentRepository($pdo);
+        $this->user_repository = new UserRepository();
+        $this->student_repository = new StudentRepository();
    
        
     }

@@ -3,6 +3,7 @@
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'UserController.php';
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'RoleController.php';
 include 'authorisation.php';
+include 'message.php';
 
 ?>
 
@@ -92,7 +93,7 @@ include 'authorisation.php';
         </div>
 
         <div class="flex justify-between">
-          <button type="button" id="openAddModal" class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2">
+          <button type="button"  class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2" onclick="openAddUser(this)">
             <i class="fas fa-user-plus"></i> New user
           </button>
         </div>
@@ -155,10 +156,13 @@ include 'authorisation.php';
                          data-lastname="<?= $userdata['last_name'] ?>"
                           data-email="<?= $userdata['email'] ?>"
                           data-roleId="<?= $userdata['role_id'] ?>"
+                          data-roleName="<?= $userdata['role_name'] ?>"
                             class="font-meduim text-blue-600 hover:underline" onclick="openEditUserModal(this)"><i class="fas fa-edit"></i></a>
 
 
-                      <button data-user="<?= $userdata['id'] ?>" class="font-meduim text-red-600 hover:underline" onclick="openDeleteModal(this)"><i class="fas fa-trash"></i></button>
+                      <button data-deleteUser="<?= $userdata['id'] ?>"
+                      data-check_role="<?= $userdata['role_id'] ?>"
+                       class="font-meduim text-red-600 hover:underline" onclick="openDeleteModal(this)"><i class="fas fa-trash"></i></button>
 
                     </div>
                   </td>
@@ -175,38 +179,6 @@ include 'authorisation.php';
 
       </div>
     </div>
-
-<!-- <script>
-// update user;
-
-function openEditUserModal(button) {
-
-   const userId = button.getAttribute('data-user');
-   const username = button.getAttribute('data-username');
-   const firstname = button.getAttribute('data-firstname');
-   const lastname = button.getAttribute('data-lastname');
-   const email = button.getAttribute('data-email');
-   const roleId = button.getAttribute('data-roleId'); 
-
-   
-   // alert ();
-   // document.getElementById('refId').innerHTML = userId ;
-   document.getElementById('updateById').value = userId ;
-   document.getElementById('updateUsername').value =username ;
-   document.getElementById('updateFirstname').value =firstname ;
-   document.getElementById('updateLastname').value =lastname ;
-   document.getElementById('updateEmail').value =email ;
-   document.getElementById('updateRoleId').value =roleId ;
- 
-
-   
-document.getElementById('editModal').classList.remove('hidden');
-
-
-}
-</script> -->
-
-
 
     <?php include 'UserModal.php' ?>
     <?php include 'educationTab.php' ?>

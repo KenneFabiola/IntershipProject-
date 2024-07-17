@@ -25,15 +25,17 @@ class ProgramService {
 
     public function updateProgram($program) {
         return $this->program_repository->updateProgram($program);
-        if(isset($result['success'])) {
-            return $result['success'];
-           }elseif (isset($result['error'])) {
-            return $result['error'];
-           }
+
     }
 
     public function deleteProgram($id) {
         return $this->program_repository->deleteProgram($id);
+    }
+    public function closeProgram($id) {
+        return $this->program_repository->closeProgram($id);
+    }
+    public function controlProgram($id) {
+        return $this->program_repository->controlProgram($id);
     }
 
     public function findAllProgram() {

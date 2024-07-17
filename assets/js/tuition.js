@@ -75,20 +75,6 @@ function closeUpdate() {
 
 }
 
-/* script to deleted tuition */
 
-function openDeleteTuitionModal(button) {
-   // alert();
-   const tuitionId = button.getAttribute('data-tuition_id'); 
-   document.getElementById('deleteTuitionById').value = tuitionId;
-   // alert(tuitionId);
-
-
-   document.getElementById('deleteTuitionModal').classList.remove('hidden');
-}
-function closeDeleteTuitionModal() {
-   document.getElementById('deleteTuitionModal').classList.add('hidden');
-
-}
 
  

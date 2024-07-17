@@ -56,7 +56,7 @@
                 <div class="space-y-8">
                     <div>
                         <input type="hidden" class="text-gray-900" id="programId" name="program_id">
-                        <input readonly type="text"  id="programName" name="program_name" placeholder="program_name" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
+                        <input readonly type="text" id="programName" name="program_name" placeholder="program_name" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
                     </div>
                     <div>
 
@@ -80,13 +80,13 @@
 
                 </div>
 
-            <div class="justify-between flex text-sm font-meduim">
+                <div class="justify-between flex text-sm font-meduim">
 
-                <button type="button" id="closeAddModal" class="px-4 py-2 text-white bg-gradient-to-r from-gray-700 via-gray-700 to-gray-700 rounded-md hover:bg-gray-600 focus:outline focus-ring cursor-pointer" onclick="cover">Annuler</button>
-                <input value="Enregister" type="submit" name="addTuition" class="px-4 py-2 bg-gradient-to-r from-blue-600 via-blue-600 to-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus-ring cursor-pointer ">
-            </div>
-        </form>
-    </div>
+                    <button type="button" id="closeAddModal" class="px-4 py-2 text-white bg-gradient-to-r from-gray-700 via-gray-700 to-gray-700 rounded-md hover:bg-gray-600 focus:outline focus-ring cursor-pointer" onclick="cover">Annuler</button>
+                    <input value="Enregister" type="submit" name="addTuition" class="px-4 py-2 bg-gradient-to-r from-blue-600 via-blue-600 to-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus-ring cursor-pointer ">
+                </div>
+            </form>
+        </div>
 
     </div>
 </div>
@@ -179,13 +179,13 @@
             </h3>
 
             <form action="../../api/controllers/TuitionController.php" method="POST">
-                <input type="text" name="deleteTuitionById" id="deleteTuitionById" class="text-gray-900">
-                <input value="Oui" href="" type="submit" name="deleteTuition" type="button" id="delete" class="text-black cursor:pointer rounded-lg border border-red-200  bg-red-600 focus:ring-red-300 text-center py-2 px-2 hover:text-red-100">
-            </form>
-            <button type="button" id="coverModal" class="text-black cursor:pointer bg-blue-600 py-2 px-2 ms-3 text-sm font-meduim text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:ring-4 focus:ring-gray-100" onclick="closeDeleteTuitionModal()">
-                Non
-            </button>
+                <input type="hidden" readonly name="deleteTuitionById" id="deleteTuitionById" class="text-gray-900">
+                <input value="Oui" href="" type="submit" name="deleteTuition" type="button" id="delete" class="text-black cursor:pointer rounded-lg border border-red-200  bg-gradient-to-r from-red-600 via-red-600 to-red-600 focus:ring-red-300 text-center py-2 px-2 hover:text-red-100">
 
+                <button type="button" id="coverModal" class="text-black cursor:pointer bg-gradient-to-r from-blue-600 via-blue-600 to-blue-600 py-2 px-2 ms-3 text-sm font-meduim text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:ring-4 focus:ring-gray-100" onclick="closeDeleteTuitionModal()">
+                    Non
+                </button>
+            </form>
         </div>
     </div>
 </div>

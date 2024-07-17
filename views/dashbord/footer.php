@@ -98,14 +98,16 @@
   <script src="../../assets/js/custom.js"></script>
   <script src="../../assets/js/tailwind.js"></script>
   <script src="../../assets/js/conn.js"></script>
-  <script src="../../assets/js/user.js"></script>
+  <!-- <script src="../../assets/js/userm.js"></script> -->
+  <script src="../../assets/js/userscript.js"></script>
   <script src="../../assets/js/student.js"></script>
   <script src="../../assets/js/script7.js"></script>
   <!-- <script src="../../assets/js/script5.js"></script> -->
   <script src="../../assets/js/script8.js"></script>
   <script src="../../assets/js/tuition.js"></script>
   <script src="../../assets/js/section.js"></script>
-  <!-- <script src="../../assets/js/program.js" defer></script> -->
+  <script src="../../assets/js/updateProgram.js"></script>
+
   <script src="../../assets/js/registration.js"></script>
   <script src="../../assets/js/form.js"></script>
  

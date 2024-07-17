@@ -8,13 +8,11 @@ class Program{
     private $created_by;
     private $last_modified_by;
     private $created_at;
-    // private $last_modified_at;
     private $deleted;
+    private $availabity;
 
-    private $created_by_username;
-    private $last_modified_by_username;
 
-    public function __construct( $id,$program_name,$level_name,$descriptive,$duration,$created_by, $last_modified_by,$created_at,$deleted) {
+    public function __construct( $id,$program_name,$level_name,$descriptive,$duration,$created_by, $last_modified_by,$created_at,$deleted,$availabity) {
         $this->id = $id;
         $this->program_name = $program_name; 
         $this->level_name = $level_name;
@@ -23,8 +21,8 @@ class Program{
         $this->created_by = $created_by;
         $this->last_modified_by =  $last_modified_by;
         $this->created_at = $created_at;
-        // $this->last_modified_at = $last_modified_at;
         $this->deleted = $deleted;
+        $this->availabity = $availabity;
         
     }
 
@@ -77,12 +75,13 @@ class Program{
     public function getCreatedAt() {
         return $this->created_at;
     }
-    // public function getLastModifiedAt() {
-    //     return $this->last_modified_at;
-    // }
-    // public function setLastModifiedAt($last_modified_at) {
-    //     return $this->last_modified_at = $last_modified_at;
-    // }
+    public function getAvailability() {
+        return $this->availabity;
+    }
+    public function setAvailability($availabity) {
+        return $this->availabity = $availabity;
+    }
+
     public function setCreayedAt($created_at) {
         return $this->created_at =$created_at;
     }
@@ -92,27 +91,8 @@ class Program{
     public function setDeleted($deleted) {
         return $this->deleted = $deleted;
     }
-    public function getCreatedByUserName(){
-        return $this ->created_by_username;
-    }
-    public function setCreatedByName($created_by_username){
-        return $this ->created_by_username= $created_by_username;
-    }
-    public function getLastModifiedByUserName(){
-        return $this ->last_modified_by_username;
-    }
+ 
     
-    public function setLastModifiedByName($last_modified_by_name){
-        return $this ->last_modified_by_username = $last_modified_by_name;
-    }
-    
-    
-    
-
-    
-
-
-
   } 
 
 ?>

@@ -67,15 +67,16 @@ class ProgramRepository
                     $result['duration'],
                     $result['created_by'],
                     $result['last_modified_by'],
+                    $result['created_by'],
                     $result['created_at'],
                     $result['deleted'],
-                    $result['created_by'],
-                    $result['last_modified_by']
+                    $result['availabilities']
+
                 );
 
                 
             }
-            return null;
+            return 0;
         } catch (PDOException $e) {
             echo 'PDOExeception: ' . $e->getMessage();
             return null;
@@ -132,10 +133,9 @@ class ProgramRepository
             level_name = :level_name,
             descriptive = :descriptive,
             duration = :duration,
-            created_by  = :created_by,
-            last_modified_by = :last_modified_by,
+            last_modified_by = :last_modified_by
           
-             WHERE id =:id';
+             WHERE id = :id';
 
          $stmt = $this->pdo->prepare($sql);
          $stmt->bindValue(':id', $program->getId());
@@ -143,16 +143,18 @@ class ProgramRepository
          $stmt->bindValue(':level_name', $program->getLevelName());
          $stmt->bindValue(':descriptive', $program->getDescriptive());
          $stmt->bindValue(':duration', $program->getDuration());
-         $stmt->bindValue(':created_by', $program->getCreatedBy());
          $stmt->bindValue(':last_modified_by', $program->getLastModifiedBy());
-       
+    //    if($stmt->bindValue(':duration', $program->getDuration())) {
+    //     return 3;
+    //    }else {
+    //     return 4;
+    //    }
 
 
          if ($stmt->execute()) {
-            return ['success' =>  $program];
-
+            return 1;
          }
-         return ['error' => 'failed'];
+         return 0;
 
      } catch (PDOException $e) {
          echo 'PDOExecption:' . $e->getMessage();
@@ -176,6 +178,61 @@ class ProgramRepository
      }
   }
 
+  /* close program
+   */
+
+   public function closeProgram($id) {
+    try {
+        $sql = 'UPDATE programs SET availabilities = "fermer" WHERE id =:id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id', $id,);
+        return $stmt->execute();
+    }catch (PDOException $e) {
+         echo 'PDOExecption:' . $e->getMessage();
+     }
+   }
+  /* open program
+   */
+
+   public function controlProgram($id) {
+    try {
+        $sqll = 'SELECT availabilities FROM programs WHERE id = :id';
+        $stmtt = $this->pdo->prepare($sqll);
+        $stmtt ->bindValue(':id', $id);
+        $stmtt->execute(); echo 'ok';
+        $result_select = $stmtt->fetch(PDO::FETCH_ASSOC);
+
+        if($result_select['availabilities'] == 'ouvert') {
+            $sql_close = 'UPDATE programs SET availabilities = "fermer" WHERE id =:id';
+            $statment_close = $this->pdo->prepare($sql_close);
+            $statment_close -> bindValue(':id',$id);
+            $statment_close->execute();
+            
+            if( $statment_close->execute()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } elseif($result_select['availabilities'] == 'fermer') {
+            $sql_open = 'UPDATE programs SET availabilities = "ouvert" WHERE id =:id';
+            $statment_open = $this->pdo->prepare($sql_open);
+            $statment_open -> bindValue(':id',$id);
+            $statment_open->execute();
+            if($statment_open->execute()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        // $sql = 'UPDATE programs SET availabilities = "ouvert" WHERE id =:id';
+        // $stmt = $this->pdo->prepare($sql);
+        // $stmt->bindValue(':id', $id);
+        // return $stmt->execute();
+    }catch (PDOException $e) {
+         echo 'PDOExecption:' . $e->getMessage();
+     }
+   }
 
 /**
  * start with other method

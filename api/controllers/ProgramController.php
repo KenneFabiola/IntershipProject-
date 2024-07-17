@@ -36,15 +36,15 @@ class ProgramController
             }
         }
 
-        if (isset($_POST['addProgam'])) {
-            
+        if (isset($_POST['addProgram'])) {
+            echo 'ok'; 
             // get data post
-            $created_by = $_POST['created_by']; 
+            $created_by = $_POST['created_by'];
             $last_modified_by = $_POST['last_modified_by'];
-            $program_name = $_POST['program_name'] ?? null;
-            $level_name = $_POST['level_name'] ?? null; 
-            $descriptive = $_POST['descriptive'] ?? null;
-            $duration = $_POST['duration'] ?? null;
+            $program_name = $_POST['program_name']; echo $program_name;
+            $level_name = $_POST['level_name']; echo $level_name;
+            $descriptive = $_POST['descriptive']; echo $descriptive;
+            $duration = $_POST['duration']; echo $duration;
 
 
             // program objet
@@ -57,7 +57,8 @@ class ProgramController
                 $created_by,
                 $last_modified_by,
                 null,
-                false
+                false,
+                null
             );
             // get service for authentification
             $created_program = $this->program_service->createProgram($program);
@@ -91,26 +92,28 @@ class ProgramController
     if(isset($_POST['updateProgram'])) {
         $last_modified_by = $_POST['last_modified_by'];
         $id = intval($_POST['updateProgramById']); 
-        $program_name = htmlspecialchars($_POST['program_name'] ?? null);
-        $level_name = htmlspecialchars($_POST['level_name'] ?? null);
-        $descriptive = htmlspecialchars($_POST['descriptive'] ?? null);
-        $duration = htmlspecialchars($_POST['duration'] ?? null);  
+        $program_name = htmlspecialchars($_POST['program_name'] ); 
+        $level_name = htmlspecialchars($_POST['level_name'] ); echo $level_name;
+        $descriptive = htmlspecialchars($_POST['descriptive'] );
+        $duration = htmlspecialchars($_POST['duration'] );  
   
         $program = $this->program_service->findById($id);
         if ($program) {
             $program->setProgramName($program_name ?? $program->getProgramName());
-            $program->setLevelName($level_name ?? $program->getLevelName());
+            $program->setLevelName($level_name ?? $program->getLevelName()); 
             $program->setDescriptive($descriptive ?? $program->getDescriptive());
             $program->setDuration($duration ?? $program->getDuration());
             $program->setLastModifiedBy($last_modified_by);
   
-           
-            $updated_program = $this->program_service->updateprogram($program);
-            if (is_array($updated_program) && isset($updated_program['error'])) {
-                $_SESSION['error'] = $updated_program['error'];
+           print_r($program); 
+            $updated_program = $this->program_service->updateProgram($program);
+            if ($updated_program == 1) {
+                echo 'ok';
+                $_SESSION['success'] = 'program update successfully';
                 header('location:../../views/dashbord/program.php');
             } else {
-                $_SESSION['success'] = 'program created successfully';
+                echo 'false';
+                $_SESSION['error'] = 'failed to update program';
                 header('location:../../views/dashbord/program.php');
 
             }
@@ -155,6 +158,39 @@ class ProgramController
         }
     }
 
+/* open program */
+    public function controlProgram()
+    {
+
+        if (!isset($_SESSION['password']) || !isset($_SESSION['username'])) {
+            echo json_encode(['error' => 'unauthorized']);
+            exit();
+        }
+
+        if ($_SESSION['role'] !== 1 && $_SESSION['role'] !== 2) { {
+                echo json_encode(['error' => 'unauthorized']);
+                exit();
+            }
+        }
+
+ 
+        if (isset($_POST['openProgram']) || isset($_POST['closeProgram']) ) {
+
+            $id = intval($_POST['controlProgram']);
+            
+
+            $control = $this->program_service->controlProgram($id);
+            if ($control == 1) {
+                echo json_encode(['success' => 'program opened successfully']);
+                header('location:../../views/dashbord/program.php');
+            } else {
+                echo json_encode(['error' => 'failed to close program']);
+            }
+        } else {
+            echo json_encode(['error' => 'Program ID not provided']);
+        }
+    }
+
     // get program by id
     public function getProgramById($id)
     {
@@ -167,6 +203,16 @@ class ProgramController
     }
 
     // get all program
+    // public function getAllOpenPrograms()
+    // {
+    //     $programs = $this->program_service->openProgram();
+    //     if ($programs) {
+    //         print_r($programs);
+    //         return json_encode($programs);
+    //     } else {
+    //         echo json_encode(['error' => 'No program found']);
+    //     }
+    // }
     public function getAllPrograms()
     {
         $programs = $this->program_service->findAllProgram();
@@ -193,6 +239,10 @@ if (isset($_POST['addProgram'])) {
 }
 if (isset($_POST['updateProgram'])) {
     $controller->updateProgram();
+}
+
+if (isset($_POST['openProgram']) || isset($_POST['closeProgram']) ) {
+    $controller->controlProgram();
 }
 
 

@@ -1,10 +1,6 @@
 
 <?php
 
-// require_once ('../api/controllers/UserController.php');
-// $json_user = $controller->getAllUsers();
-
-// $users = json_decode($json_user,true);
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +35,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ">
                 <li class="nav-item active">
-                  <a class="nav-link" href="index.php">Accueil <span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="#">Accueil <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Filière </a>
@@ -47,9 +43,12 @@
                 <li class="nav-item">
                   <a class="nav-link cursor-pointer" >Scolarité</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link cursor-pointer">Deconnexion</a>
-                </li>
+                <form action="../api/controllers/AuthentificateController.php" method="POST">
+                  <input type="hidden" name="logout" value="true">
+                  <li class="nav-item">
+                    <button type="submit" class="nav-link cursor-pointer">Déconnexion</button>
+                  </li>
+                </form>
                 <li class="nav-item">
                   <a class="nav-link" href="contact.php">Profil</a>
                 </li>

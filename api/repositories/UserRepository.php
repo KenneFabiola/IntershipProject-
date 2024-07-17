@@ -112,6 +112,30 @@ class UserRepository
             echo 'PDOExecption:' . $e->getMessage();
         }
     }
+ // update uemail user and password
+    public function updateEmailUser(User $user)
+    {
+        try {
+          
+            $sql = 'UPDATE users SET 
+            email = :email,         
+            pwd =:pwd
+            WHERE id =:id';
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':id', $user->getId());
+            $stmt->bindValue(':email', $user->getEmail());
+            $stmt->bindValue(':pwd', $user->getRoleId());
+
+
+            if ($stmt->execute()) {
+                return $user;
+            }
+            return null;
+        } catch (PDOException $e) {
+            echo 'PDOExecption:' . $e->getMessage();
+        }
+    }
 
     
 
@@ -156,11 +180,80 @@ class UserRepository
         }
     }
 
+    /* user where role is admin */
+    public function findAllUserAdmin(){
+        try{
+            
+            $sql = 'SELECT u.*,  role_name
+                FROM users u
+                JOIN roles r ON u.role_id = r.id
+                WHERE u.deleted = false AND u.role_id = 1 ORDER BY u.id';
+            $stmt = $this->pdo->query($sql);
+            $users = [];
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+                $users[] = $row;
+              
+            }
+            return $users;
+        }catch(PDOException $e){
+            echo 'PDOExecption:' .$e->getMessage();
+            return[];
+        }
+    }
+    /* user where role is secretary */
+
+    public function findAllUserSecretary(){
+        try{
+            
+            $sql = 'SELECT u.*,  role_name
+                FROM users u
+                JOIN roles r ON u.role_id = r.id
+                WHERE u.deleted = false AND u.role_id = 2 ORDER BY u.id';
+            $stmt = $this->pdo->query($sql);
+            $users = [];
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+                $users[] = $row;
+              
+            }
+            return $users;
+        }catch(PDOException $e){
+            echo 'PDOExecption:' .$e->getMessage();
+            return[];
+        }
+    }
+    /* user where role is student */
+
+    public function findAllUserStudent(){
+        try{
+            
+            $sql = 'SELECT u.*,  role_name
+                FROM users u
+                JOIN roles r ON u.role_id = r.id
+                WHERE u.deleted = false AND u.role_id = 3 ORDER BY u.id';
+            $stmt = $this->pdo->query($sql);
+            $users = [];
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+                $users[] = $row;
+              
+            }
+            return $users;
+        }catch(PDOException $e){
+            echo 'PDOExecption:' .$e->getMessage();
+            return[];
+        }
+    }
+
 
  // find by username 
     public function findByUsername($username) {
         try {
-            $sql = 'SELECT * FROM users WHERE username = :username';
+            $sql = 'SELECT * FROM users WHERE username = :username AND deleted = 0';
             $stmt = $this->pdo->prepare($sql);
             $stmt ->bindValue(':username',$username);
             $stmt->execute();

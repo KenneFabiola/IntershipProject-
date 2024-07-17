@@ -94,9 +94,7 @@
                                   class="font-meduim text-blue-600 hover:underline" onclick="openEditModalTuition(this)"><i class="fas fa-edit"></i></a> 
                                 
 
-                                  <button  data-tuition_id = "<?= $tuitiondata['id'] ?>"
-                                   class="font-meduim text-red-600 hover:underline" onclick="openDeleteTuitionModal(this)"><i class="fas fa-trash"></i></button> 
-                                
+                                 
                               </div>
                             </td>
                         </tr>

@@ -10,9 +10,9 @@ class AuthentificateController
 {
     private $authentificate_service;
 
-    public function __construct($pdo)
+    public function __construct()
     {
-        $this->authentificate_service = new AuthentificateService($pdo);
+        $this->authentificate_service = new AuthentificateService();
     }
 
     public function login()
@@ -82,7 +82,7 @@ class AuthentificateController
 // Initialisation et exécution du contrôleur
 $database = new Database();
 $pdo = $database->connect();
-$controller = new AuthentificateController($pdo);
+$controller = new AuthentificateController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller->login();

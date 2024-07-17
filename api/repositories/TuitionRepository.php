@@ -87,7 +87,7 @@ public function findAllTuitions(){
         LEFT JOIN sections s ON t.section_id = s.id
         LEFT JOIN programs p1 ON t.program_id = p1.id
         LEFT JOIN programs p2 ON t.program_id = p2.id
-        WHERE t.deleted = false
+        WHERE p1.deleted = false AND p1.availabilities = "ouvert" AND t.deleted = false
         ORDER BY  t.id '; 
         $stmt = $this->pdo->query($sql);
         $tuitions = [];
@@ -97,6 +97,7 @@ public function findAllTuitions(){
             $tuitions[] = $row;
     
         }
+    
         return $tuitions;
 
 
