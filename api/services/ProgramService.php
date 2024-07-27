@@ -11,12 +11,8 @@ class ProgramService {
     }
 
     public function createProgram($student) {
-       $result= $this->program_repository->createProgram($student);
-         if(isset($result['success'])) {
-            return $result['success'];
-           }elseif (isset($result['error'])) {
-            return $result['error'];
-           }
+       return $this->program_repository->createProgram($student);
+      
     }
 
     public function findById($id) {
@@ -31,9 +27,7 @@ class ProgramService {
     public function deleteProgram($id) {
         return $this->program_repository->deleteProgram($id);
     }
-    public function closeProgram($id) {
-        return $this->program_repository->closeProgram($id);
-    }
+  
     public function controlProgram($id) {
         return $this->program_repository->controlProgram($id);
     }

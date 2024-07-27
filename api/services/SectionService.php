@@ -14,12 +14,7 @@ class SectionService {
 
     public function createsection( Section $section) {
      
-        $result = $this->section_repository->createsection($section);
-        if (isset($result['success'])) {
-            return $result['success'];
-        } elseif (isset($result['error'])) {
-            return ['error' => $result['error']];
-        }
+        return $this->section_repository->createsection($section);
     }
 
     public function findById($id) {

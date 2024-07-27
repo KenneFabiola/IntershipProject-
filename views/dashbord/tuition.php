@@ -131,11 +131,7 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY
 
                 ?>
                 <tbody>
-                <?php if (isset($tuitions['error'])): ?>
-                      <tr>
-                          <td colspan="5" class="py-2 px-4"><?= htmlspecialchars($tuitions['error']); ?></td>
-                      </tr>
-                  <?php elseif (!empty($tuitions)): ?>
+                  <?php if (!empty($tuitions)): ?>
                       <?php foreach ($tuitions as $tuition_data): ?>
                           <tr>
                          
@@ -164,7 +160,6 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY
                               </td>
                           </tr>
                       <?php endforeach; ?>
-                  <?php else: ?>
                       <tr>
                           <td colspan="5" class="py-2 px-4">Aucun utilisateur trouvé.</td>
                       </tr>

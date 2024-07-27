@@ -62,15 +62,26 @@ class TuitionController
            
           
              // get service for authentification
-            $createdTuition = $this->tuition_service->createTuition($tuition);
-            if (is_array($createdTuition) && isset($createdTuition['error'])) {
-                echo json_encode(['error' => $createdTuition['error']]);
-            }
-            elseif ($createdTuition) {
-                echo json_encode(['success' => 'tuition created successfully']);
-            } else {
-                echo json_encode(['error' => 'Failed to create Tuition']);
-            }
+            $createdTuition = $this->tuition_service->createTuition($tuition,$program_id);
+           if( $createdTuition === 1) {
+            // echo '1';
+            $_SESSION['success'] = 'tuition created successfully';
+            header('location:../../views/dashbord/program.php');
+
+           }elseif( $createdTuition === 0) {
+            // echo '0';
+            $_SESSION['error'] = 'error during insertion';
+            header('location:../../views/dashbord/program.php');
+           }elseif( $createdTuition === 5){
+            // echo '5';
+            $_SESSION['error'] = 'Already define for this session, please change your session';
+            header('location:../../views/dashbord/program.php');
+            }else {
+            echo 'error';
+            $_SESSION['error'] = 'Vous ne pouvez pas définir de frais pour un programe fermé, veuillez ouvrir le programme avant';
+            header('location:../../views/dashbord/program.php');
+
+           }
          }
     }
 
@@ -106,13 +117,15 @@ class TuitionController
                 // print_r($tuition);
                
                 $update_tuition = $this->tuition_service->updatetuition($tuition);
-                if (is_array($update_tuition) && isset($update_tuition['error'])) {
-                    $_SESSION['error'] =  $update_tuition['error'];
-                    header('location:../../views/dashbord/program.php');
-                } else {
+                if($update_tuition === 1) {
                     $_SESSION['success'] = 'tuition updated successfully';
                     header('location:../../views/dashbord/program.php');
-                }
+        
+                   }else {
+                    $_SESSION['error'] = 'failed to update student';
+                    header('location:../../views/dashbord/program.php');
+        
+                   }
             } 
         }
         
@@ -162,41 +175,59 @@ class TuitionController
             echo json_encode(['error' => 'No tuitions found']);
         }
     }
+    public function getAlltuitionForSessionId($section_id)
+    {
+        $tuitions = $this->tuition_service->findTuitionBySectionId($section_id);
+        if ($tuitions) {
+            // echo '<pre>';
+            // print_r($tuitions);
+            // echo ' </pre>';
+            return json_encode($tuitions);
+        } else {
+            echo json_encode(['error' => 'No tuitions found']);
+        }
+    }
 
     // find program name 
     public function findProgramName()
     {
         $program_name = $this->program_service->findAllProgram();
         if ($program_name) {
-        //     echo '<pre>';
-        //     print_r($program_name);
-        //    echo ' </pre>';
             return json_encode($program_name);
         } else {
             echo json_encode(['error' => 'No program found']);
         }
     }
+
+    public function findProgramBySession($section_id) {
+        $programs = $this->tuition_service->findProgramBySession($section_id);
+        if($programs) {
+            
+            return json_encode($programs);
+        } else {
+            echo json_encode(['error' => 'No program found']);
+
+        }
+
+    }
 }
 
-// Connexion à la base de données et création de l'instance du contrôleur
-// $database = new Database();
-//  = $database->connect();
-$controller = new TuitionController();
+
+$tuition_controller = new TuitionController();
 
 if (isset($_POST['addTuition'])) {
-    $controller->createTuition();
+    $tuition_controller->createTuition();
 }
 if (isset($_POST['updateTuition'])) {
-    $controller->updateTuition();
+    $tuition_controller->updateTuition();
 }
 if (isset($_POST['deleteTuition'])) {
-    $controller->deleteTuition();
+    $tuition_controller->deleteTuition();
 }
-$json_tuition = $controller->getAlltuitions();
-$json_program = $controller->findProgramName();
+$json_tuition = $tuition_controller->getAlltuitions();
+$json_program = $tuition_controller->findProgramName();
 
-$tuitions = json_decode($json_tuition, true);
-$programs = json_decode($json_program, true);
+
 
 
 

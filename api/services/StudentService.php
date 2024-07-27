@@ -11,13 +11,8 @@ class studentService {
 
     public function createStudent($student)
     {
-        $result = $this->student_repository->createStudent($student);
+        return $this->student_repository->createStudent($student);
     
-        if (isset($result['error'])) {
-            return $result['error'];
-        } elseif (isset($result['success'])) {
-            return $result['success'];
-        }
     }
     
 
@@ -26,12 +21,7 @@ class studentService {
     }
 
     public function updateStudent($student) {
-        $result = $this->student_repository->updateStudent($student);
-        if (isset($result['error'])) {
-            return $result['error'];
-        } elseif (isset($result['success'])) {
-            return $result['success'];
-        }
+      return $this->student_repository->updateStudent($student);
     }
 
     public function deleteStudent($id) {
@@ -40,6 +30,21 @@ class studentService {
 
     public function findAll() {
         return $this->student_repository->findAllStudent();
+    }
+    public function findAllRegisterStudent() {
+        return $this->student_repository->findAllRegisterStudent();
+    }
+    public function findAllUnregisterStudent() {
+        return $this->student_repository->findAllUnregisterStudent();
+    }
+
+    public function createAccount($id,$user) {
+        return $this->student_repository->createAccount($id,$user);
+
+    }
+    public function disableAccount($id) {
+        return $this->student_repository->disableAccount($id);
+
     }
 
   

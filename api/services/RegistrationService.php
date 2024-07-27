@@ -5,8 +5,8 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY
 class RegistrationService {
     private $registration_repository;
 
-    public function __construct($pdo) {
-        $this->registration_repository = new RegistrationRepository($pdo);
+    public function __construct() {
+        $this->registration_repository = new RegistrationRepository();
     }
 
     public function createRegistration($registration) {
@@ -28,6 +28,23 @@ class RegistrationService {
     public function findAll() {
         return $this->registration_repository->findAll();
     }
+    public function findRegistrationBySessionId($section_id) {
+        return $this->registration_repository->findSessionById($section_id);
+           
+    }
+    public function findRegistrationByFinishSessionId($section_id) {
+        return $this->registration_repository->findRegistrationForFinishSession($section_id);
+           
+    }
+    // probleme ici
+    public function studentRegisterBySession($section_id) {
+        return $this->registration_repository->studentRegisterBySession($section_id);
+    }
 
+
+    public function findNewProgramForStudent($section_id) {
+        return $this->registration_repository->findNewProgramForStudent($section_id);
+
+    }
   
 }

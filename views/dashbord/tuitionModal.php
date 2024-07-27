@@ -66,11 +66,14 @@
                         <input type="text" id="amount" name="amount" placeholder="mountant" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
                     </div>
                     <div>
-                        <select name="section" id="section" onchange="getSelectedSectionId()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option selected>Choisir une Section</option>
+                        <select name="section" id="section" onchange="getSelectedSectionId()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                            <option selected>Choisir une Session</option>
 
                             <?php foreach ($sections as $sectiondata) : ?>
-                                <option value="<?= htmlspecialchars($sectiondata['school_year']); ?>" data-section-id="<?= $sectiondata['id']; ?>"><?= htmlspecialchars($sectiondata['school_year']); ?></option>
+                                <option value="<?= htmlspecialchars($sectiondata['school_year']); ?>" data-section-id="<?= $sectiondata['id']; ?>">
+                                   Session de  <?= htmlspecialchars($sectiondata['months']); ?> <?= htmlspecialchars($sectiondata['school_year']); ?>
+                                   
+                                </option>
                             <?php endforeach; ?>
 
                         </select>
@@ -129,7 +132,7 @@
                         <input type="text" id="updateTAmount" name="amount" placeholder="mountant" class="bg-gray-50 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" required>
                     </div>
                     <div>
-                        <select name="section" id="updateTSection" onchange="updateSelectedSectionId()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <select name="section" id="updateTSection" onchange="updateSelectedSectionId()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                             <option selected>Choisir une Section</option>
                             <?php foreach ($sections as $sectiondata) : ?>
 

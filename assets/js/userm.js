@@ -67,19 +67,13 @@ function getUpdateRoleId() {
     const selectUpdateRole = document.getElementById('updateRole');
     alert(selectUpdateRole);
     const selectUpdateOption = selectUpdateRole.options[selectUpdateRole.selectIndex];
-
-
-    /* delete modal */
     const updateRole = selectUpdateOption.getAttribute('data-updaterole_id');
     alert(updateRole);
 
     document.getElementById('updateRoleId').value = updateRole;
 
 }
-    const updateRole = selectUpdateOption..getAttribute(' data-updaterole_id');
-   document.getElementById('updateRoleId').value = updateRole;
-
-
+ 
 
 // delete modal User
 

@@ -42,24 +42,28 @@ class AuthentificateService
 
                 return $user;
             } 
-        } else    
-        $student= $this->student_repository->findByUsername($username);
-    
-        if ($student) {
-            $hashed_password = $student->getPwd();
-        
-            // Check password
-            if (password_verify($password, $hashed_password)) {
-
-                return $student;
-            } else {
-                error_log('incorrect password');
+            else {
+                return null;
             }
-        } else{
-            error_log('student not found');
-        }
-         return null;
+        // } else    
+        // $student= $this->student_repository->findByUsername($username);
+    
+        // if ($student) {
+        //     $hashed_password = $student->getPwd();
+        
+        //     // Check password
+        //     if (password_verify($password, $hashed_password)) {
+
+        //         return $student;
+        //     } else {
+        //         error_log('incorrect password');
+        //     }
+        // } else{
+        //     error_log('student not found');
+        // }
+        //  return null;
     }
+}
 
     public function logout()
     {

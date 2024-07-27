@@ -21,7 +21,8 @@ class UserRepository
             $stmtverify->bindValue(':email', $user->getEmail());
             $stmtverify->execute();
             if($stmtverify->fetchColumn() > 0) {
-                return ['error' => 'User already exist'];
+                // return ['error' => 'User already exist'];
+                return 3;
             }
              
 
@@ -43,9 +44,10 @@ class UserRepository
                 // get id of new user 
                 $user->setId($this->pdo->lastInsertId());
                
-                return ['success' =>  $user];
+                // return ['success' =>  $user];
+                return 1;
             }
-            return ['error' => 'failed'];
+            return 0;
          
         }catch(PDOException $e){
           error_log('PDOExeception: ' .$e->getMessage());
@@ -73,6 +75,7 @@ class UserRepository
                 $result['email'],
                 $result['pwd'],
                 $result['role_id'],
+                $result['statut'],
                 $result['deleted']
             );
         }
@@ -86,6 +89,16 @@ class UserRepository
     public function updateUser(User $user)
     {
         try {
+
+            $verify = "SELECT COUNT(*) FROM users WHERE email = :email AND username = :username ";
+            $stmtverify = $this->pdo->prepare($verify);
+            $stmtverify->bindValue(':username', $user->getUsername());
+            $stmtverify->bindValue(':email', $user->getEmail());
+            $stmtverify->execute();
+            if($stmtverify->fetchColumn() > 0) {
+                // return ['error' => 'User already exist'];
+                return 3;
+            }
           
             $sql = 'UPDATE users SET 
             username = :username,
@@ -105,9 +118,10 @@ class UserRepository
 
 
             if ($stmt->execute()) {
-                return $user;
+                // return $user;
+                return 1;
             }
-            return null;
+            return 0;
         } catch (PDOException $e) {
             echo 'PDOExecption:' . $e->getMessage();
         }
@@ -253,7 +267,7 @@ class UserRepository
  // find by username 
     public function findByUsername($username) {
         try {
-            $sql = 'SELECT * FROM users WHERE username = :username AND deleted = 0';
+            $sql = 'SELECT * FROM users WHERE username = :username AND deleted = 0 AND statut = "actif"';
             $stmt = $this->pdo->prepare($sql);
             $stmt ->bindValue(':username',$username);
             $stmt->execute();
@@ -269,6 +283,7 @@ class UserRepository
                     $result['email'],
                     $result['pwd'],
                     $result['deleted'],
+                    $result['statut'],
                     $result['role_id']
                    
                 );

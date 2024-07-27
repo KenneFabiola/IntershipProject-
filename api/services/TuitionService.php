@@ -15,14 +15,10 @@ class TuitionService {
         
     }
 
-    public function createTuition(Tuition $tuition) {
+    public function createTuition(Tuition $tuition, $id) {
         if($this->section_repository->checkActiveSection($tuition->getSectionId())) {
-            $result =  $this->tuition_repository->createTuition($tuition);
-            if (isset($result['success'])) {
-                return $result['success'];
-            } elseif (isset($result['error'])) {
-                return ['error' => $result['error']];
-            }
+            return  $this->tuition_repository->createTuition($tuition,$id);
+            
         }
     
     }
@@ -33,12 +29,7 @@ class TuitionService {
 
     public function updateTuition($tuition) {
         if($this->section_repository->checkActiveSection($tuition->getSectionId())) {
-            $result =  $this->tuition_repository->updateTuition($tuition);
-            if (isset($result['success'])) {
-                return $result['success'];
-            } elseif (isset($result['error'])) {
-                return ['error' => $result['error']];
-            }
+            return $this->tuition_repository->updateTuition($tuition);
         }
         
     }
@@ -49,6 +40,14 @@ class TuitionService {
 
     public function findAllTuition() {
         return $this->tuition_repository->findAllTuitions();
+    }
+    public function findTuitionBySectionId($section_id) {
+        return $this->tuition_repository->findTuitionBySectionId($section_id);
+    }
+
+    public function findProgramBySession($section_id) {
+        return $this->tuition_repository->findProgramBySession($section_id);
+
     }
    
 

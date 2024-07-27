@@ -100,16 +100,20 @@
   <script src="../../assets/js/conn.js"></script>
   <!-- <script src="../../assets/js/userm.js"></script> -->
   <script src="../../assets/js/userscript.js"></script>
-  <script src="../../assets/js/student.js"></script>
+  <script src="../../assets/js/studen.js"></script>
+  <script src="../../assets/js/stud.js"></script>
   <script src="../../assets/js/script7.js"></script>
   <!-- <script src="../../assets/js/script5.js"></script> -->
   <script src="../../assets/js/script8.js"></script>
   <script src="../../assets/js/tuition.js"></script>
   <script src="../../assets/js/section.js"></script>
   <script src="../../assets/js/updateProgram.js"></script>
-
-  <script src="../../assets/js/registration.js"></script>
   <script src="../../assets/js/form.js"></script>
+  <script src="../../assets/js/updateSession.js"></script>
+  <!-- <script src="../../assets/js/regis.js"></script> -->
+  <script src="../../assets/js/schoolDropdown.js"></script>
+  <script src="../../assets/js/schoolDropdown1.js"></script>
+  <script src="../../assets/js/payment.js"></script>
  
   
   

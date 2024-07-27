@@ -5,8 +5,8 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY
 class PaymentService {
     private $payment_repository;
 
-    public function __construct($pdo) {
-        $this->payment_repository = new PaymentRepository($pdo);
+    public function __construct() {
+        $this->payment_repository = new PaymentRepository();
     }
 
     public function createPayment($payment) {
@@ -25,8 +25,25 @@ class PaymentService {
         return $this->payment_repository->deletePayment($id);
     }
 
-    public function findAll() {
-        return $this->payment_repository->findAll();
+    public function findAllBySession($section_id) {
+        return $this->payment_repository->findAllBySession($section_id);
+    }
+
+    public function findPaymentForfinishSession($section_id) {
+        return $this->payment_repository->findPaymentForfinishSession($section_id);
+    }
+
+    public function findAllFinishPaymentBySession($section_id) {
+        return $this->payment_repository->findAllFinishPaymentBySession($section_id);
+    }
+
+    public function findPaymentByregistration($registration_id) {
+        return $this->payment_repository->findPaymentByregistration($registration_id);
+
+    }
+    public function findPaymentsByregistration($registration_id) {
+        return $this->payment_repository->findPaymentsByregistration($registration_id);
+
     }
 
   

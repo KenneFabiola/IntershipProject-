@@ -9,12 +9,12 @@ class UserService {
     }
 
     public function createUser($user) {
-        $result = $this->user_repository->createUser($user);
-        if (isset($result['success'])) {
-            return $result['success'];
-        } elseif (isset($result['error'])) {
-            return ['error' => $result['error']];
-        }
+        return  $this->user_repository->createUser($user);
+        // if (isset($result['success'])) {
+        //     return $result['success'];
+        // } elseif (isset($result['error'])) {
+        //     return ['error' => $result['error']];
+        // }
     }
 
     public function findById($id) {

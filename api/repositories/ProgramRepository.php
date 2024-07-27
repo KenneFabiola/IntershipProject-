@@ -22,7 +22,7 @@ class ProgramRepository
             $stmtverify->bindValue(':level_name', $program->getLevelName());
             $stmtverify->execute();
             if($stmtverify->fetchColumn() > 0) {
-                return ['error' => 'This program already exist for this level'];
+               return 3;
             }
 
     $sql = "INSERT INTO programs (created_by,last_modified_by,program_name,level_name,descriptive,duration,deleted,created_at) VALUES (:created_by,:last_modified_by,:program_name,:level_name,:descriptive,:duration,:deleted,:created_at)";
@@ -37,9 +37,9 @@ class ProgramRepository
     $stmt->bindValue(':deleted', $program->getDeleted());
     if ($stmt->execute()) {
         $program->setId($this->pdo->lastInsertId());
-        return ['success' =>  $program];
+        return 1;
     }
-    return ['error' => 'failed'];
+    return 0;
 
         } catch (PDOException $e) {
             echo 'PDOExeception: ' . $e->getMessage();
@@ -93,7 +93,7 @@ class ProgramRepository
             LEFT JOIN users u1 ON p.created_by = u1.id
             LEFT JOIN users u2 ON p.last_modified_by = u2.id
             WHERE p.deleted = false
-            ORDER BY p.id';
+            ORDER BY p.program_name ASC';
             $stmt = $this->pdo->query($sql);
             $programs = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -125,7 +125,7 @@ class ProgramRepository
         $stmtverify->bindValue(':level_name', $program->getLevelName());
         $stmtverify->execute();
         if($stmtverify->fetchColumn() > 0) {
-            return ['error' => 'This program already exist for this level'];
+            return 3;
         }
          
          $sql = 'UPDATE programs SET 
@@ -178,28 +178,14 @@ class ProgramRepository
      }
   }
 
-  /* close program
-   */
-
-   public function closeProgram($id) {
-    try {
-        $sql = 'UPDATE programs SET availabilities = "fermer" WHERE id =:id';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id,);
-        return $stmt->execute();
-    }catch (PDOException $e) {
-         echo 'PDOExecption:' . $e->getMessage();
-     }
-   }
-  /* open program
-   */
+ 
 
    public function controlProgram($id) {
     try {
         $sqll = 'SELECT availabilities FROM programs WHERE id = :id';
         $stmtt = $this->pdo->prepare($sqll);
         $stmtt ->bindValue(':id', $id);
-        $stmtt->execute(); echo 'ok';
+        $stmtt->execute(); 
         $result_select = $stmtt->fetch(PDO::FETCH_ASSOC);
 
         if($result_select['availabilities'] == 'ouvert') {
@@ -225,10 +211,6 @@ class ProgramRepository
             }
         }
 
-        // $sql = 'UPDATE programs SET availabilities = "ouvert" WHERE id =:id';
-        // $stmt = $this->pdo->prepare($sql);
-        // $stmt->bindValue(':id', $id);
-        // return $stmt->execute();
     }catch (PDOException $e) {
          echo 'PDOExecption:' . $e->getMessage();
      }

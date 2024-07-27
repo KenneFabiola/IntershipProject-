@@ -1,17 +1,17 @@
 <?php
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'repositories' . DIRECTORY_SEPARATOR . 'RoleRepository.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR .'services' . DIRECTORY_SEPARATOR . 'UserService.php';
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR .'services' . DIRECTORY_SEPARATOR . 'AuthentificateService.php';
+// require_once dirname(__DIR__) . DIRECTORY_SEPARATOR .'services' . DIRECTORY_SEPARATOR . 'AuthentificateService.php';
 
 class UserController {
     private $user_service;
-    private $authentificate_service;
+    // private $authentificate_service;
     private $role_repository;
 
     public function __construct() {
         $this->role_repository = new RoleRepository();
         $this->user_service = new UserService();
-        $this->authentificate_service = new AuthentificateService();
+        // $this->authentificate_service = new AuthentificateService();
     }
 /**
  * created user
@@ -45,27 +45,35 @@ public function createUser() {
             $email,
             $pwd,
             false,
+            null,
             $role_id
+
         );
 
        print_r($user); 
 
         //call services to verify
       
-        try {
+ 
             $createdUser = $this->user_service->createUser($user);
            
-        } catch (Exception $e) {
-            echo json_encode(['error' => 'Error creating user: ' . $e->getMessage()]);
-            return;
-        }
-
+       
         // check an error while user is create
-        if (is_array($createdUser) && isset($createdUser['error'])) {
-            echo json_encode(['error' => $createdUser['error']]);
-        } else {
-            echo json_encode(['success' => 'User created successfully']);
+        if ($createdUser === 1) {
+            $_SESSION['success'] = "user created successfully";
+            header('location:../../views/dashbord/dashbord.php');
+
+        } elseif($createdUser === 3) {
+            $_SESSION['error'] = "cet adresse email et ou ce nom d'utilisateur existe déjà";
+            header('location:../../views/dashbord/dashbord.php');
             
+
+
+            // echo json_encode(['success' => 'User created successfully']);         
+
+        } else {
+            $_SESSION['error'] == "unknown the type an error , please try again";
+            header('location:../../views/dashbord/dashbord.php');
 
         }
     }
@@ -96,13 +104,21 @@ public function createUser() {
                 $user->setRoleId($role_id ?? $user->getRoleId());
 
                 $updatedUser = $this->user_service->updateUser($user);
-                if ($updatedUser) {
-                    echo json_encode(['success' => 'User updated successfully']);
-                } else {
-                    echo json_encode(['error' => 'Failed to update user']);
+                if ($updatedUser === 1) {
+                    $_SESSION['success'] = 'User updated successfully';
+                    header('location:../../views/dashbord/dashbord.php');
+
+                } elseif($updatedUser === 3) {
+                    $_SESSION['error'] = "cet adresse email et ou ce nom d'utilisateur existe déjà";
+                    header('location:../../views/dashbord/dashbord.php');
+                }else {
+                    $_SESSION['error'] == "unknown the type an error , please try again";
+                    header('location:../../views/dashbord/dashbord.php');
+        
                 }
             } else {
-                echo json_encode(['error' => 'User not found']);
+                $_SESSION['error'] == "id not provided";
+
             }
         }
     }
@@ -144,16 +160,10 @@ public function createUser() {
     }
     
     public function getAllUsers() {
-        // $connected_user  = $this->authentificate_service->login($_SESSION['role'],$_SESSION['id']);
-        // if($connected_user == 2 ) {
-        // $user = $this->user_service->findAllStudent();
 
-        // } else
         $user = $this->user_service->findAll();
         if ($user) {
-        //    echo '<pre>';
-        //    print_r($user);
-        //    echo '</pre>';
+
            return json_encode($user);
           
         } else {
@@ -163,9 +173,7 @@ public function createUser() {
     public function getAllUserAdmin() {
         $user_admin = $this->user_service->findAllAdmin();
         if ($user_admin) {
-        //    echo '<pre>';
-        //    print_r($user_admin);
-        //    echo '</pre>';
+
            return json_encode($user_admin);
           
         } else {

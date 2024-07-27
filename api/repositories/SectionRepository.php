@@ -17,30 +17,37 @@ class SectionRepository{
     // create section
     public function createSection(Section $section)
     {   
-        $verify = "SELECT COUNT(*) FROM sections WHERE school_year = :school_year AND deleted = false ";
+        $verify = "SELECT COUNT(*) FROM sections WHERE statut = 'active' ";
             $stmtverify = $this->pdo->prepare($verify);
-            $stmtverify->bindValue(':school_year', $section->getSchoolYear());
+            // $stmtverify->bindValue(':satut', $section->getStatut());
             $stmtverify->execute();
-            if($stmtverify->fetchColumn() > 0) {
-                return ['error' => 'this section already exist'];
+            $count = $stmtverify->fetchColumn();
+            if($count < 2) {
+               
+            $verify_months = "SELECT COUNT(*) FROM sections WHERE school_year = :school_year AND months = :months AND deleted = false";
+            $verify_months = $this->pdo->prepare($verify_months);
+            $verify_months->bindValue(':school_year', $section->getSchoolYear());
+            $verify_months->bindValue(':months', $section->getMonth());
+            $verify_months->execute();
+            if($verify_months->fetchColumn() > 0 ) {
+                return 4;
             }
-
-       $sql = "INSERT INTO sections (school_year,created_by,last_modified_by,created_at,statut,deleted) VALUES (:school_year,:created_by,:last_modified_by,:created_at,:statut,:deleted)";
+       $sql = "INSERT INTO sections (school_year,months,created_by,last_modified_by,created_at,deleted) VALUES (:school_year,:months,:created_by,:last_modified_by,:created_at,:deleted)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':school_year', $section->getSchoolYear());
+        $stmt->bindValue(':months', $section->getMonth());
         $stmt->bindValue(':created_by',$section->getCreatedBy());
         $stmt->bindValue(':last_modified_by',$section->getLastModifiedBy());
         $stmt->bindValue(':created_at',$section->getCreatedAt());
-        $stmt->bindValue(':statut', $section->getStatut());
         $stmt->bindValue(':deleted',$section->getDeleted());
 
         if ($stmt->execute()) {
             $section->setId($this->pdo->lastInsertId());
-            return ['success' =>  $section];
+            return 1;
         }
-        return ['error' => 'failed'];
-        
-
+        return 0;
+    }   
+    return 3;
 }
 /**
  * find section by their id 
@@ -61,6 +68,7 @@ public function findById($id)
         return new Section(
             $result['id'],
             $result['school_year'],
+            $result['months'],
             $result['statut'],
             $result['created_by'],
             $result['last_modified_by'],
@@ -68,7 +76,6 @@ public function findById($id)
             $result['deleted']
         );
 
-        echo ( $result['id'] . " " . $result['school_year'] . " ". $result['statut']." ". "<br>");
        
     }
     return null;
@@ -89,7 +96,7 @@ public function findAllSection(){
         FROM sections s
         LEFT JOIN users u1 ON s.created_by = u1.id
         LEFT JOIN users u2 ON s.last_modified_by = u2.id
-         WHERE s.deleted=false AND statut= "active" 
+         WHERE s.deleted=false AND s.statut= "active" 
          ORDER BY s.id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
@@ -119,32 +126,40 @@ public function findAllSection(){
  */
  public function updateSection(Section $section)
  {
-     try {
+
+        $verify = "SELECT COUNT(*) FROM sections WHERE statut = 'active' ";
+        $stmtverify = $this->pdo->prepare($verify);
+        // $stmtverify->bindValue(':satut', $section->getStatut());
+        $stmtverify->execute();
+        $count = $stmtverify->fetchColumn();
+        if($count < 2) {
+           
+        $verify_months = "SELECT COUNT(*) FROM sections WHERE school_year = :school_year AND months = :months AND deleted = false";
+        $verify_months = $this->pdo->prepare($verify_months);
+        $verify_months->bindValue(':school_year', $section->getSchoolYear());
+        $verify_months->bindValue(':months', $section->getMonth());
+        $verify_months->execute();
+        if($verify_months->fetchColumn() > 0 ) {
+            return 4;
+        }
            $sql = 'UPDATE sections SET 
             school_year = :school_year,
-            statut = :statut, 
-            created_by = :created_by, 
-            last_modified_by = :last_modified_by,
-            created_at = :created_at,
-            deleted = :deleted WHERE id =:id';
+            months = :months,
+            last_modified_by = :last_modified_by
+            WHERE id =:id';
 
          $stmt = $this->pdo->prepare($sql);
          $stmt->bindValue(':id', $section->getId());
-         $stmt->bindValue(':created_at', $section->getCreatedAt());
          $stmt->bindValue(':school_year', $section->getSchoolYear());
-         $stmt->bindValue(':created_by', $section->getCreatedBy());
+         $stmt->bindValue(':months', $section->getMonth());
          $stmt->bindValue(':last_modified_by', $section->getLastModifiedBy());
-         $stmt->bindValue(':deleted', $section->getDeleted());
-         $stmt->bindValue(':statut', $section->getStatut());
-
 
          if ($stmt->execute()) {
-             return $section;
+             return 1;
          }
-         return null;
-     } catch (PDOException $e) {
-         echo 'PDOExecption:' . $e->getMessage();
-     }
+         return 0;
+         }
+         return 3;
  }
 
  /**
@@ -206,7 +221,7 @@ public function findAllSection(){
         FROM sections s
         LEFT JOIN users u1 ON s.created_by = u1.id
         LEFT JOIN users u2 ON s.last_modified_by = u2.id
-         WHERE s.deleted = false AND statut = "inactive" 
+         WHERE s.deleted = false AND s.statut = "inactive" 
          ORDER BY s.id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();

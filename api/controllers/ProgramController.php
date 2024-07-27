@@ -37,7 +37,7 @@ class ProgramController
         }
 
         if (isset($_POST['addProgram'])) {
-            echo 'ok'; 
+           
             // get data post
             $created_by = $_POST['created_by'];
             $last_modified_by = $_POST['last_modified_by'];
@@ -63,11 +63,17 @@ class ProgramController
             // get service for authentification
             $created_program = $this->program_service->createProgram($program);
 
-            if (is_array($created_program) && isset($created_program['error'])) {
-                $_SESSION['error'] = $created_program['error'];
+            if ($created_program === 3) {
+                echo 'ok';
+                $_SESSION['error'] = 'ce program existe deja pour ce niveau';
                 header('location:../../views/dashbord/program.php');
-            } else {
+            } elseif($created_program === 1) {
                 $_SESSION['success'] = 'program created successfully';
+                header('location:../../views/dashbord/program.php');
+
+            }
+            else {
+                $_SESSION['error'] = 'unknown type of error, please try again';
                 header('location:../../views/dashbord/program.php');
 
             }
@@ -105,17 +111,15 @@ class ProgramController
             $program->setDuration($duration ?? $program->getDuration());
             $program->setLastModifiedBy($last_modified_by);
   
-           print_r($program); 
+
             $updated_program = $this->program_service->updateProgram($program);
             if ($updated_program == 1) {
-                echo 'ok';
                 $_SESSION['success'] = 'program update successfully';
                 header('location:../../views/dashbord/program.php');
-            } else {
-                echo 'false';
-                $_SESSION['error'] = 'failed to update program';
+            } elseif($updated_program == 3) {
+                echo 'ok';
+                $_SESSION['error'] = 'ce program existe deja pour ce niveau';
                 header('location:../../views/dashbord/program.php');
-
             }
         } else {
             echo json_encode(['error' => 'program not found']);

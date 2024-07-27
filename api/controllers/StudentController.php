@@ -41,7 +41,7 @@ class StudentController
             $first_name = htmlspecialchars($_POST['first_name'] ?? null);
             $last_name = htmlspecialchars($_POST['last_name'] ?? null);
             $email = htmlspecialchars($_POST['email'] ?? null);
-            $pwd = htmlspecialchars($_POST['pwd'] ?? 'azerty');
+
 
 
             // Création de l'objet User
@@ -51,36 +51,107 @@ class StudentController
                 $first_name,
                 $last_name,
                 $email,
-                $pwd,
                 $created_by,
                 $last_modified_by,
                 null,
+                null,
+                null,
                 false
             );
-            try {
                 $created_student = $this->student_service->createStudent($student);
                
-            } catch (Exception $e) {
-                echo json_encode(['error' => 'Error creating user: ' . $e->getMessage()]);
-                return;
-            }
-    
-            // check an error while user is create
-            if (is_array($created_student) && isset($created_student['error'])) {
-            $_SESSION['error'] =  $created_student['error'];
+           if($created_student ===1 ) {
+            $_SESSION['success'] = 'student created successfully';
             header('location:../../views/dashbord/student.php');
 
-            } else {
-               $_SESSION['success'] = 'student created successfully';
+           }elseif($created_student ===3) {
+            $_SESSION['error'] = 'this student already exist';
             header('location:../../views/dashbord/student.php');
 
-                
+           }else {
+            $_SESSION['error'] = 'failed to created student';
+            header('location:../../views/dashbord/student.php');
+
+           }
     
+        }
+    }
+    public function createAccount()
+    {
+
+        if (!isset($_SESSION['password']) || !isset($_SESSION['username'])) {
+            echo json_encode(['error' => 'unauthorized']);
+            exit();
+        }
+
+        if ($_SESSION['role'] !== 1 && $_SESSION['role'] !== 2) { {
+                echo json_encode(['error' => 'unauthorized']);
+                exit();
             }
+        }
+        if (isset($_POST['studentAccount']) ) {
+
+            $id = intval($_POST['studentId']);
+
+ 
+            $username = htmlspecialchars($_POST['username'] ?? null);
+            $first_name = htmlspecialchars($_POST['first_name'] ?? null);
+            $last_name = htmlspecialchars($_POST['last_name'] ?? null);
+            $email = htmlspecialchars($_POST['email'] ?? null);
+            $pwd = htmlspecialchars($_POST['email'] ?? null);
+            $role_id = htmlspecialchars($_POST['role_id'] ?? null);
+
+            // Création de l'objet User
+            $user = new User(
+                null,
+                $username,
+                $first_name,
+                $last_name,
+                $email,
+                $pwd,
+                false,
+                null,
+                $role_id
+
+            );
+                $created_user = $this->student_service->createAccount($id,$user);
+               if($created_user == 1) {
+                $_SESSION['success'] = 'compte utilisateur créé, le mot de passe de cet utilisateur est son adresse email';
+               } elseif($created_user == 12) {
+                $_SESSION['error'] = 'Un compte utilisateur est déjà défini pour cet étudiant';
+               } else {
+                $_SESSION['error'] =  'undefined error';
+               }
     
         }
     }
 
+    
+public function disableAccount() {
+    if (!isset($_SESSION['password']) || !isset($_SESSION['username'])) {
+        echo json_encode(['error' => 'unauthorized']);
+        exit();
+    }
+
+    if ($_SESSION['role'] !== 1 && $_SESSION['role'] !== 2) { {
+            echo json_encode(['error' => 'unauthorized']);
+            exit();
+        }
+    }
+
+    if(isset($_POST['disableAccount'])) {
+        $id = intval($_POST['studentIdDisable']);
+        $disable = $this->student_service->disableAccount($id);
+        if($disable == 1) {
+           $_SESSION ['success'] = 'compte desactivé';
+        } else {
+            $_SESSION ['success'] = 'error';
+        }
+
+
+    }
+
+}
     // update student
     public function updateStudent()
     {
@@ -115,16 +186,24 @@ class StudentController
                     
                     $update_student= $this->student_service->updateStudent($student);
 
-                    if (is_array($update_student) && isset($update_student['error'])) {
-                        $_SESSION['error'] =  $update_student['error'];
-                        header('location:../../views/dashbord/student.php');
-                    } else {
-                        $_SESSION['success'] = 'student created successfully';
-                        header('location:../../views/dashbord/student.php');
-                    }
+                         
+           if($update_student ===1 ) {
+            $_SESSION['success'] = 'student updated successfully';
+            header('location:../../views/dashbord/student.php');
+
+           }elseif($update_student ===3) {
+            $_SESSION['error'] = 'this student already exist';
+            header('location:../../views/dashbord/student.php');
+
+           }else {
+            $_SESSION['error'] = 'failed to update student';
+            header('location:../../views/dashbord/student.php');
+
+           }
 
                 } else {
-                    echo json_encode(['error' => 'student not found']);
+                    $_SESSION['error'] = 'failed to update student';
+
                 }
 
 
@@ -173,7 +252,25 @@ class StudentController
            
             return json_encode($students);
         } else {
-            echo json_encode(['error' => 'No students found']);
+            // return json_encode(['error' => 'No students found']);
+        }
+    }
+    public function getAllRegisterStudent()
+    {
+        $register_student = $this->student_service->findAllRegisterStudent();
+        if ($register_student) {
+            return json_encode($register_student);
+        } else {
+            // return json_encode(['error' => 'No students found']);
+        }
+    }
+    public function getAllUnregisterStudent()
+    {
+        $unregister_student = $this->student_service->findAllUnregisterStudent();
+        if ($unregister_student) {
+            return json_encode($unregister_student);
+        } else {
+            // return json_encode(['error' => 'No students found']);
         }
     }
 }
@@ -186,6 +283,12 @@ $controller = new StudentController();
 $json_student = $controller->getAllStudents();
 $students = json_decode($json_student,true);
 
+$json_register_student = $controller->getAllRegisterStudent();
+$register_student = json_decode($json_register_student,true);
+
+$json_unregister_student = $controller->getAllUnregisterStudent();
+$unregister_student = json_decode($json_unregister_student,true);
+
 if(isset($_POST['addStudent'])) {
     $controller->createStudent();
 }
@@ -196,4 +299,11 @@ if(isset($_POST['updateStudent'])) {
     $controller->updateStudent();
 }
 
+if (isset($_POST['studentAccount'])) {
+    $controller->createAccount();
+}
+if( isset($_POST['disableAccount'])) {
+    $controller->disableAccount();
+
+}
 

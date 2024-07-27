@@ -2,6 +2,7 @@
 // session_start();
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Database.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Student.php' ;
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'User.php' ;
 
 
 class StudentRepository{
@@ -25,20 +26,18 @@ class StudentRepository{
             $verifyStatement->execute();
     
             if ($verifyStatement->fetchColumn() > 0) {
-                return ['error' => 'Student already exists'];
+                return 3;
             }
     
-            $hashed_pwd = password_hash($student->getPwd(), PASSWORD_DEFAULT);
     
-            $sql = "INSERT INTO students (created_by, last_modified_by, username, first_name, last_name, email, pwd, created_at, deleted)
-                    VALUES (:created_by, :last_modified_by, :username, :first_name, :last_name, :email, :pwd, :created_at, :deleted)";
+            $sql = "INSERT INTO students (created_by, last_modified_by, username, first_name, last_name, email, created_at, deleted)
+                    VALUES (:created_by, :last_modified_by, :username, :first_name, :last_name, :email, :created_at, :deleted)";
     
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(':username', $student->getUsername());
             $stmt->bindValue(':first_name', $student->getFirstName());
             $stmt->bindValue(':last_name', $student->getLastName());
             $stmt->bindValue(':email', $student->getEmail());
-            $stmt->bindValue(':pwd', $hashed_pwd);
             $stmt->bindValue(':created_by', $student->getCreatedBy());
             $stmt->bindValue(':last_modified_by', $student->getLastModifiedBy());
             $stmt->bindValue(':created_at', $student->getCreatedAt());
@@ -46,16 +45,17 @@ class StudentRepository{
     
             if ($stmt->execute()) {
                 $student->setId($this->pdo->lastInsertId());
-                return ['success' => $student];
+                return 1;
             }
     
-            return ['error' => 'Failed to create student'];
+            return 0;
         } catch (PDOException $e) {
             error_log('PDOException: ' . $e->getMessage());
             throw new Exception('Error creating student: ' . $e->getMessage());
         }
     }
-     
+
+  
 /**
  * find student by their id 
  *
@@ -78,10 +78,11 @@ public function findById($id)
             $result['first_name'],
             $result['last_name'],
             $result['email'],
-            $result['pwd'],
             $result['created_by'],
             $result['last_modified_by'],
             $result['created_at'],
+            $result['statut'],
+            $result['registration'],
             $result['deleted']
         );        
     }
@@ -106,7 +107,56 @@ public function findAllStudent()
                 LEFT JOIN users u1 ON s.created_by = u1.id
                 LEFT JOIN users u2 ON s.last_modified_by = u2.id
                 WHERE s.deleted = false
-                ORDER BY s.id";
+                ORDER BY s.username ASC";
+        $stmt = $this->pdo->query($sql);
+        $students = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $students[] = $row;
+        }
+
+        return $students;
+    } catch (PDOException $e) {
+        echo 'PDOExecption:' . $e->getMessage();
+        return [];
+    }
+}
+
+public function findAllUnregisterStudent()
+{
+    try {
+        $sql = "SELECT  s.*,
+                u1.username AS created_by_username,
+                u2.username AS last_modified_by_username
+                FROM students s
+                LEFT JOIN users u1 ON s.created_by = u1.id
+                LEFT JOIN users u2 ON s.last_modified_by = u2.id
+                WHERE s.deleted = false AND s.registration = false
+                ORDER BY s.username ASC";
+        $stmt = $this->pdo->query($sql);
+        $students = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $students[] = $row;
+        }
+
+        return $students;
+    } catch (PDOException $e) {
+        echo 'PDOExecption:' . $e->getMessage();
+        return [];
+    }
+}
+public function findAllRegisterStudent()
+{
+    try {
+        $sql = "SELECT  s.*,
+                u1.username AS created_by_username,
+                u2.username AS last_modified_by_username
+                FROM students s
+                LEFT JOIN users u1 ON s.created_by = u1.id
+                LEFT JOIN users u2 ON s.last_modified_by = u2.id
+                WHERE s.deleted = false AND s.registration = true
+                ORDER BY s.username ASC";
         $stmt = $this->pdo->query($sql);
         $students = [];
 
@@ -141,7 +191,7 @@ public function findAllStudent()
         $verifyStatement->execute();
 
         if ($verifyStatement->fetchColumn() > 0) {
-            return ['error' => 'Student already exists'];
+            return 3;
         }
 
             $sql = 'UPDATE students SET 
@@ -162,10 +212,10 @@ public function findAllStudent()
 
 
          if ($stmt->execute()) {
-            return ['success' => $student];
+            return 1;
             }
     
-            return ['error' => 'Failed to update student'];
+            return 0;
      } catch (PDOException $e) {
         error_log('PDOException: ' . $e->getMessage());
         throw new Exception('Error updating student: ' . $e->getMessage());
@@ -227,28 +277,118 @@ public function findByUsername($username) {
 
 
 
-/**
- * find Program
- 
- */
-public function  findProgram($id) {
+
+
+
+  /* create user account of student */
+
+  public function createAccount($id,User $user) {
 
     try {
-        $sql = 'SELECT program_name FROM programs where id = :id';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt -> bindParam(':id',$id);
+        $sql = 'SELECT statut FROM students WHERE id = :id';
+        $stmt = $this ->pdo->prepare($sql);
+        $stmt->bindValue(':id',$id);
         $stmt->execute();
-        $result= $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if($result) {
-            return $result['program_name'];
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); 
+
+        if($result['statut'] == 'etudiant') {
+
+            $verify = "SELECT COUNT(*) FROM users WHERE email = :email AND username = :username AND statut = 'actif' ";
+            $stmtverify = $this->pdo->prepare($verify);
+            $stmtverify->bindValue(':username', $user->getUsername());
+            $stmtverify->bindValue(':email', $user->getEmail());
+            $stmtverify->execute();
+
+            if($stmtverify->fetchColumn() > 0) {
+                return 12 ;
+            }
+
+            $sql_update = "UPDATE students SET statut = 'utilisateur' WHERE id = :id AND deleted = false ";
+            $stmt_update = $this->pdo->prepare($sql_update);
+            $stmt_update ->bindValue('id',$id);
+            $stmt_update->execute();
+
+            $find_password = $user->getPwd();
+            $hashed_pwd = password_hash($find_password, PASSWORD_DEFAULT);
+
+            $sql_user = "INSERT INTO users
+            (username,first_name,last_name,email,pwd,role_id,deleted) 
+            VALUES (:username, :first_name, :last_name, :email,:pwd,:role_id,:deleted)";
+            $stmt = $this->pdo->prepare($sql_user);
+            $stmt->bindValue(':username', $user->getUsername());
+            $stmt->bindValue(':first_name', $user->getFirstName());
+            $stmt->bindValue(':last_name', $user->getLastName());
+            $stmt->bindValue(':email', $user->getEmail());
+            $stmt->bindValue(':pwd', $hashed_pwd);
+            $stmt->bindValue(':role_id', $user->getRoleId());
+            $stmt->bindValue(':deleted', $user->getDeleted());
+    
+            if($stmt->execute() && $stmt_update->execute() ) {
+                $user->setId($this->pdo->lastInsertId());
+                return 1;
+            }
+            return 0;
+
+            }
+
+        }catch (PDOException $e) {
+            echo 'PDOExecption:' . $e->getMessage();
         }
-        return null;
-    } catch(PDOException $e) {
-        echo 'PDOExecption:' .$e->getMessage();
-        return null;
-    }
 }
+
+
+public function disableAccount($id) {
+    try {
+        $sql = 'SELECT statut FROM students WHERE id = :id';
+        $stmt = $this ->pdo->prepare($sql);
+        $stmt->bindValue(':id',$id);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); 
+        print_r($result['statut']); 
+
+        if($result['statut'] == 'utilisateur') {
+                $sql_statut = "UPDATE students SET statut = 'etudiant' WHERE id = :id ";
+                $stmt = $this->pdo->prepare($sql_statut);
+                $stmt ->bindParam(':id',$id);
+                $stmt->execute();
+                echo '2';
+                $select = "SELECT username, email FROM students WHERE id = :id AND deleted = false";
+                $statment = $this->pdo->prepare($select);
+                $statment->bindValue(':id',$id);
+                $statment->execute();
+                $result_username = $statment->fetch(PDO::FETCH_ASSOC);
+                $username_student=($result_username['username']);
+                $email_student = ($result_username['email']);
+
+                $sql_find_student = "SELECT id FROM users WHERE username = :username AND email = :email";
+                $stmt_find_student = $this->pdo->prepare($sql_find_student);
+                $stmt_find_student->bindParam(':username',$username_student);
+                $stmt_find_student->bindParam(':email',$email_student);
+
+                $stmt_find_student->execute(); echo '2';
+                $result_select = $stmt_find_student->fetch(PDO::FETCH_ASSOC); 
+                $student_id_user = $result_select['id'];
+
+                $sql_update = "UPDATE users SET statut = 'inactif' WHERE id = :id AND deleted = false ";
+                $stmt_update = $this->pdo->prepare($sql_update);
+                $stmt_update ->bindParam('id',$student_id_user);
+                $stmt_update->execute();
+                if($stmt->execute() && $stmt_update->execute()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+
+            }
+
+        }catch (PDOException $e) {
+            echo 'PDOExecption:' . $e->getMessage();
+        }
+}
+     
+
 
 
  

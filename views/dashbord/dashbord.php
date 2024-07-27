@@ -1,5 +1,4 @@
 <?php
-
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'UserController.php';
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'RoleController.php';
 include 'authorisation.php';
@@ -10,9 +9,6 @@ include 'message.php';
 <!DOCTYPE html>
 <html>
 <?php include 'head.php'; ?>
-<?php include 'message.php' ; ?>
-
-
 
 <body>
   <div class="hero_area">
@@ -21,17 +17,15 @@ include 'message.php';
       <div class="header_top py-1" style="background-color:#313858;">
         <div class="container-fluid">
           <div class="top_nav_container py-1" class="h-8 w-8">
-
             <img src="../../assets/images/logo1.png" alt="" srcset="" class="h-8 ">
             <p style="color:white">IFP LEADER EN INFORMATIQUE</p>
           </div>
-
         </div>
       </div>
       <div class="header_bottom  py-1">
         <div class="container-fluid ">
           <nav class="navbar navbar-expand-lg custom_nav-container">
-            <a class="navbar-brand text-lg" href="../index.html">
+            <a class="navbar-brand text-lg" href="#">
               <span>
                 IFPLI
               </span>
@@ -72,14 +66,20 @@ include 'message.php';
       </div>
     </header>
 
+    <div>
 
-
-
+      <!-- <p class="hover:text-blue-500 cursor-pointer"> Bienvenu dans votre espace <?php echo $_SESSION['username']; ?></p> -->
+    </div>
     <div class="px-2 py-2">
 
-
+      <button type="button" class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2" onclick="viewUser(this)">
+        <i class="fas fa-user-plus"></i> Utilisateur
+      </button>
       <!-- table to get user -->
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div id="userTable" class=" hidden relative overflow-x-auto shadow-md sm:rounded-lg">
+        <button type="button" class="end-10 text-gray-700 bg-transparent  rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-blue-gray-900:text-white" onclick="closeViewUser()">
+          <i class="fas fa-times"></i>
+        </button>
         <div class="pb-4 bg-white dark-bg-gray-900">
           <label for="table-search" class="sr-only">Search</label>
           <div class="relative mt-1">
@@ -93,7 +93,7 @@ include 'message.php';
         </div>
 
         <div class="flex justify-between">
-          <button type="button"  class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2" onclick="openAddUser(this)">
+          <button type="button" class="cursor-pointer text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-meduim rounded-lg text-sm px-3 py-3 text-center me-2 mb-2" onclick="openAddUser(this)">
             <i class="fas fa-user-plus"></i> New user
           </button>
         </div>
@@ -103,7 +103,7 @@ include 'message.php';
         <table class="w-full text-sm text-left rtl-text-right text-gray-900 border-collapse border border-slate-500 ">
           <thead class="text-xs text-gray-700 uppercase bg-blue-300 ">
             <tr>
-             
+
               <th scope="col" class="px-6 py-3 border border-slate-600 ">
                 id
               </th>
@@ -150,19 +150,10 @@ include 'message.php';
                   <td class="py-2 px-4 border border-slate-700 "><?= htmlspecialchars($userdata['role_name']); ?></td>
                   <td class="py-2 px-4 border border-slate-700 ">
                     <div class="justify between">
-                      <a href="#" id="" data-user="<?= $userdata['id'] ?>"
-                       data-username="<?= $userdata['username'] ?>"
-                        data-firstname="<?= $userdata['first_name'] ?>"
-                         data-lastname="<?= $userdata['last_name'] ?>"
-                          data-email="<?= $userdata['email'] ?>"
-                          data-roleId="<?= $userdata['role_id'] ?>"
-                          data-roleName="<?= $userdata['role_name'] ?>"
-                            class="font-meduim text-blue-600 hover:underline" onclick="openEditUserModal(this)"><i class="fas fa-edit"></i></a>
+                      <a href="#" id="" data-user="<?= $userdata['id'] ?>" data-username="<?= $userdata['username'] ?>" data-firstname="<?= $userdata['first_name'] ?>" data-lastname="<?= $userdata['last_name'] ?>" data-email="<?= $userdata['email'] ?>" data-roleId="<?= $userdata['role_id'] ?>" data-roleName="<?= $userdata['role_name'] ?>" class="font-meduim text-blue-600 hover:underline" onclick="openEditUserModal(this)"><i class="fas fa-edit"></i></a>
 
 
-                      <button data-deleteUser="<?= $userdata['id'] ?>"
-                      data-check_role="<?= $userdata['role_id'] ?>"
-                       class="font-meduim text-red-600 hover:underline" onclick="openDeleteModal(this)"><i class="fas fa-trash"></i></button>
+                      <button data-deleteUser="<?= $userdata['id'] ?>" data-check_role="<?= $userdata['role_id'] ?>" class="font-meduim text-red-600 hover:underline" onclick="openDeleteModal(this)"><i class="fas fa-trash"></i></button>
 
                     </div>
                   </td>
@@ -179,10 +170,18 @@ include 'message.php';
 
       </div>
     </div>
+    <script>
+      function viewUser(button) {
+        document.getElementById('userTable').classList.remove('hidden');
+      }
 
+      function closeViewUser() {
+        document.getElementById('userTable').classList.add('hidden');
+
+      }
+    </script>
     <?php include 'UserModal.php' ?>
     <?php include 'educationTab.php' ?>
     <?php include 'footer.php' ?>
 </body>
-
 </html>

@@ -27,7 +27,6 @@ cover.addEventListener('click', () => {
 
 
 
-
 /* finish section */
 function openFinishModal(button) {
     
@@ -52,18 +51,13 @@ function openMultiDropdown(button) {
     
 }
 
-/*  fermer le menu deroulant de la section */
-const optionForSection = document.getElementById('optionForSection');
 
-window.addEventListener('click', (event) => {
-    if(event.target === optionForSection){
-      optionForSection.classList.add('hidden');
-    }
- });
 
- function closeMultiDropdown() {
-    document.getElementById('optionForSection').classList.add('hidden');
+ function closeMultiDropdownS() {
+   alert();
+   //  document.getElementById('optionForSection').classList.add('hidden');
 
  }
 
+/* menu deroulant de l'enregistrement */
 

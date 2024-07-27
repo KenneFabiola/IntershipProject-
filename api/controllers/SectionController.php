@@ -27,27 +27,41 @@ class SectionController {
         if (isset($_POST['addSection'])) {
             $created_by = $_SESSION['id'];
             $last_modified_by = $_SESSION['id'];              
-              // get data post
-              $school_year=htmlspecialchars($_POST['school_year'] ?? null);
-              $statut = htmlspecialchars($_POST['statut'] ?? 'active');
-            
+            $school_year=htmlspecialchars($_POST['school_year']);
+            $month=htmlspecialchars($_POST['month']);
+ 
               // objet section
               $section = new Section(
                   null,
                   null,
                   $school_year,
+                  $month,
                   $created_by,
                   $last_modified_by,
                   false,
-                  $statut
+                  null
               );
+              print_r($section);
                   // get service for authentification
               $createdSection = $this->section_service->createSection($section);
       
-              if ($createdSection) {
-                  echo json_encode(['success' => 'section created successfully']);
-              } else {
-                  echo json_encode(['error' => 'Failed to create section']);
+              if($createdSection === 3) {
+                $_SESSION['error'] = 'Vous ne pouvez pas avoir plus de deux session en cours, veuillez terminé la session avant de debuter un nouvelle';
+                header('location:../../views/dashbord/education.php');
+                
+            }elseif($createdSection === 1) {
+                $_SESSION['success'] = 'Nouvelle session crée';
+            header('location:../../views/dashbord/education.php');
+                
+              }elseif($createdSection === 4) {
+                $_SESSION['error'] = 'cet session existe déjà';
+                header('location:../../views/dashbord/education.php');
+                
+              }
+              else {
+                 $_SESSION['error'] = 'unknown type an error';
+                 header('location:../../views/dashbord/education.php');
+
               }
          
         }
@@ -56,37 +70,61 @@ class SectionController {
     }
 
     // update section
-    // public function updateSection() {
-        
-    //     $id = 5;
-    //     $user = $this->user_repository->findById($id);
-    //     if ($user) {
-    //         $created_by = $user->getId();
-    //         $last_modified_by = $user->getId();
-    //         $input_data = json_decode(file_get_contents("php://input"), true);
+    public function updateSection() {
+         // check if authentification is ok
+         if (!isset($_SESSION['password']) || !isset($_SESSION['username'])) {
+            echo json_encode(['error' => 'unauthorized']);
+            exit();
+        }
 
-    //         $id = $input_data['id'] ?? null;
-    //         $user = $this->section_service->findById($id);
+        // check authentification of user
+        if ($_SESSION['role'] !== 1 && $_SESSION['role'] !== 2) { 
+                echo json_encode(['error' => 'unauthorized']);
+                exit();
+            }
 
-    //     $id = $input_data['id'] ?? null;
-    //     $section = $this->section_service->findById($id);
-    //     if ($section) {
-    //         $section->setSchoolYear($input_data['school_year'] ?? $section->getSchoolYear());
-    //         $section->setStatut($input_data['statut'] ?? $section->getStatut());
-    //         $section->setLastModifiedBy($last_modified_by);
-    //         $section->setCreatedBy($section->getCreatedBy()); // Ne devrait pas être modifié lors de la mise à jour
+     if(isset($_POST['updateSection'])) {
 
-    //         $updateSection = $this->section_service->updateSection($section, $last_modified_by);
-    //         if ($updateSection) {
-    //             echo json_encode(['success' => 'Section updated successfully']);
-    //         } else {
-    //             echo json_encode(['error' => 'Failed to update section']);
-    //         }
-    //     } else {
-    //         echo json_encode(['error' => 'Section not found']);
-    //     }
-    // }
-    // }
+        $id = intval($_POST['updateSessionById']); 
+        $last_modified_by = htmlspecialchars($_POST['last_modified_by']);          
+        $school_year =htmlspecialchars($_POST['school_year']); 
+        $month =htmlspecialchars($_POST['month']); 
+
+        $section = $this->section_service->findById($id);
+        if($section) {
+            $section->setSchoolYear($school_year ?? $section->getSchoolYear());
+            $section->setMonth($month ?? $section->getMonth()); 
+            $section->setLastModifiedBy($last_modified_by);
+
+            $updated_section = $this->section_service->updateSection($section);
+            if($updated_section === 3) {
+                // $_SESSION['error'] = 'Vous ne pouvez pas avoir plus de deux session en cours, veuillez terminé la session avant de debuter un nouvelle';
+                // header('location:../../views/dashbord/education.php');
+                
+            }elseif($updated_section === 1) {
+                echo 'ok';
+            //     $_SESSION['success'] = 'Nouvelle session crée';
+            // header('location:../../views/dashbord/education.php');
+                
+              }elseif($updated_section === 4) {
+                echo 'already';
+                // $_SESSION['error'] = 'cet session existe déjà';
+                // header('location:../../views/dashbord/education.php');
+                
+              }
+              else {
+                echo 'rr';
+                //  $_SESSION['error'] = 'unknown type an error';
+                //  header('location:../../views/dashbord/education.php');
+
+              }
+  
+        }
+
+
+     }   
+       
+    }
 
     // delete section
     public function deleteSection() {
@@ -184,6 +222,9 @@ $inactive_section = json_decode($json_inactive_section,true);
 
 if(isset($_POST['addSection'])) {
     $controller->createSection();
+}
+if(isset($_POST['updateSection'])) {
+    $controller->updateSection();
 }
 if(isset($_POST['finishSection'])) {
     $controller->finishSection();

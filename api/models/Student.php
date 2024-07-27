@@ -6,27 +6,28 @@ class Student
     private $first_name;
     private $last_name;
     private $email;
-    private $pwd;
+    // private $pwd;
     private $created_by;
     private $last_modified_by;
     private $created_at;
+    private $statut;
+    private $registration;
     private $deleted;
-    private $created_by_username;
-    private $last_modified_by_username;
+
     
-
-
-    public function __construct($id, $username, $first_name, $last_name, $email, $pwd, $created_by, $last_modified_by, $created_at, $deleted)
+    public function __construct($id, $username, $first_name, $last_name, $email, $created_by, $last_modified_by, $created_at,$statut,$registration, $deleted)
     {
         $this->id = $id;
         $this->username = $username;
         $this->first_name = $first_name;
         $this->last_name = $last_name;
         $this->email = $email;
-        $this->pwd = $pwd;
+        // $this->pwd = $pwd;
         $this->created_by = $created_by;
         $this->last_modified_by = $last_modified_by;
         $this->created_at = $created_at;
+        $this->statut = $statut;
+        $this->registration = $registration;
         $this->deleted = $deleted;
     }
 
@@ -51,10 +52,10 @@ class Student
     {
         return $this->email;
     }
-    public function getPwd()
-    {
-        return $this->pwd;
-    }
+    // public function getPwd()
+    // {
+    //     return $this->pwd;
+    // }
     public function getCreatedBy()
     {
         return $this->created_by;
@@ -70,6 +71,23 @@ class Student
     public function getDeleted()
     {
         return $this->deleted;
+    }
+    
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+    public function setStatut($statut)
+    {
+        return $this->statut = $statut;
+    }
+    public function getRegistration()
+    {
+        return $this->registration;
+    }
+    public function setRegistration($registration)
+    {
+        return $this->registration = $registration;
     }
     
     public function setId($id)
@@ -92,10 +110,10 @@ class Student
     {
         return $this-> email = $email;
     }
-    public function setPwd($pwd)
-    {
-        return $this->pwd = $pwd;
-    }
+    // public function setPwd($pwd)
+    // {
+    //     return $this->pwd = $pwd;
+    // }
     public function setCreatedBy($created_by)
     {
         return $this->created_by = $created_by;
@@ -113,17 +131,5 @@ class Student
         return $this->deleted = $deleted;
     }
 
-    public function getCreatedByUsername(){
-        return $this->created_by_username;
-    }
-    public function setCreatedByUsername($created_by_username){
-        return $this->created_by_username = $created_by_username;
-    }
-    public function getLastModifiedByUsername() {
-        return $this->last_modified_by_username;
-    }
-    public function setLastModifiedByUsername($last_modified_by_username) {
-        return $this->last_modified_by_username = $last_modified_by_username;
-    }
     
 }

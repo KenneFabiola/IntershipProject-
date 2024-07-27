@@ -9,10 +9,11 @@ class User
     private $pwd;
     private $deleted;
     private $role_id;
-    private $role_name;
+    private $statut;
 
 
-    public function __construct($id, $username, $first_name, $last_name, $email, $pwd,$deleted = 0,$role_id)
+
+    public function __construct($id, $username, $first_name, $last_name, $email, $pwd,$deleted = 0,$statut,$role_id)
     {
 
 
@@ -24,6 +25,7 @@ class User
         $this->pwd = $pwd;
         $this->deleted = $deleted;
         $this->role_id = $role_id;
+        $this->statut = $statut;
      
     }
 
@@ -60,6 +62,14 @@ class User
     {
         return $this->role_id;
     }
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+    public function setStatut($statut)
+    {
+        return $this->statut = $statut;
+    }
     public function setId($id)
     {
         return $this->id = $id;
@@ -91,10 +101,10 @@ class User
     {
         return $this->role_id = $role_id;
     }
-    public function getRoleName() {
-        return $this->role_name;
-    }
-    public function setRoleName($role_name) {
-        return $this->role_name = $role_name;
-    }
+    // public function getRoleName() {
+    //     return $this->role_name;
+    // }
+    // public function setRoleName($role_name) {
+    //     return $this->role_name = $role_name;
+    // }
 }

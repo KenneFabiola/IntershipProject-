@@ -14,22 +14,21 @@ include 'message.php';
 <?php include 'head.php'; ?>
 
 <body>
-  <div class="hero_area">
+<div class="hero_area">
     <!-- header section strats -->
     <header class="header_section">
       <div class="header_top py-1" style="background-color:#313858;">
         <div class="container-fluid">
           <div class="top_nav_container py-1" class="h-8 w-8">
-            <img src="../assets/images/logo1.png" alt="" srcset="" class="h-8 ">
+            <img src="../../assets/images/logo1.png" alt="" srcset="" class="h-8 ">
             <p style="color:white">IFP LEADER EN INFORMATIQUE</p>
           </div>
-
         </div>
       </div>
       <div class="header_bottom  py-1">
         <div class="container-fluid ">
-          <nav class="navbar navbar-expand-lg custom_nav-container p-1 h-4">
-            <a class="navbar-brand text-lg" href="index.html">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand text-lg" href="#">
               <span>
                 IFPLI
               </span>
@@ -40,18 +39,18 @@ include 'message.php';
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ">
-                <li class="nav-item ">
-                  <a class="nav-link" href="dashbord.php">Accueil </a>
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="dashbord.php">Accueil <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                  <a class="nav-link" href="program.php">Filière <span class="sr-only">(current)</span> </a>
-                </li>
-                <li class="nav-item ">
-                  <a class="nav-link" href="student.php">Etudiant <span class="sr-only">(current)</span> </a>
+                  <a class="nav-link" href="program.php">Filière </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link cursor-pointer" href="education.php">Scolarité</a>
+                  <a class="nav-link" href="student.php">Etudiant</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link cursor-pointer " href="education.php" onclick="openEducatio(this)">Scolarité</a>
                 </li>
                 <form action="../../api/controllers/AuthentificateController.php" method="POST">
                   <input type="hidden" name="logout" value="true">
@@ -59,6 +58,7 @@ include 'message.php';
                     <button type="submit" class="nav-link cursor-pointer">Déconnexion</button>
                   </li>
                 </form>
+
                 <li class="nav-item">
                   <a class="nav-link" href="profil.php">Profil</a>
                 </li>
@@ -68,7 +68,6 @@ include 'message.php';
         </div>
       </div>
     </header>
-
 
     <div class="px-2">
 
@@ -112,10 +111,10 @@ include 'message.php';
                 Description
               </th>
               <th scope="col" class="px-6 py-3">
-                Durée
+                Disponibilité
               </th>
               <th scope="col" class="px-6 py-3">
-                Disponibilité
+                Durée
               </th>
               <th scope="col" class="px-6 py-3">
                 Créer par
@@ -148,18 +147,33 @@ include 'message.php';
                   <td class="py-2 px-4"><?= htmlspecialchars($programdata['program_name']); ?></td>
                   <td class="py-2 px-4"><?= htmlspecialchars($programdata['level_name']); ?></td>
                   <td class="py-2 px-4"><?= htmlspecialchars($programdata['descriptive']); ?></td>
+                  <td class="py-2 px-4 <?php if (htmlspecialchars($programdata['availabilities']) == "fermer") {
+                                          echo "text-red-500";
+                                        } else {
+                                          echo "text-green-600";
+                                        } ?>"><?= htmlspecialchars($programdata['availabilities']); ?></td>
                   <td class="py-2 px-4"><?= htmlspecialchars($programdata['duration']); ?></td>
-                  <td class="py-2 px-4"><?= htmlspecialchars($programdata['availabilities']); ?></td>
                   <td class="py-2 px-4"><?= htmlspecialchars($programdata['created_by_username']); ?></td>
                   <td class="py-2 px-4"><?= htmlspecialchars($programdata['last_modified_by_username']); ?></td>
                   <td class="py-2 px-4"><?= htmlspecialchars($programdata['created_at']); ?></td>
 
                   <td class="py-2 px-4">
-                    <div class="justify between">
-                      <a href="#" id="" data-program_id="<?= $programdata['id'] ?>" data-program_name="<?= $programdata['program_name'] ?>" data-level_name="<?= $programdata['level_name'] ?>" data-program_description="<?= $programdata['descriptive'] ?>" data-duration="<?= $programdata['duration'] ?>" class="font-meduim text-blue-600 hover:underline" onclick="openEditProgramModal(this) "><i class="fas fa-edit"></i></a>
-
-
-                        <button data-program_id="<?= $programdata['id'] ?>" data-program_name="<?= htmlspecialchars($programdata['program_name']); ?>" data-program_level="<?= htmlspecialchars($programdata['level_name']); ?>" onclick="openAddModalTuition(this)"><i class="fas fa-credit-card"></i></button>
+                    <div class="flex justify-between items-center">
+                      <a href="#" id="" data-program_id="<?= $programdata['id'] ?>" data-program_name="<?= $programdata['program_name'] ?>" data-level_name="<?= $programdata['level_name'] ?>" data-program_description="<?= $programdata['descriptive'] ?>" data-duration="<?= $programdata['duration'] ?>" class="font-medium text-blue-600 hover:underline" onclick="openEditProgramModal(this)"><i class="fas fa-edit"></i></a>
+                      <button data-program_id="<?= $programdata['id'] ?>"
+                       data-program_name="<?= htmlspecialchars($programdata['program_name']); ?>"
+                        data-program_level="<?= htmlspecialchars($programdata['level_name']); ?>" 
+                        class="text-yellow-500"
+                        onclick="openAddModalTuition(this)"><i class="fas fa-credit-card"></i></button>
+                      <form action="../../api/controllers/ProgramController.php" method="POST" class="flex items-center">
+                        <?php if ((htmlspecialchars($programdata['availabilities']) == "fermer")) { ?>
+                          <input type="hidden" readonly name="controlProgram" value="<?= ($programdata['id']); ?>">
+                          <button type="submit" name="openProgram" class=" text-green-500 "><i class="fas fa-unlock"></i></button>
+                        <?php } else { ?>
+                          <input type="hidden" readonly name="controlProgram" value="<?= ($programdata['id']); ?>">
+                          <button type="submit" name="closeProgram" class="text-red-500"><i class="fas fa-lock"></i></button>
+                        <?php } ?>
+                      </form>
                     </div>
                   </td>
 
@@ -174,95 +188,9 @@ include 'message.php';
 
         </table>
 
-      </div>
-
-      <!-- table to get user -->
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-2/3">
-        <div class="pb-4 bg-white dark-bg-gray-900">
-          <label for="table-search" class="sr-only">Search</label>
-          <div class="relative mt-1">
-            <div class="absolute inset-y-0 rtl:inset-r-0 flex items-center ps-3 pointer-events-none">
-              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-              </svg>
-            </div>
-            <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 rpunded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
           </div>
-        </div>
 
 
-        <!-- table -->
-        <table class="w-full text-sm text-left rtl-text-right text-gray-900 ">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
-            <tr>
-
-              <th scope="col" class="px-6 py-3">
-                id
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Nom de la filière
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Niveau
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Disponibilité
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <?php
-
-
-          ?>
-          <tbody>
-            <?php if (isset($programs['error'])) : ?>
-              <tr>
-                <td colspan="5" class="py-2 px-4"><?= htmlspecialchars($programs['error']); ?></td>
-              </tr>
-            <?php elseif (!empty($programs)) : ?>
-              <?php foreach ($programs as $programdata) : ?>
-                <tr>
-                  <td class="py-2 px-4"><?=($programdata['id']); ?></td>
-                  <td class="py-2 px-4"><?= htmlspecialchars($programdata['program_name']); ?></td>
-                  <td class="py-2 px-4"><?= htmlspecialchars($programdata['level_name']); ?></td>
-                  <td class="py-2 px-4 <?php if (htmlspecialchars($programdata['availabilities']) == "fermer") {
-                                          echo "text-red-500";
-                                        } else {
-                                          echo "text-green-600";
-                                        } ?>"><?= htmlspecialchars($programdata['availabilities']); ?></td>
-                  <form action="../../api/controllers/ProgramController.php" method="POST">
-                    <td class="py-2 px-4">
-                      <?php if ((htmlspecialchars($programdata['availabilities']) == "fermer")) { ?>
-                        <input type="hidden" readonly name="controlProgram" value="<?=($programdata['id']); ?>">
-                        <button  type="submit" name="openProgram" class=" border border-1 rounded-lg px-1 py-1font-meduim text-white hover:underline bg-gradient-to-r from-green-600 via-green-600 to-green-600">Ouvrir</button>
-
-                      <?php } else {
-                      ?>
-                        <input type="hidden" readonly name="controlProgram" value="<?=($programdata['id']); ?>">
-                        <button type="submit" name="closeProgram" class=" border border-1 rounded-lg px-1 py-1font-meduim text-white hover:underline bg-gradient-to-r from-red-500 via-red-500 to-red-500">Fermer</button>
-
-                      <?php } ?>
-
-                    </td>
-                  </form>
-
-                </tr>
-              <?php endforeach; ?>
-            <?php else : ?>
-              <tr>
-                <td colspan="5" class="py-2 px-4">Aucun Programme trouvé.</td>
-              </tr>
-            <?php endif; ?>
-          </tbody>
-
-        </table>
-
-      </div>
-
-      <?php include 'tuitionTable.php'; ?>
       <?php include 'programModal.php'; ?>
       <?php include 'tuitionModal.php'; ?>
 

@@ -7,9 +7,10 @@ class Registration {
     private $created_by;
     private $last_modified_by;
     private $created_at;
+    private $statut;
     private $deleted;
     
-    public function __construct($id, $student_id,$section_id,$program_id,$created_by,$last_modified_by,$created_at,$deleted)
+    public function __construct($id, $student_id,$section_id,$program_id,$created_by,$last_modified_by,$created_at,$statut,$deleted)
     {
         $this->id=$id;
         $this->student_id=$student_id;
@@ -18,6 +19,7 @@ class Registration {
         $this->created_by=$created_by;
         $this->last_modified_by=$last_modified_by;
         $this->created_at=$created_at;
+        $this->statut=$statut;
         $this->deleted=$deleted;
     }
 
@@ -41,6 +43,9 @@ class Registration {
     }
     public function getCreatedAt() {
         return $this->created_at;
+    }
+    public function getStatut() {
+        return $this->statut;
     }
     public function getDeleted() {
         return $this->deleted;
@@ -66,6 +71,9 @@ class Registration {
     }
     public function setCreatedAt($created_at) {
         return $this->created_at = $created_at;
+    }
+    public function setStatut($statut) {
+        return $this->statut = $statut;
     }
     public function setDeleted($deleted) {
         return $this->deleted = $deleted;

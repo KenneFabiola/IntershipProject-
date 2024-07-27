@@ -20,7 +20,6 @@ include 'authorisation.php';
       <div class="header_top py-1" style="background-color:#313858;">
         <div class="container-fluid">
           <div class="top_nav_container py-1" class="h-8 w-8">
-
             <img src="../../assets/images/logo1.png" alt="" srcset="" class="h-8 ">
             <p style="color:white">IFP LEADER EN INFORMATIQUE</p>
           </div>

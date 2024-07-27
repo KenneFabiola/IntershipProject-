@@ -2,17 +2,19 @@
 class Payment {
     private $id;
     private $amount;
+    private $statut;
     private $created_at;
     private $created_by;
     private $last_modified_by;
     private $deleted;
     private $registration_id;
 
-    public function __construct($id, $amount,$created_at,$created_by,$last_modified_by,$deleted,$registration_id) {
+    public function __construct($id,$amount,$statut,$created_at,$created_by,$last_modified_by,$deleted,$registration_id) {
        
         $this->id = $id;
         $this->created_at = $created_at;
         $this->amount = $amount;
+        $this->statut = $statut;
         $this->created_by = $created_by;
         $this->last_modified_by = $last_modified_by;
         $this->deleted = $deleted;
@@ -26,6 +28,9 @@ class Payment {
     
     public function getAmount() {
         return $this->amount;
+    }
+    public function getStatut() {
+        return $this->statut;
     }
     public function getCreatedAt()
     {
@@ -51,8 +56,11 @@ class Payment {
     {
         return $this->id = $id;
     }
-    public function setamount($amount) {
-        return $this->amount;
+    public function setAmount($amount) {
+        return $this->amount = $amount;
+    }
+    public function setStatut($statut) {
+        return $this->statut = $statut;
     }
     public function setCreatedAt($created_at)
     {

@@ -4,18 +4,17 @@ class Section
     private $id;
     private $created_at;
     private $school_year;
+    private $months;
     private $created_by;
     private $last_modified_by;
     private $deleted;
     private $statut;
-    private $created_by_username;
-    private $last_modified_by_username;
-
-    public function __construct($id, $created_at, $school_year, $created_by, $last_modified_by, $deleted, $statut)
+    public function __construct($id, $created_at, $school_year,$months, $created_by, $last_modified_by, $deleted, $statut)
     {
         $this->id = $id;
         $this->created_at = $created_at;
         $this->school_year = $school_year;
+        $this-> months = $months;
         $this->created_by = $created_by;
         $this->last_modified_by = $last_modified_by;
         $this->deleted = $deleted;
@@ -41,6 +40,10 @@ class Section
     public function getSchoolYear()
     {
         return $this->school_year;
+    }
+    public function getMonth()
+    {
+        return $this->months;
     }
     public function getDeleted()
     {
@@ -70,6 +73,10 @@ class Section
     {
         return $this->school_year;
     }
+    public function setMonth($months)
+    {
+        return $this->months = $months;
+    }
     public function setDeleted($deleted)
     {
         return $this->deleted;
@@ -79,16 +86,4 @@ class Section
         return $this->statut;
     }
 
-    public function getCreatedByUsername(){
-        return $this->created_by_username;
-    }
-    public function setCreatedByUsername($created_by_username){
-        return $this->created_by_username = $created_by_username;
-    }
-    public function getLastModifiedByUsername() {
-        return $this->last_modified_by_username;
-    }
-    public function setLastModifiedByUsername($last_modified_by_username) {
-        return $this->last_modified_by_username = $last_modified_by_username;
-    }
 }

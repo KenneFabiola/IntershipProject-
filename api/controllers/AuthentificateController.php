@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-session_start();
+
 
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Database.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'services' . DIRECTORY_SEPARATOR . 'AuthentificateService.php';
@@ -18,6 +18,10 @@ class AuthentificateController
     public function login()
     {
         try {
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
             $username = $_POST['username'];
             $password = $_POST['password'];
 
@@ -35,9 +39,7 @@ class AuthentificateController
                 $_SESSION['username'] = $connexion->getUsername();
                 $_SESSION['password'] = $connexion->getPwd();
                 $_SESSION['role'] = $connexion->getRoleId();
-              
-
-
+                
 
                 if (method_exists($connexion, 'getRoleId')) {
                     $_SESSION['role'] = $connexion->getRoleId();
@@ -58,7 +60,7 @@ class AuthentificateController
                     header('Location: ../../views/student.php');
                 }
 
-                echo json_encode(['success' => 'Authentication successful. Welcome, ' . $_SESSION['username']]);
+                echo json_encode(['success' => 'Authentication successful. Welcome, ' . $_SESSION['role']]);
             } else {
                 echo json_encode(['error' => 'Failed to authenticate. Check your username and your password.']);
             }
